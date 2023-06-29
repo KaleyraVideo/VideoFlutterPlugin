@@ -1,0 +1,2 @@
+#include? "Pods/Target Support Files/Pods-KaleyraVideoFlutter/Pods-KaleyraVideoFlutter.debug.xcconfig"
+#include "Generated.xcconfig"

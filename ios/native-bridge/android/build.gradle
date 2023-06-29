@@ -1,0 +1,72 @@
+buildscript {
+  ext.kotlin_version = '1.6.10'
+  repositories {
+    google()
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://maven.bandyer.com/releases' }
+    maven { url 'https://jitpack.io' }
+  }
+
+  dependencies {
+    classpath 'com.android.tools.build:gradle:7.1.2'
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
+}
+
+allprojects {
+  repositories {
+    google()
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://maven.bandyer.com/releases' }
+    maven { url 'https://jitpack.io' }
+  }
+}
+
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+  compileSdkVersion 31
+
+  defaultConfig {
+    minSdkVersion 21
+    testInstrumentationRunner "com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner"
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  kotlinOptions {
+    jvmTarget = '1.8'
+  }
+
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+  }
+
+  testOptions {
+    unitTests.returnDefaultValues = true
+  }
+
+}
+
+dependencies {
+  implementation 'com.google.code.gson:gson:2.9.1'
+  implementation "com.kaleyra:collaboration-suite-utils:3.0.3"
+  implementation "com.bandyer:bandyer-android-sdk:3.6.1"
+  implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+  compileOnly "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1"
+  implementation "androidx.room:room-runtime:2.4.2"
+  kapt "androidx.room:room-compiler:2.4.2"
+
+  /*** Testing ***/
+  testImplementation 'junit:junit:4.13.2'
+  testImplementation 'io.mockk:mockk:1.13.2'
+  testImplementation "org.json:json:20180813"
+  testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+  testImplementation "com.github.ologe:flow-test-observer:1.5.1"
+}

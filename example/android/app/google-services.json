@@ -1,0 +1,219 @@
+{
+  "project_info": {
+    "project_number": "320803497860",
+    "firebase_url": "https://bandyer-android-sdk-push-test.firebaseio.com",
+    "project_id": "bandyer-android-sdk-push-test",
+    "storage_bucket": "bandyer-android-sdk-push-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320803497860:android:d385914a5136e5ca",
+        "android_client_info": {
+          "package_name": "com.bandyer.cordova.sampleapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFfZsnxMRPDi464FfaKnxiZaAkWaPXO2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320803497860:android:7dcfd9da4708edcf52dfd1",
+        "android_client_info": {
+          "package_name": "com.bandyer.cordovasampleapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFfZsnxMRPDi464FfaKnxiZaAkWaPXO2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320803497860:android:61959850f28bd834",
+        "android_client_info": {
+          "package_name": "com.bandyer.demo_android_chat_sdk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFfZsnxMRPDi464FfaKnxiZaAkWaPXO2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320803497860:android:cdb73d78b4c5cf31",
+        "android_client_info": {
+          "package_name": "com.bandyer.demo_android_sdk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320803497860-di3knqni7trc3h1on7lejjbc9v41drjf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bandyer.demo_android_sdk",
+            "certificate_hash": "737598642df3eca94b9c151aabce48ef10cdb481"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFfZsnxMRPDi464FfaKnxiZaAkWaPXO2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320803497860:android:2d91bc69e674bc2152dfd1",
+        "android_client_info": {
+          "package_name": "com.bandyer.demo_android_sdk.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320803497860-24i6l9ngstenr2ue1bsep3q6oqpe3054.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bandyer.demo_android_sdk.debug",
+            "certificate_hash": "8efbf7ef1bbc36ba5b361fb9be2cabd2dd2065d1"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFfZsnxMRPDi464FfaKnxiZaAkWaPXO2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320803497860:android:88056511389a603f52dfd1",
+        "android_client_info": {
+          "package_name": "com.bandyer.glasses_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFfZsnxMRPDi464FfaKnxiZaAkWaPXO2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320803497860:android:c235b8af2e9a1d0a52dfd1",
+        "android_client_info": {
+          "package_name": "com.bandyer.xamarin.demo_android_sdk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFfZsnxMRPDi464FfaKnxiZaAkWaPXO2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320803497860:android:0471400f0433ebc052dfd1",
+        "android_client_info": {
+          "package_name": "com.kaleyra.demo_collaboration_suite"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFfZsnxMRPDi464FfaKnxiZaAkWaPXO2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320803497860:android:29a1dc4d0e352d0052dfd1",
+        "android_client_info": {
+          "package_name": "com.kaleyra.videoFlutterExample"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFfZsnxMRPDi464FfaKnxiZaAkWaPXO2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320803497860:android:4701bd9b928cadc952dfd1",
+        "android_client_info": {
+          "package_name": "com.kaleyra.videoReactExample"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFfZsnxMRPDi464FfaKnxiZaAkWaPXO2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

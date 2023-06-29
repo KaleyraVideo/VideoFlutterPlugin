@@ -1,0 +1,42 @@
+name: kaleyra_video_flutter_plugin
+description: Kaleyra Video Flutter plugin
+version: 1.0.0
+homepage: https://www.kaleyra.com/video/
+repository: https://github.com/KaleyraVideo/VideoFlutterPlugin
+issue_tracker: https://github.com/KaleyraVideo/VideoFlutterPlugin/issues
+
+topics:
+  - webrtc
+  - voip
+  - video
+  - chat
+  - call
+
+environment:
+  sdk: '>=2.18.6 <3.0.0'
+  flutter: ">=2.5.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  json_serializable: ^6.5.4
+  package_info_plus: ^3.0.2
+  plugin_platform_interface: ^2.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.kaleyra.video_flutter_plugin
+        pluginClass: VideoNativePlugin
+      ios:
+        pluginClass: VideoNativePlugin
+
+false_secrets:
+ - /example/lib/firebase_options.dart
+ - /example/android/app/google-services.json

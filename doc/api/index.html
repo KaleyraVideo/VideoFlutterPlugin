@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="generator" content="made with love by dartdoc 6.1.5">
+  <meta name="description" content="kaleyra_video_flutter_plugin API docs, for the Dart programming language.">
+  <title>kaleyra_video_flutter_plugin - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="https://www.kaleyra.com/video/">kaleyra_video_flutter_plugin package</a></li>
+  </ol>
+  <div class="self-name">kaleyra_video_flutter_plugin</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span class="material-symbols-outlined">
+        brightness_4
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <p><img src="https://static.bandyer.com/corporate/iOS/logo/kaleyra-logo.png" alt="Kaleyra Logo"></p>
+<h1 id="kaleyra-video-flutter-plugin">Kaleyra Video Flutter Plugin</h1>
+<p><a href="https://pub.dev/packages/kaleyra_video_flutter_plugin"><img src="https://img.shields.io/pub/v/kaleyra_video_flutter_plugin" alt="pub version"></a></p>
+<h2 id="how-to-run-the-example">How to run the example</h2>
+<p>Execute the following commands from the repository root folder</p>
+<pre class="language-shell"><code class="language-shell">cd example
+# nano .env use your own keys
+flutter pub get
+cd ios
+pod install
+</code></pre>
+<h2 id="how-to-install-the-plugin">How to install the plugin</h2>
+<p>Open the <strong>terminal</strong> in your Flutter-App folder and run the following commands</p>
+<pre class="language-shell"><code class="language-shell">flutter pub add kaleyra_video_flutter_plugin
+</code></pre>
+<h2 id="how-to-remove-the-plugin">How to remove the plugin</h2>
+<pre class="language-shell"><code class="language-shell">flutter pub remove kaleyra_video_flutter_plugin
+</code></pre>
+<h2 id="how-to-use-the-kaleyra-video-plugin-in-your-flutter-app">How to use the Kaleyra Video plugin in your Flutter app</h2>
+<p>You can refer to the Kaleyra Video plugin in your Flutter app via</p>
+<pre class="language-dart"><code class="language-dart">KaleyraVideo
+</code></pre>
+<h2 id="plugin-setup">Plugin setup</h2>
+<p>The first thing you need to do is to configure the plugin specifying your keys and your options.</p>
+<h5 id="configure-params">Configure params</h5>
+<pre class="language-dart"><code class="language-dart">var configuration = Configuration(
+      appID: "mAppId_xxx", // your mobile appId
+      environment: Environment.sandbox(), // production()
+      region: Region.europe(), // india(), us()
+      logEnabled: true, // enable the logger
+      tools: Tools(
+          // by default no tools will be set
+          chat: ChatToolConfiguration(
+              audioCallOption: AudioCallOptions(
+                  type: AudioCallType.audio, // audio or audioUpgradable
+                  recordingType:
+                      RecordingType.none), // none, manual or automatic
+              videoCallOption: CallOptions(
+                  recordingType:
+                      RecordingType.none)), // none, manual or automatic
+          feedback: true,
+          fileShare: true,
+          whiteboard: true,
+          screenShare: ScreenShareToolConfiguration(
+              inApp: true, // screenshare only the app
+              wholeDevice: true)), // screenshare the whole device
+      // optional you can set one or more of the following capabilities, by default callkit is enabled
+      iosConfig: IosConfiguration(
+          voipHandlingStrategy: VoipHandlingStrategy.automatic, // implement to be able to receive VoIPs
+          callkit: CallKitConfiguration(
+              enabled: true, // enable CallKit on iOS 10+
+              appIconName: "logo_transparent", // optional but recommended
+              ringtoneSoundName: "custom_ringtone.mp3"))); // optional
+
+var kaleyraVideoPlugin = await KaleyraVideo.configure(configuration);
+</code></pre>
+<p>If screenShare.wholeDevice is set to true look <a href="#ios-broadcast-screen-sharing">here</a> for the required additional setup.</p>
+<h2 id="plugin-listen-for-errorsevents">Plugin listen for errors/events</h2>
+<p>To listen for events and/or errors register
+Check the documentation <a href="https://pub.dev/documentation/kaleyra_video_flutter_plugin/latest/kaleyra_video_flutter_plugin/Events-class.html">here</a> for a complete list.</p>
+<p>Example:</p>
+<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.events.onCallModuleStatusChanged = (status) =&gt; {};
+</code></pre>
+<h2 id="ios---voip-notifications">iOS - VoIP Notifications</h2>
+<h3 id="setup-required-for-voip-notifications">Setup required for VoIP notifications</h3>
+<p>If you desire to use VoIP notifications on iOS platform as first thing you should configure kaleyraVideoPlugin passing a config object as follow:</p>
+<pre class="language-dart"><code class="language-dart">var configuration = Configuration(
+      [...]
+      iosConfig: IosConfiguration(
+          voipHandlingStrategy: VoipHandlingStrategy.automatic, 
+          [...]
+
+var kaleyraVideoPlugin = await KaleyraVideo.configure(configuration);
+</code></pre>
+<p>The iOS project requires a little setup for use VoIP notifications. <a href="https://github.com/Bandyer/Bandyer-iOS-SDK/wiki/VOIP-notifications#project-setup">Here</a> you can find a description of how the project should be configured.</p>
+<h3 id="listening-for-voip-push-token">Listening for VoIP push token</h3>
+<p>In order to get your device push token, you must listen for the <strong>KaleyraVideo.events.iOSVoipPushTokenUpdated</strong> event registering a callback as follows:</p>
+<pre class="language-dart"><code class="language-dart">// The token is received in this listener only after calling kaleyraVideoPlugin.connect(_)
+kaleyraVideoPlugin.events.oniOSVoipPushTokenUpdated = (token) =&gt; {
+    // register the VoIP push token on your server
+};
+</code></pre>
+<p><strong>Warning:</strong> Make sure this listener is attached before calling kaleyraVideo.connect(_), otherwise the event reporting the device token could be missed.</p>
+<p>The token provided in the callback is the <strong>string</strong> representation of your device token.
+Here's an example of a device token: <strong>dec105f879924349fd2fa9aa8bb8b70431d5f41d57bfa8e31a5d80a629774fd9</strong></p>
+<h3 id="voip-notification-payload">VoIP notification payload</h3>
+<p><a href="https://github.com/Bandyer/Bandyer-iOS-SDK/wiki/VOIP-notifications#notification-payload-key-path">Here</a> you can find an example of how your VoIP notifications payload should be structured.</p>
+<h2 id="plugin-connect">Plugin connect</h2>
+<p>To connect the plugin to the Kaleyra Video system you will need to provide a Session object.
+The session needs a userID and a function returning a Future<string> with the access token for that user</string></p>
+<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.connect(Session("usr_xxx", (userId) async {
+    // get token for user_xxx
+    return "jwt_xxx";
+}));
+</code></pre>
+<h2 id="start-a-call">Start a call</h2>
+<p>To make a call you need to specify some params.</p>
+<h5 id="start-call-params">Start call params</h5>
+<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.startCall(CreateCallOptions(
+    callees: ["usr_yyy", "usr_zzz"], //  an array of user ids of the users you want to call
+    callType: CallType.audioVideo, // audio, audioUpgradable or audioVideo - the type of the call you want to start
+    recordingType: RecordingType.none)); // none, manual or automatic
+</code></pre>
+<h2 id="start-a-chat">Start a chat</h2>
+<p>To make a chat you need to specify some params.</p>
+<h5 id="start-chat-params">Start chat params</h5>
+<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.startChat("usr_yyy");// the user_id of the user you want to create a chat with
+</code></pre>
+<h2 id="set-user-details">Set user details</h2>
+<p>This method will allow you to set your user details DB from which the sdk will read when needed to show the information.</p>
+<blockquote>
+<p>Be sure to have this always up to date, otherwise if an incoming call is received and the user is missing in this set the user ids will be printed on the UI.</p>
+</blockquote>
+<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.addUsersDetails([
+    UserDetails(userID: "usr_yyy", firstName: "User1Name", lastName: "User1Surname"),
+    UserDetails(userID: "usr_zzz", firstName: "User2Name", lastName: "User2Surname"),
+]);
+</code></pre>
+<h2 id="remove-all-user-details">Remove all user details</h2>
+<p>This method will allow you to remove all the user info from the local app DB.</p>
+<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.removeUsersDetails();
+</code></pre>
+<h2 id="set-user-details-format">Set user details format</h2>
+<p>This method will allow you to specify how you want your user details to be displayed.</p>
+<blockquote>
+<p>Be aware that you can specify only keywords which exist in the UserDetails type.</p>
+</blockquote>
+<p>For example: if you wish to show only the firstName while your dataset contains also the lastName you may change it here.</p>
+<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.setUserDetailsFormat(UserDetailsFormat(
+      userDetailsFormatDefault: "\${firstName} \${lastName}",
+      androidNotification: "\${firstName} \${lastName}")); // optional if you wish to personalize the details in the notification.
+</code></pre>
+<h2 id="remove-all-the-cached-info-in-preferences-and-dbs">Remove all the cached info in preferences and DBs</h2>
+<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.clearUserCache();
+</code></pre>
+<h2 id="android-change-display-mode">Android change display mode</h2>
+<p>This method is useful for use-cases where you need to show a prompt and don't want it to be invalidated by the call going into pip.
+For example: if you wish to show fingerprint dialog you should first put the current call in background, execute the fingerprint validation and then put back the call in foreground.</p>
+<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.setDisplayModeForCurrentCall(CallDisplayMode.background); // .foreground, .foregroundPictureInPicture or .background
+</code></pre>
+<h2 id="verify-user">Verify user</h2>
+<p>To verify a user for the current call.</p>
+<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.verifyCurrentCall(true);
+</code></pre>
+<h2 id="ios-podfile-setup">iOS Podfile Setup</h2>
+<p>Please pay attention to the Podfile setup for your iOS application. Is required to add this to your Podfile:</p>
+<pre class="language-ruby"><code class="language-ruby">use_frameworks!
+</code></pre>
+<h2 id="ios-broadcast-screen-sharing">iOS Broadcast Screen sharing</h2>
+<p>To enable whole device screen share is required and additional setup.
+Open the iOS Xcode project of your Flutter application and follow <a href="https://github.com/Bandyer/Bandyer-iOS-SDK/wiki/Screen-sharing#broadcast-screen-sharing">this guide</a>.
+After completing the procedure described in the guide above you need to add to your Podfile this lines:</p>
+<pre class="language-ruby"><code class="language-ruby">target 'BroadcastExtension' do
+  use_frameworks!
+
+  pod 'BandyerBroadcastExtension'
+end
+</code></pre>
+<p>Furthermore, to allow a correct configuration of the SDK it is necessary to create a file called "KaleyraVideoConfig.plist" and add it to the same target of the application. This file must have the following content:</p>
+<pre class="language-xml"><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+ &lt;key&gt;broadcast&lt;/key&gt;
+ &lt;dict&gt;
+  &lt;key&gt;appGroupIdentifier&lt;/key&gt;
+  &lt;string&gt;&lt;!-- PUT HERE THE BUNDLE ID OF YOUR APP GROUP --&gt;&lt;/string&gt;
+  &lt;key&gt;extensionBundleIdentifier&lt;/key&gt;
+  &lt;string&gt;&lt;!-- PUT HERE THE BUNDLE ID OF YOUR BROADCAST EXTENSION --&gt;&lt;/string&gt;
+ &lt;/dict&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+<h2 id="ios-notifications">iOS Notifications</h2>
+<p>The module supports <strong>on_call_incoming</strong> notification.
+You will need to set the <strong>voipHandlingStrategy</strong> and subscribe to <strong>iOSVoipPushTokenUpdated</strong> event to receive the voip token to use on your backend to notify the plugin.</p>
+<h2 id="android-notifications">Android Notifications</h2>
+<p>Supports only <strong>on_call_incoming</strong> and <strong>on_message_sent</strong> notification types.</p>
+<pre class="language-javascript"><code class="language-javascript">kaleyraVideo.handlePushNotificationPayload(payload);
+</code></pre>
+<p>Example of acceptable payload</p>
+<pre class="language-json"><code class="language-json">{
+  "google.delivered_priority":"high",
+  "content-available":"1",
+  "google.sent_time":1663347601917,
+  "google.ttl":60,
+  "google.original_priority":"high",
+  "from":"320",
+  "title":"",
+  "google.message_id":"0:1123%ac212d7bf9fd7ecd",
+  "message":"{\"kaleyra\":{\"payload\":{\"event\":\"on_call_incoming\",\"room_id\":\"room_b36f162\",\"data\":{\"initiator\":\"user1\",\"users\":[{\"user\":{\"userAlias\":\"user2\"},\"status\":\"invited\"},{\"user\":{\"userAlias\":\"user1\"},\"status\":\"invited\"}],\"roomAlias\":\"room_b37a64c6f162\",\"options\":{\"duration\":0,\"record\":true,\"recordingType\":\"manual\",\"recording\":\"manual\",\"creationDate\":\"2022-09-16T17:00:01.457Z\",\"callType\":\"audio_upgradable\",\"live\":true}}},\"user_token\":\"eyJhtokenksadfjoiasdjfoaidjfsoasidjfoi\"}}",
+  "google.c.sender.id":"320"
+}
+</code></pre>
+<h2 id="documentation">Documentation</h2>
+<p>The API documentation is available on the link:
+<a href="https://pub.dev/documentation/kaleyra_video_flutter_plugin/latest/">https://pub.dev/documentation/kaleyra_video_flutter_plugin/latest/</a></p>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="kaleyra_video_flutter_plugin">
+  <span class="name"><a href="kaleyra_video_flutter_plugin/kaleyra_video_flutter_plugin-library.html">kaleyra_video_flutter_plugin</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+        </dl>
+      </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="https://www.kaleyra.com/video/">kaleyra_video_flutter_plugin package</a></li>
+</ol>
+
+
+    <h5 class="hidden-xs"><span class="package-name">kaleyra_video_flutter_plugin</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="kaleyra_video_flutter_plugin/kaleyra_video_flutter_plugin-library.html">kaleyra_video_flutter_plugin</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+
+</main>
+
+<footer>
+  <span class="no-break">
+    kaleyra_video_flutter_plugin
+      1.0.0
+  </span>
+
+  
+</footer>
+
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+
