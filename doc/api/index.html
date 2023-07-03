@@ -97,31 +97,31 @@ pod install
               appIconName: "logo_transparent", // optional but recommended
               ringtoneSoundName: "custom_ringtone.mp3"))); // optional
 
-var kaleyraVideoPlugin = await KaleyraVideo.configure(configuration);
+var kaleyraVideo = await KaleyraVideo.configure(configuration);
 </code></pre>
 <p>If screenShare.wholeDevice is set to true look <a href="#ios-broadcast-screen-sharing">here</a> for the required additional setup.</p>
 <h2 id="plugin-listen-for-errorsevents">Plugin listen for errors/events</h2>
 <p>To listen for events and/or errors register
 Check the documentation <a href="https://pub.dev/documentation/kaleyra_video_flutter_plugin/latest/kaleyra_video_flutter_plugin/Events-class.html">here</a> for a complete list.</p>
 <p>Example:</p>
-<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.events.onCallModuleStatusChanged = (status) =&gt; {};
+<pre class="language-dart"><code class="language-dart">kaleyraVideo.events.onCallModuleStatusChanged = (status) =&gt; {};
 </code></pre>
 <h2 id="ios---voip-notifications">iOS - VoIP Notifications</h2>
 <h3 id="setup-required-for-voip-notifications">Setup required for VoIP notifications</h3>
-<p>If you desire to use VoIP notifications on iOS platform as first thing you should configure kaleyraVideoPlugin passing a config object as follow:</p>
+<p>If you desire to use VoIP notifications on iOS platform as first thing you should configure kaleyraVideo passing a config object as follow:</p>
 <pre class="language-dart"><code class="language-dart">var configuration = Configuration(
       [...]
       iosConfig: IosConfiguration(
           voipHandlingStrategy: VoipHandlingStrategy.automatic, 
           [...]
 
-var kaleyraVideoPlugin = await KaleyraVideo.configure(configuration);
+var kaleyraVideo = await KaleyraVideo.configure(configuration);
 </code></pre>
 <p>The iOS project requires a little setup for use VoIP notifications. <a href="https://github.com/Bandyer/Bandyer-iOS-SDK/wiki/VOIP-notifications#project-setup">Here</a> you can find a description of how the project should be configured.</p>
 <h3 id="listening-for-voip-push-token">Listening for VoIP push token</h3>
 <p>In order to get your device push token, you must listen for the <strong>KaleyraVideo.events.iOSVoipPushTokenUpdated</strong> event registering a callback as follows:</p>
-<pre class="language-dart"><code class="language-dart">// The token is received in this listener only after calling kaleyraVideoPlugin.connect(_)
-kaleyraVideoPlugin.events.oniOSVoipPushTokenUpdated = (token) =&gt; {
+<pre class="language-dart"><code class="language-dart">// The token is received in this listener only after calling kaleyraVideo.connect(_)
+kaleyraVideo.events.oniOSVoipPushTokenUpdated = (token) =&gt; {
     // register the VoIP push token on your server
 };
 </code></pre>
@@ -133,7 +133,7 @@ Here's an example of a device token: <strong>dec105f879924349fd2fa9aa8bb8b70431d
 <h2 id="plugin-connect">Plugin connect</h2>
 <p>To connect the plugin to the Kaleyra Video system you will need to provide a Session object.
 The session needs a userID and a function returning a Future<string> with the access token for that user</string></p>
-<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.connect(Session("usr_xxx", (userId) async {
+<pre class="language-dart"><code class="language-dart">kaleyraVideo.connect(Session("usr_xxx", (userId) async {
     // get token for user_xxx
     return "jwt_xxx";
 }));
@@ -141,7 +141,7 @@ The session needs a userID and a function returning a Future<string> with the ac
 <h2 id="start-a-call">Start a call</h2>
 <p>To make a call you need to specify some params.</p>
 <h5 id="start-call-params">Start call params</h5>
-<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.startCall(CreateCallOptions(
+<pre class="language-dart"><code class="language-dart">kaleyraVideo.startCall(CreateCallOptions(
     callees: ["usr_yyy", "usr_zzz"], //  an array of user ids of the users you want to call
     callType: CallType.audioVideo, // audio, audioUpgradable or audioVideo - the type of the call you want to start
     recordingType: RecordingType.none)); // none, manual or automatic
@@ -149,21 +149,21 @@ The session needs a userID and a function returning a Future<string> with the ac
 <h2 id="start-a-chat">Start a chat</h2>
 <p>To make a chat you need to specify some params.</p>
 <h5 id="start-chat-params">Start chat params</h5>
-<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.startChat("usr_yyy");// the user_id of the user you want to create a chat with
+<pre class="language-dart"><code class="language-dart">kaleyraVideo.startChat("usr_yyy");// the user_id of the user you want to create a chat with
 </code></pre>
 <h2 id="set-user-details">Set user details</h2>
 <p>This method will allow you to set your user details DB from which the sdk will read when needed to show the information.</p>
 <blockquote>
 <p>Be sure to have this always up to date, otherwise if an incoming call is received and the user is missing in this set the user ids will be printed on the UI.</p>
 </blockquote>
-<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.addUsersDetails([
+<pre class="language-dart"><code class="language-dart">kaleyraVideo.addUsersDetails([
     UserDetails(userID: "usr_yyy", firstName: "User1Name", lastName: "User1Surname"),
     UserDetails(userID: "usr_zzz", firstName: "User2Name", lastName: "User2Surname"),
 ]);
 </code></pre>
 <h2 id="remove-all-user-details">Remove all user details</h2>
 <p>This method will allow you to remove all the user info from the local app DB.</p>
-<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.removeUsersDetails();
+<pre class="language-dart"><code class="language-dart">kaleyraVideo.removeUsersDetails();
 </code></pre>
 <h2 id="set-user-details-format">Set user details format</h2>
 <p>This method will allow you to specify how you want your user details to be displayed.</p>
@@ -171,21 +171,21 @@ The session needs a userID and a function returning a Future<string> with the ac
 <p>Be aware that you can specify only keywords which exist in the UserDetails type.</p>
 </blockquote>
 <p>For example: if you wish to show only the firstName while your dataset contains also the lastName you may change it here.</p>
-<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.setUserDetailsFormat(UserDetailsFormat(
+<pre class="language-dart"><code class="language-dart">kaleyraVideo.setUserDetailsFormat(UserDetailsFormat(
       userDetailsFormatDefault: "\${firstName} \${lastName}",
       androidNotification: "\${firstName} \${lastName}")); // optional if you wish to personalize the details in the notification.
 </code></pre>
 <h2 id="remove-all-the-cached-info-in-preferences-and-dbs">Remove all the cached info in preferences and DBs</h2>
-<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.clearUserCache();
+<pre class="language-dart"><code class="language-dart">kaleyraVideo.clearUserCache();
 </code></pre>
 <h2 id="android-change-display-mode">Android change display mode</h2>
 <p>This method is useful for use-cases where you need to show a prompt and don't want it to be invalidated by the call going into pip.
 For example: if you wish to show fingerprint dialog you should first put the current call in background, execute the fingerprint validation and then put back the call in foreground.</p>
-<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.setDisplayModeForCurrentCall(CallDisplayMode.background); // .foreground, .foregroundPictureInPicture or .background
+<pre class="language-dart"><code class="language-dart">kaleyraVideo.setDisplayModeForCurrentCall(CallDisplayMode.background); // .foreground, .foregroundPictureInPicture or .background
 </code></pre>
 <h2 id="verify-user">Verify user</h2>
 <p>To verify a user for the current call.</p>
-<pre class="language-dart"><code class="language-dart">kaleyraVideoPlugin.verifyCurrentCall(true);
+<pre class="language-dart"><code class="language-dart">kaleyraVideo.verifyCurrentCall(true);
 </code></pre>
 <h2 id="ios-podfile-setup">iOS Podfile Setup</h2>
 <p>Please pay attention to the Podfile setup for your iOS application. Is required to add this to your Podfile:</p>
@@ -286,7 +286,7 @@ You will need to set the <strong>voipHandlingStrategy</strong> and subscribe to 
 <footer>
   <span class="no-break">
     kaleyra_video_flutter_plugin
-      1.0.0
+      1.0.1
   </span>
 
   
