@@ -74,7 +74,7 @@ var configuration = Configuration(
               appIconName: "logo_transparent", // optional but recommended
               ringtoneSoundName: "custom_ringtone.mp3"))); // optional
 
-var kaleyraVideoPlugin = await KaleyraVideo.configure(configuration);
+var kaleyraVideo = await KaleyraVideo.configure(configuration);
 ```
 
 If screenShare.wholeDevice is set to true look [here][BroadcastAchor] for the required additional setup.
@@ -87,14 +87,14 @@ Check the documentation [here][EventsDoc] for a complete list.
 Example:
 
 ```dart
-kaleyraVideoPlugin.events.onCallModuleStatusChanged = (status) => {};
+kaleyraVideo.events.onCallModuleStatusChanged = (status) => {};
 ```
 
 ## iOS - VoIP Notifications
 
 ### Setup required for VoIP notifications
 
-If you desire to use VoIP notifications on iOS platform as first thing you should configure kaleyraVideoPlugin passing a config object as follow:
+If you desire to use VoIP notifications on iOS platform as first thing you should configure kaleyraVideo passing a config object as follow:
 
 ```dart
 var configuration = Configuration(
@@ -103,7 +103,7 @@ var configuration = Configuration(
           voipHandlingStrategy: VoipHandlingStrategy.automatic, 
           [...]
 
-var kaleyraVideoPlugin = await KaleyraVideo.configure(configuration);
+var kaleyraVideo = await KaleyraVideo.configure(configuration);
 ```
 
 The iOS project requires a little setup for use VoIP notifications. [Here][iOSProjectSetup] you can find a description of how the project should be configured.
@@ -113,8 +113,8 @@ The iOS project requires a little setup for use VoIP notifications. [Here][iOSPr
 In order to get your device push token, you must listen for the **KaleyraVideo.events.iOSVoipPushTokenUpdated** event registering a callback as follows:
 
 ```dart
-// The token is received in this listener only after calling kaleyraVideoPlugin.connect(_)
-kaleyraVideoPlugin.events.oniOSVoipPushTokenUpdated = (token) => {
+// The token is received in this listener only after calling kaleyraVideo.connect(_)
+kaleyraVideo.events.oniOSVoipPushTokenUpdated = (token) => {
     // register the VoIP push token on your server
 };
 ```
@@ -134,7 +134,7 @@ To connect the plugin to the Kaleyra Video system you will need to provide a Ses
 The session needs a userID and a function returning a Future<String> with the access token for that user
 
 ```dart
-kaleyraVideoPlugin.connect(Session("usr_xxx", (userId) async {
+kaleyraVideo.connect(Session("usr_xxx", (userId) async {
     // get token for user_xxx
     return "jwt_xxx";
 }));
@@ -147,7 +147,7 @@ To make a call you need to specify some params.
 ##### Start call params
 
 ```dart
-kaleyraVideoPlugin.startCall(CreateCallOptions(
+kaleyraVideo.startCall(CreateCallOptions(
     callees: ["usr_yyy", "usr_zzz"], //  an array of user ids of the users you want to call
     callType: CallType.audioVideo, // audio, audioUpgradable or audioVideo - the type of the call you want to start
     recordingType: RecordingType.none)); // none, manual or automatic
@@ -160,7 +160,7 @@ To make a chat you need to specify some params.
 ##### Start chat params
 
 ```dart
-kaleyraVideoPlugin.startChat("usr_yyy");// the user_id of the user you want to create a chat with
+kaleyraVideo.startChat("usr_yyy");// the user_id of the user you want to create a chat with
 ```
 
 ## Set user details
@@ -169,7 +169,7 @@ This method will allow you to set your user details DB from which the sdk will r
 > Be sure to have this always up to date, otherwise if an incoming call is received and the user is missing in this set the user ids will be printed on the UI.
 
 ```dart
-kaleyraVideoPlugin.addUsersDetails([
+kaleyraVideo.addUsersDetails([
     UserDetails(userID: "usr_yyy", firstName: "User1Name", lastName: "User1Surname"),
     UserDetails(userID: "usr_zzz", firstName: "User2Name", lastName: "User2Surname"),
 ]);
@@ -180,7 +180,7 @@ kaleyraVideoPlugin.addUsersDetails([
 This method will allow you to remove all the user info from the local app DB.
 
 ```dart
-kaleyraVideoPlugin.removeUsersDetails();
+kaleyraVideo.removeUsersDetails();
 ```
 
 ## Set user details format
@@ -191,7 +191,7 @@ This method will allow you to specify how you want your user details to be displ
 For example: if you wish to show only the firstName while your dataset contains also the lastName you may change it here.
 
 ```dart
-kaleyraVideoPlugin.setUserDetailsFormat(UserDetailsFormat(
+kaleyraVideo.setUserDetailsFormat(UserDetailsFormat(
       userDetailsFormatDefault: "\${firstName} \${lastName}",
       androidNotification: "\${firstName} \${lastName}")); // optional if you wish to personalize the details in the notification.
 ```
@@ -199,7 +199,7 @@ kaleyraVideoPlugin.setUserDetailsFormat(UserDetailsFormat(
 ## Remove all the cached info in preferences and DBs
 
 ```dart
-kaleyraVideoPlugin.clearUserCache();
+kaleyraVideo.clearUserCache();
 ```
 
 ## Android change display mode
@@ -208,7 +208,7 @@ This method is useful for use-cases where you need to show a prompt and don't wa
 For example: if you wish to show fingerprint dialog you should first put the current call in background, execute the fingerprint validation and then put back the call in foreground.
 
 ```dart
-kaleyraVideoPlugin.setDisplayModeForCurrentCall(CallDisplayMode.background); // .foreground, .foregroundPictureInPicture or .background
+kaleyraVideo.setDisplayModeForCurrentCall(CallDisplayMode.background); // .foreground, .foregroundPictureInPicture or .background
 ```
 
 ## Verify user
@@ -216,7 +216,7 @@ kaleyraVideoPlugin.setDisplayModeForCurrentCall(CallDisplayMode.background); // 
 To verify a user for the current call.
 
 ```dart
-kaleyraVideoPlugin.verifyCurrentCall(true);
+kaleyraVideo.verifyCurrentCall(true);
 ```
 
 ## iOS Podfile Setup
