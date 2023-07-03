@@ -1,23 +1,21 @@
-#
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint kaleyra_video_flutter_plugin.podspec` to validate before publishing.
-#
+require 'yaml'
+
+spec = YAML.load_file('../pubspec.yaml')
+
 Pod::Spec.new do |s|
-  s.name             = 'kaleyra_video_flutter_plugin'
-  s.version          = '0.0.1'
-  s.summary          = 'A new Flutter plugin project.'
-  s.description      = <<-DESC
-A new Flutter plugin project.
-                       DESC
-  s.homepage         = 'http://example.com'
+  s.name             = spec["name"]
+  s.version          = spec["version"]
+  s.summary          = spec["description"]
+  s.description      = spec["description"]
+  s.homepage         = spec["repository"]
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Kaleyra' => 'support@kaleyra.com' }
   s.source           = { :path => '.' }
 
   s.source_files = "Classes/**/*.{h,m,mm,swift}", "native-bridge/iOS/Source/**/*.swift"
 
   s.dependency 'Flutter'
-  s.dependency 'Bandyer', '~> 3.6.2'
+  s.dependency 'Bandyer', '~> 3.6.3'
   s.platform = :ios, '10.0'
 
   # Flutter.framework does not contain a i386 slice.
