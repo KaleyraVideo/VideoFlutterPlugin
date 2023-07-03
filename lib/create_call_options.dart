@@ -29,6 +29,6 @@ class CreateCallOptions {
   Map<String, dynamic> toMapJson() => {
     "callees": List<dynamic>.from(callees.map((x) => x)),
     "callType": callType.name,
-    "recordingType": recordingType ?? RecordingType.none.name,
+    "recordingType": recordingType?.name ?? RecordingType.none.name,
   };
 }
