@@ -55,8 +55,8 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.11.1):
     - GoogleUtilities/Logger
-  - kaleyra_video_flutter_plugin (0.0.1):
-    - Bandyer (~> 3.6.2)
+  - kaleyra_video_flutter_plugin (1.0.1):
+    - Bandyer (~> 3.6.3)
     - Flutter
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
@@ -77,7 +77,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - kaleyra_video_flutter_plugin (from `.symlinks/plugins/kaleyra_video_flutter_plugin/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -105,7 +105,7 @@ EXTERNAL SOURCES:
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
   Bandyer: d9f2aa82328210b5fc088b913e1cd7084cf96004
@@ -120,7 +120,7 @@ SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   GoogleDataTransport: f0308f5905a745f94fb91fea9c6cbaf3831cb1bd
   GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
-  kaleyra_video_flutter_plugin: c89a3c12c6e6ce379f984e64e1bf9d4533f51107
+  kaleyra_video_flutter_plugin: d7467d7b2c302a3b7427defa04852f60ad4f07d8
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
