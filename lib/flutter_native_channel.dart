@@ -39,7 +39,7 @@ class FlutterNativeChannel extends FlutterNativePlatformInterface {
       return instance!;
     }
 
-    await nativeChannel.invokeMethod('configureBridge', configuration.toJson()).whenComplete(() => { instance = FlutterNativeChannel()});
+    await nativeChannel.invokeMethod('configureBridge', configuration.toJson()).whenComplete(() => instance = FlutterNativeChannel());
     return instance!;
   }
 
