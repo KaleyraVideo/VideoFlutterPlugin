@@ -27,7 +27,7 @@ class CreateCallOptions {
 
   /// @nodoc
   Map<String, dynamic> toMapJson() => {
-    "callees": List<dynamic>.from(callees.map((x) => x)),
+    "callees": List<dynamic>.from(callees),
     "callType": callType.name,
     "recordingType": recordingType?.name ?? RecordingType.none.name,
   };

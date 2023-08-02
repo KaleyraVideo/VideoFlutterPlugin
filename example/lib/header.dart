@@ -8,8 +8,8 @@ class KaleyraLogoHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
+    return Column(
+      children: const [
         SizedBox(
           height: 32,
         ),

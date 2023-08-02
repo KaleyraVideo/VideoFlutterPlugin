@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  test-dart:
+    runs-on: macos-latest
+
+    steps:
+      
+      - uses: actions/checkout@v3.5.3
+      - uses: MobileDevOps/flutter-sdk-action@v1.0.0
+
+      - name: Fetch dependencies
+        run: flutter pub get
+
+      - name: Build runners
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Run tests
+        run: flutter test
