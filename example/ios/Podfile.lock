@@ -1,30 +1,30 @@
 PODS:
   - Bandyer (3.6.3)
   - BandyerBroadcastExtension (1.2.0)
-  - Firebase/CoreOnly (10.10.0):
-    - FirebaseCore (= 10.10.0)
-  - Firebase/Messaging (10.10.0):
+  - Firebase/CoreOnly (10.12.0):
+    - FirebaseCore (= 10.12.0)
+  - Firebase/Messaging (10.12.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 10.10.0)
-  - firebase_core (2.14.0):
-    - Firebase/CoreOnly (= 10.10.0)
+    - FirebaseMessaging (~> 10.12.0)
+  - firebase_core (2.15.0):
+    - Firebase/CoreOnly (= 10.12.0)
     - Flutter
-  - firebase_messaging (14.6.3):
-    - Firebase/Messaging (= 10.10.0)
+  - firebase_messaging (14.6.5):
+    - Firebase/Messaging (= 10.12.0)
     - firebase_core
     - Flutter
-  - FirebaseCore (10.10.0):
+  - FirebaseCore (10.12.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
-  - FirebaseCoreInternal (10.11.0):
+  - FirebaseCoreInternal (10.13.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
-  - FirebaseInstallations (10.11.0):
+  - FirebaseInstallations (10.13.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - PromisesObjC (~> 2.1)
-  - FirebaseMessaging (10.10.0):
+  - FirebaseMessaging (10.12.0):
     - FirebaseCore (~> 10.0)
     - FirebaseInstallations (~> 10.0)
     - GoogleDataTransport (~> 9.2)
@@ -34,26 +34,26 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - Flutter (1.0.0)
-  - GoogleDataTransport (9.2.3):
+  - GoogleDataTransport (9.2.5):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/AppDelegateSwizzler (7.11.1):
+  - GoogleUtilities/AppDelegateSwizzler (7.11.5):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (7.11.1):
+  - GoogleUtilities/Environment (7.11.5):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.11.1):
+  - GoogleUtilities/Logger (7.11.5):
     - GoogleUtilities/Environment
-  - GoogleUtilities/Network (7.11.1):
+  - GoogleUtilities/Network (7.11.5):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.11.1)"
-  - GoogleUtilities/Reachability (7.11.1):
+  - "GoogleUtilities/NSData+zlib (7.11.5)"
+  - GoogleUtilities/Reachability (7.11.5):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (7.11.1):
+  - GoogleUtilities/UserDefaults (7.11.5):
     - GoogleUtilities/Logger
   - kaleyra_video_flutter_plugin (1.0.1):
     - Bandyer (~> 3.6.3)
@@ -65,7 +65,7 @@ PODS:
   - nanopb/encode (2.30909.0)
   - package_info_plus (0.4.5):
     - Flutter
-  - PromisesObjC (2.2.0)
+  - PromisesObjC (2.3.1)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -110,21 +110,21 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Bandyer: d9f2aa82328210b5fc088b913e1cd7084cf96004
   BandyerBroadcastExtension: 975d1a3694d56c879b0545c7e9f5df8467cda209
-  Firebase: facd334e557a979bd03a0b58d90fd56b52b8aba0
-  firebase_core: 85b6664038311940ad60584eaabc73103c61f5de
-  firebase_messaging: db0dab2713aafcf69591a1dc4ee8af7d8bba2abd
-  FirebaseCore: d027ff503d37edb78db98429b11f580a24a7df2a
-  FirebaseCoreInternal: 9e46c82a14a3b3a25be4e1e151ce6d21536b89c0
-  FirebaseInstallations: 2a2c6859354cbec0a228a863d4daf6de7c74ced4
-  FirebaseMessaging: 8a3b9a8b98ce72a42d22e69865cf662e38d2d6f5
+  Firebase: 07150e75d142fb9399f6777fa56a187b17f833a0
+  firebase_core: e477125798fc37cd4ab43ca6a8536bf7e0929c00
+  firebase_messaging: 334d68c3a36b6d4d5cd91e4f42509e0d4ae49828
+  FirebaseCore: f86a1394906b97ac445ae49c92552a9425831bed
+  FirebaseCoreInternal: b342e37cd4f5b4454ec34308f073420e7920858e
+  FirebaseInstallations: b28af1b9f997f1a799efe818c94695a3728c352f
+  FirebaseMessaging: bb2c4f6422a753038fe137d90ae7c1af57251316
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  GoogleDataTransport: f0308f5905a745f94fb91fea9c6cbaf3831cb1bd
-  GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
-  kaleyra_video_flutter_plugin: d7467d7b2c302a3b7427defa04852f60ad4f07d8
+  GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
+  GoogleUtilities: 13e2c67ede716b8741c7989e26893d151b2b2084
+  kaleyra_video_flutter_plugin: 8340d5e790324193d31bc1cfd085b68785584735
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
-  PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
-  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
+  package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
+  PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
 
 PODFILE CHECKSUM: 5474307982ce55d7f87cad0b6f1b7d8441d14663
 
