@@ -1,0 +1,26 @@
+name: Release Plugin
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_kind:
+        type: choice
+        description: What kind of release do you want to do?
+        required: true
+        options: 
+        - 
+        - patch
+        - minor
+        - major
+
+jobs:
+  release-plugin:
+    runs-on: macos-latest
+    environment:
+      name: release_environment
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Update package version
+      run: python3 update_plugin_version.py ${{ github.event.inputs.release_kind }}
