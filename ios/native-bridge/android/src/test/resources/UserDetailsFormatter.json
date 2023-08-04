@@ -1,4 +1,0 @@
-{
-  "androidNotification": "notification = ${userAlias},${email},${firstName},${imageUrl},${displayName},${lastName},${nickName}",
-  "default": "${userAlias},${email},${firstName},${imageUrl},${displayName},${lastName},${nickName}"
-}
