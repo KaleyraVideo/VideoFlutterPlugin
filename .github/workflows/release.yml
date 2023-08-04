@@ -25,7 +25,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    # - uses: MobileDevOps/flutter-sdk-action@v1.0.0
 
     - name: Setting up environment 
       run: |
@@ -34,8 +33,16 @@ jobs:
       run: |
         set -o pipefail
         new_version=$(python update_plugin_version.py ${{ github.event.inputs.release_kind }})
+        echo -e "## $new_version\n\n${{ github.event.inputs.changelog }}\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
         git add .
         git commit -m "Updated to version $new_version" 
         git tag v$new_version
         git push
         git push origin v$new_version
+
+  publish:
+    needs: release-plugin
+    runs-on: macos-latest
+    permissions:
+      id-token: write # Required for authentication using OIDC
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
