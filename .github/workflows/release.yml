@@ -21,6 +21,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    
+    # - uses: MobileDevOps/flutter-sdk-action@v1.0.0
+
+    - name: Setting up environment 
+      run: |
+        pip install pyyaml
     - name: Update package version
-      run: python3 update_plugin_version.py ${{ github.event.inputs.release_kind }}
+      run: |
+        set -o pipefail
+        new_version=$(python update_plugin_version.py ${{ github.event.inputs.release_kind }})
+        git add .
+        git commit -m "Updated to version $new_version" 
+        git tag v$new_version
+        git push
+        git push origin v$new_version
