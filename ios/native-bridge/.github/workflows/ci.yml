@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  test-ios:
+    runs-on: macos-latest
+
+    steps:
+      
+      - uses: actions/checkout@v3.5.3
+      - name: Install pods
+        working-directory: ./iOS
+        run: pod install --repo-update
+
+      - name: Run unit tests iOS 16
+        working-directory: ./iOS
+        run: |
+          set -o pipefail
+          xcodebuild clean -workspace KaleyraVideoHybridNativeBridge.xcworkspace -scheme KaleyraVideoHybridNativeBridge | xcpretty
+          xcodebuild test -workspace KaleyraVideoHybridNativeBridge.xcworkspace -scheme KaleyraVideoHybridNativeBridge -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 14,OS=16.2"  | xcpretty -t
+
+      - name: Run unit tests iOS 15
+        working-directory: ./iOS
+        run: |
+          set -o pipefail
+          sudo xcode-select -s /Applications/Xcode_13.4.app
+          xcodebuild clean -workspace KaleyraVideoHybridNativeBridge.xcworkspace -scheme KaleyraVideoHybridNativeBridge | xcpretty
+          xcodebuild test -workspace KaleyraVideoHybridNativeBridge.xcworkspace -scheme KaleyraVideoHybridNativeBridge -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 13,OS=15.5"  | xcpretty -t
+
+  test-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      # Execute unit tests
+      - name: Unit Test
+        working-directory: ./android
+        run: |
+           sed -i '/apply plugin: .kotlin-android./i apply plugin: "com.android.library"' build.gradle
+           ./gradlew testDebugUnitTest

@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:KaleyraVideo/VideoHybridNativeBridge.git
+	branch = main
+	commit = d5026d9e94f7f9507e5b576aa221e1018ec8e1a0
+	parent = eafd9f86cbe3a1a9833f84708eb8c044d1dd110f
+	method = merge
+	cmdver = 0.4.6
