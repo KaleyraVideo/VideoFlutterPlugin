@@ -12,6 +12,10 @@ on:
         - patch
         - minor
         - major
+      changelog:
+        type: string
+        description: Write a changelog for this release
+        required: true
 
 jobs:
   release-plugin:
