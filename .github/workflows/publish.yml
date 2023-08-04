@@ -1,0 +1,27 @@
+name: Publish Plugin Update
+
+on:
+  push:
+    tags:
+    - 'v[0-9]+.[0-9]+.[0-9]+*'
+
+jobs:
+  publish:
+    runs-on: macos-latest
+    permissions:
+      id-token: write # Required for authentication using OIDC
+    environment:
+      name: release_environment
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1
+      - uses: MobileDevOps/flutter-sdk-action@v1.0.0
+
+      - name: Pull last changes
+        run: git pull
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Publish
+        run: dart pub publish --force

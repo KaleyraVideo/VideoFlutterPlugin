@@ -25,13 +25,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        repo-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
     - name: Setting up environment 
       run: |
         pip install pyyaml
     - name: Update package version
+      env:
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
         set -o pipefail
+        export GITHUB_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}
         new_version=$(python update_plugin_version.py ${{ github.event.inputs.release_kind }})
         echo -e "## $new_version\n\n${{ github.event.inputs.changelog }}\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
         git add .
@@ -39,10 +44,3 @@ jobs:
         git tag v$new_version
         git push
         git push origin v$new_version
-
-  publish:
-    needs: release-plugin
-    runs-on: macos-latest
-    permissions:
-      id-token: write # Required for authentication using OIDC
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
