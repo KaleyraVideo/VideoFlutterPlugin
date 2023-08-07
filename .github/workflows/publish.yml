@@ -17,9 +17,6 @@ jobs:
       - uses: dart-lang/setup-dart@v1
       - uses: MobileDevOps/flutter-sdk-action@v1.0.0
 
-      - name: Pull last changes
-        run: git pull
-
       - name: Install dependencies
         run: flutter pub get
 
