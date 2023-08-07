@@ -1,6 +1,6 @@
 name: kaleyra_video_flutter_plugin
 description: Flutter plugin enabling video communication through Kaleyra Video SDKs
-version: 1.0.1
+version: 1.0.2
 homepage: https://www.kaleyra.com/video/
 repository: https://github.com/KaleyraVideo/VideoFlutterPlugin
 issue_tracker: https://github.com/KaleyraVideo/VideoFlutterPlugin/issues
