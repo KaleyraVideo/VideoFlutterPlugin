@@ -1,4 +1,4 @@
-name: Publish Plugin Update
+name: Publish Plugin Update to pub.dev
 
 on:
   push:
