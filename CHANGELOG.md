@@ -1,3 +1,7 @@
+## 1.1.0
+
+
+
 ## 1.0.2
 
 - Align user details formatter default behaviour between iOS and Android platform 
