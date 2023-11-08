@@ -18,6 +18,7 @@ protocol BandyerSDKProtocol: AnyObject {
     func connect(_ session: Bandyer.Session)
     func verifiedUser(_ verified: Bool, for call: Bandyer.Call, completion: ((Error?) -> Void)?)
     func disconnect()
+    func reset()
 }
 
 @available(iOS 12.0, *)

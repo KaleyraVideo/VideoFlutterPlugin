@@ -1,7 +1,7 @@
 # Copyright © 2018-2023 Kaleyra S.p.a. All Rights Reserved.
 # See LICENSE for licensing information
 
-platform :ios, '10.0'
+platform :ios, '12.0'
 
 target 'KaleyraVideoHybridNativeBridge' do
   use_frameworks!
@@ -14,15 +14,4 @@ target 'KaleyraVideoHybridNativeBridge' do
     pod 'SwiftHamcrest', '~> 2.2'
   end
 
-end
-
-#This post_install script is needed after updating Xcode to 14.3 version, otherwise there will be compilation issues.
-post_install do |installer|
-  installer.generated_projects.each do |project|
-    project.targets.each do |target|
-      target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
-      end
-    end
-  end
 end

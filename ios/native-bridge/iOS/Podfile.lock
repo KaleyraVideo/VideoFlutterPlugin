@@ -1,6 +1,6 @@
 PODS:
-  - Bandyer (3.7.1)
-  - SwiftHamcrest (2.2.2)
+  - Bandyer (3.9.0)
+  - SwiftHamcrest (2.2.4)
 
 DEPENDENCIES:
   - Bandyer
@@ -12,9 +12,9 @@ SPEC REPOS:
     - SwiftHamcrest
 
 SPEC CHECKSUMS:
-  Bandyer: 6e08c8a3998b67dda18dd3646833b250138b6a5f
-  SwiftHamcrest: 940c3dae2a31f92da433f5a0b13d42103247051b
+  Bandyer: 64a80517e7e1aff3ea49e0c32c1872e80fac17b6
+  SwiftHamcrest: a45dd878978049c0953259aa01c34fd7258d0340
 
-PODFILE CHECKSUM: 4dcc6d8e15f107f998b14af91b4d8f58cea31d08
+PODFILE CHECKSUM: 66fc4f81333eb6e98b7f40196dbf5ee1fa5c1996
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.2

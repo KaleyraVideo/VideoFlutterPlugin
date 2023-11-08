@@ -136,6 +136,10 @@ class VideoHybridNativeBridge {
         sdk.verifiedUser(verify, for: call, completion: nil)
     }
 
+    func reset() {
+        sdk.reset()
+    }
+
     // MARK: - Private Functions
 
     private func configurePushEventsReporterIfNeeded(config: KaleyraVideoConfiguration) {
@@ -152,10 +156,6 @@ class VideoHybridNativeBridge {
     }
 
     // MARK: - Unsupported Features on iOS Platform
-
-    func reset() {
-        debugPrint("Reset is not supported for iOS platform.")
-    }
 
     func clearUserCache() {
         debugPrint("clearUserCache() is not supported for iOS platform.")

@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2B02758D547CD158CD0323B4 /* Pods_KaleyraVideoHybridNativeBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF8359579961024B3EFBCA2D /* Pods_KaleyraVideoHybridNativeBridge.framework */; };
-		6CAC870A6BDFEA0054DF5578 /* Pods_KaleyraVideoHybridNativeBridge_KaleyraVideoHybridNativeBridgeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E96C905FFBA0F1343AD217EF /* Pods_KaleyraVideoHybridNativeBridge_KaleyraVideoHybridNativeBridgeTests.framework */; };
+		76F386C72A8629D7FEEA9772 /* Pods_KaleyraVideoHybridNativeBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77C58764B5DB5F383BE462 /* Pods_KaleyraVideoHybridNativeBridge.framework */; };
+		9F6CF28AAAF0D5AA9DD43E82 /* Pods_KaleyraVideoHybridNativeBridge_KaleyraVideoHybridNativeBridgeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1BE0F8F5443147BF27F063 /* Pods_KaleyraVideoHybridNativeBridge_KaleyraVideoHybridNativeBridgeTests.framework */; };
 		F931C8AF29DECE2400194E1D /* URL+FromString.swift in Sources */ = {isa = PBXBuildFile; fileRef = F931C8AE29DECE2400194E1D /* URL+FromString.swift */; };
 		F931C8B229DECF7600194E1D /* URL+FromStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F931C8B129DECF7600194E1D /* URL+FromStringTests.swift */; };
 		F931C8B429DEF24600194E1D /* KaleyraVideoSDKUserInterfacePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F931C8B329DEF24600194E1D /* KaleyraVideoSDKUserInterfacePresenter.swift */; };
@@ -165,12 +165,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0DBF27EF0DFAE2D959FEA905 /* Pods-KaleyraVideoHybridNativeBridge.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaleyraVideoHybridNativeBridge.release.xcconfig"; path = "Target Support Files/Pods-KaleyraVideoHybridNativeBridge/Pods-KaleyraVideoHybridNativeBridge.release.xcconfig"; sourceTree = "<group>"; };
-		A0F266EFACC797DFE10AE19D /* Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.debug.xcconfig"; path = "Target Support Files/Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests/Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.debug.xcconfig"; sourceTree = "<group>"; };
-		D402E93B64728382079177EC /* Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.release.xcconfig"; path = "Target Support Files/Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests/Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.release.xcconfig"; sourceTree = "<group>"; };
-		DB98873C21689B5D31B12E28 /* Pods-KaleyraVideoHybridNativeBridge.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaleyraVideoHybridNativeBridge.debug.xcconfig"; path = "Target Support Files/Pods-KaleyraVideoHybridNativeBridge/Pods-KaleyraVideoHybridNativeBridge.debug.xcconfig"; sourceTree = "<group>"; };
-		DF8359579961024B3EFBCA2D /* Pods_KaleyraVideoHybridNativeBridge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KaleyraVideoHybridNativeBridge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E96C905FFBA0F1343AD217EF /* Pods_KaleyraVideoHybridNativeBridge_KaleyraVideoHybridNativeBridgeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KaleyraVideoHybridNativeBridge_KaleyraVideoHybridNativeBridgeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C1BE0F8F5443147BF27F063 /* Pods_KaleyraVideoHybridNativeBridge_KaleyraVideoHybridNativeBridgeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KaleyraVideoHybridNativeBridge_KaleyraVideoHybridNativeBridgeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		31B2D50C090D5E6076BD39E0 /* Pods-KaleyraVideoHybridNativeBridge.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaleyraVideoHybridNativeBridge.release.xcconfig"; path = "Target Support Files/Pods-KaleyraVideoHybridNativeBridge/Pods-KaleyraVideoHybridNativeBridge.release.xcconfig"; sourceTree = "<group>"; };
+		3C77C58764B5DB5F383BE462 /* Pods_KaleyraVideoHybridNativeBridge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KaleyraVideoHybridNativeBridge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AFE6A0D76614CF3A1055AFB /* Pods-KaleyraVideoHybridNativeBridge.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaleyraVideoHybridNativeBridge.debug.xcconfig"; path = "Target Support Files/Pods-KaleyraVideoHybridNativeBridge/Pods-KaleyraVideoHybridNativeBridge.debug.xcconfig"; sourceTree = "<group>"; };
+		9FDA74BAD258248FC14F9BB1 /* Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.debug.xcconfig"; path = "Target Support Files/Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests/Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B73D5754EF9B7B724563F429 /* Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.release.xcconfig"; path = "Target Support Files/Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests/Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.release.xcconfig"; sourceTree = "<group>"; };
 		F931C8AE29DECE2400194E1D /* URL+FromString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+FromString.swift"; sourceTree = "<group>"; };
 		F931C8B129DECF7600194E1D /* URL+FromStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+FromStringTests.swift"; sourceTree = "<group>"; };
 		F931C8B329DEF24600194E1D /* KaleyraVideoSDKUserInterfacePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaleyraVideoSDKUserInterfacePresenter.swift; sourceTree = "<group>"; };
@@ -322,7 +322,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B02758D547CD158CD0323B4 /* Pods_KaleyraVideoHybridNativeBridge.framework in Frameworks */,
+				76F386C72A8629D7FEEA9772 /* Pods_KaleyraVideoHybridNativeBridge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,7 +331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9875C7529A661FC00A91C93 /* KaleyraVideoHybridNativeBridge.framework in Frameworks */,
-				6CAC870A6BDFEA0054DF5578 /* Pods_KaleyraVideoHybridNativeBridge_KaleyraVideoHybridNativeBridgeTests.framework in Frameworks */,
+				9F6CF28AAAF0D5AA9DD43E82 /* Pods_KaleyraVideoHybridNativeBridge_KaleyraVideoHybridNativeBridgeTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,19 +341,19 @@
 		A04417F243B917842D1D4244 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				DB98873C21689B5D31B12E28 /* Pods-KaleyraVideoHybridNativeBridge.debug.xcconfig */,
-				0DBF27EF0DFAE2D959FEA905 /* Pods-KaleyraVideoHybridNativeBridge.release.xcconfig */,
-				A0F266EFACC797DFE10AE19D /* Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.debug.xcconfig */,
-				D402E93B64728382079177EC /* Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.release.xcconfig */,
+				8AFE6A0D76614CF3A1055AFB /* Pods-KaleyraVideoHybridNativeBridge.debug.xcconfig */,
+				31B2D50C090D5E6076BD39E0 /* Pods-KaleyraVideoHybridNativeBridge.release.xcconfig */,
+				9FDA74BAD258248FC14F9BB1 /* Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.debug.xcconfig */,
+				B73D5754EF9B7B724563F429 /* Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		E07C6F68F7D3EA2B93AA305D /* Frameworks */ = {
+		BFFEF6AB45F582862D1DA1C9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DF8359579961024B3EFBCA2D /* Pods_KaleyraVideoHybridNativeBridge.framework */,
-				E96C905FFBA0F1343AD217EF /* Pods_KaleyraVideoHybridNativeBridge_KaleyraVideoHybridNativeBridgeTests.framework */,
+				3C77C58764B5DB5F383BE462 /* Pods_KaleyraVideoHybridNativeBridge.framework */,
+				2C1BE0F8F5443147BF27F063 /* Pods_KaleyraVideoHybridNativeBridge_KaleyraVideoHybridNativeBridgeTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -398,7 +398,7 @@
 				F9875C7829A661FC00A91C93 /* Tests */,
 				F9875C6D29A661FC00A91C93 /* Products */,
 				A04417F243B917842D1D4244 /* Pods */,
-				E07C6F68F7D3EA2B93AA305D /* Frameworks */,
+				BFFEF6AB45F582862D1DA1C9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -832,7 +832,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F9875C7E29A661FC00A91C93 /* Build configuration list for PBXNativeTarget "KaleyraVideoHybridNativeBridge" */;
 			buildPhases = (
-				92FFBE44402D6C9E05C87171 /* [CP] Check Pods Manifest.lock */,
+				D4A6F65CD1B366B5FE70494E /* [CP] Check Pods Manifest.lock */,
 				F9875C6729A661FC00A91C93 /* Headers */,
 				F9875C6829A661FC00A91C93 /* Sources */,
 				F9875C6929A661FC00A91C93 /* Frameworks */,
@@ -851,11 +851,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F9875C8129A661FC00A91C93 /* Build configuration list for PBXNativeTarget "KaleyraVideoHybridNativeBridgeTests" */;
 			buildPhases = (
-				CFC0DB906A26CB7EDC9B4893 /* [CP] Check Pods Manifest.lock */,
+				1D220D8FD79E0C49D895887D /* [CP] Check Pods Manifest.lock */,
 				F9875C7029A661FC00A91C93 /* Sources */,
 				F9875C7129A661FC00A91C93 /* Frameworks */,
 				F9875C7229A661FC00A91C93 /* Resources */,
-				DE341C4DFCB8029DEE8B4F5F /* [CP] Embed Pods Frameworks */,
+				85937B93FAE28ABA6CBBA1CF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -934,29 +934,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		92FFBE44402D6C9E05C87171 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-KaleyraVideoHybridNativeBridge-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CFC0DB906A26CB7EDC9B4893 /* [CP] Check Pods Manifest.lock */ = {
+		1D220D8FD79E0C49D895887D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -978,7 +956,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DE341C4DFCB8029DEE8B4F5F /* [CP] Embed Pods Frameworks */ = {
+		85937B93FAE28ABA6CBBA1CF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -993,6 +971,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests/Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D4A6F65CD1B366B5FE70494E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KaleyraVideoHybridNativeBridge-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1275,7 +1275,7 @@
 		};
 		F9875C7F29A661FC00A91C93 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DB98873C21689B5D31B12E28 /* Pods-KaleyraVideoHybridNativeBridge.debug.xcconfig */;
+			baseConfigurationReference = 8AFE6A0D76614CF3A1055AFB /* Pods-KaleyraVideoHybridNativeBridge.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1287,7 +1287,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1305,7 +1305,7 @@
 		};
 		F9875C8029A661FC00A91C93 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0DBF27EF0DFAE2D959FEA905 /* Pods-KaleyraVideoHybridNativeBridge.release.xcconfig */;
+			baseConfigurationReference = 31B2D50C090D5E6076BD39E0 /* Pods-KaleyraVideoHybridNativeBridge.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1317,7 +1317,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1335,14 +1335,14 @@
 		};
 		F9875C8229A661FC00A91C93 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A0F266EFACC797DFE10AE19D /* Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.debug.xcconfig */;
+			baseConfigurationReference = 9FDA74BAD258248FC14F9BB1 /* Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TQ49746752;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kaleyra.VideoHybidNativeBridgeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1354,14 +1354,14 @@
 		};
 		F9875C8329A661FC00A91C93 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D402E93B64728382079177EC /* Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.release.xcconfig */;
+			baseConfigurationReference = B73D5754EF9B7B724563F429 /* Pods-KaleyraVideoHybridNativeBridge-KaleyraVideoHybridNativeBridgeTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TQ49746752;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kaleyra.VideoHybidNativeBridgeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

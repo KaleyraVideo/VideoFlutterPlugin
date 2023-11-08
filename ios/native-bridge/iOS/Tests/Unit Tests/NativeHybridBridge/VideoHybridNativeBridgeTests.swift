@@ -314,6 +314,14 @@ final class VideoHybridNativeBridgeTests: UnitTestCase {
         assertThat(sut.sdkSpy.verifiedUserInvocations.first?.completion, nilValue())
     }
 
+    // MARK: - Reset
+
+    func testResetShouldResetBandyerSDK() {
+        sut.reset()
+
+        assertThat(sut.sdkSpy.resetInvocations, hasCount(1))
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> VideoHybridNativeBridgeSpy {

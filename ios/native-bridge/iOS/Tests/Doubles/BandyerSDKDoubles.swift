@@ -29,6 +29,7 @@ class BandyerSDKProtocolSpy: BandyerSDKProtocol {
     private(set) var connectInvocations = [Bandyer.Session]()
     private(set) var verifiedUserInvocations = [(verified: Bool, call: Bandyer.Call, completion: ((Error?) -> Void)?)]()
     private(set) var disconnectInvocations: [()] = []
+    private(set) var resetInvocations: [()] = []
 
     func configure(_ config: Config) {
         configureInvocations.append(config)
@@ -44,6 +45,10 @@ class BandyerSDKProtocolSpy: BandyerSDKProtocol {
 
     func disconnect() {
         disconnectInvocations.append(())
+    }
+
+    func reset() {
+        resetInvocations.append(())
     }
 }
 
@@ -89,4 +94,6 @@ class BandyerSDKProtocolDummy: BandyerSDKProtocol {
     func verifiedUser(_ verified: Bool, for call: Bandyer.Call, completion: ((Error?) -> Void)?) {}
 
     func disconnect() {}
+
+    func reset() {}
 }
