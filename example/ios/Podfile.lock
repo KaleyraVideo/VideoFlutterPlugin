@@ -1,5 +1,5 @@
 PODS:
-  - Bandyer (3.6.3)
+  - Bandyer (3.10.0)
   - BandyerBroadcastExtension (1.2.0)
   - Firebase/CoreOnly (10.12.0):
     - FirebaseCore (= 10.12.0)
@@ -55,8 +55,8 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.11.5):
     - GoogleUtilities/Logger
-  - kaleyra_video_flutter_plugin (1.0.1):
-    - Bandyer (~> 3.6.3)
+  - kaleyra_video_flutter_plugin (1.0.2):
+    - Bandyer (~> 3.10.0)
     - Flutter
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
@@ -108,7 +108,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
-  Bandyer: d9f2aa82328210b5fc088b913e1cd7084cf96004
+  Bandyer: fc2e06b382453e6cfbbae0b9464165fa187192f3
   BandyerBroadcastExtension: 975d1a3694d56c879b0545c7e9f5df8467cda209
   Firebase: 07150e75d142fb9399f6777fa56a187b17f833a0
   firebase_core: e477125798fc37cd4ab43ca6a8536bf7e0929c00
@@ -120,7 +120,7 @@ SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
   GoogleUtilities: 13e2c67ede716b8741c7989e26893d151b2b2084
-  kaleyra_video_flutter_plugin: 8340d5e790324193d31bc1cfd085b68785584735
+  kaleyra_video_flutter_plugin: 4a70f50530954b5089800bec05a55b3ef0243538
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
@@ -128,4 +128,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 5474307982ce55d7f87cad0b6f1b7d8441d14663
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.2
