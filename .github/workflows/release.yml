@@ -25,6 +25,7 @@ jobs:
     - name: Setting up environment 
       run: |
         pip install pyyaml
+        git pull
     - name: Update package version
       run: |
         set -o pipefail
@@ -32,7 +33,9 @@ jobs:
         last_commit_hash=$(git log -1 --format="%H")
         last_tag_commit_hash=$(git log -1 --format=format:"%H" $(git describe --tags --abbrev=0))
         changelog=$(git log $last_commit_hash...$last_tag_commit_hash --pretty=format:"- %s")
-        echo -e "## $new_version\n\n$changelog\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
+        new_version_changelog="## $new_version\n\n$changelog"
+        echo $new_version_changelog
+        echo -e "$new_version_changelog\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
         git add .
         git commit -m "Updated to version $new_version" 
         git push
