@@ -6,7 +6,7 @@ part of 'kaleyra_video_flutter_plugin.dart';
 /// Chat tool configuration
 ///
 /// Set to enable the chat feature
-/// 
+///
 /// <b><font color="blue">default</font>: no chat</b>
 class ChatToolConfiguration {
   ChatToolConfiguration({
@@ -23,7 +23,7 @@ class ChatToolConfiguration {
   String toJson() => json.encode(toMapJson());
 
   Map<String, dynamic> toMapJson() => {
-    "audioCallOption": audioCallOption?.toMapJson(),
-    "videoCallOption": videoCallOption?.toMapJson(),
-  };
+        "audioCallOption": audioCallOption?.toMapJson(),
+        "videoCallOption": videoCallOption?.toMapJson(),
+      };
 }

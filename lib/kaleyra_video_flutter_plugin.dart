@@ -45,16 +45,15 @@ part 'user_details_format.dart';
 
 part 'voip_handling_strategy.dart';
 
-
 /// KaleyraVideo
 abstract class KaleyraVideo {
-
   ///
   /// Call this method when device is ready to configure the module
-  /// 
+  ///
   /// Throws Exception if the provided configuration is malformed, returns an instance of KaleyraVideo plugin.
   ///
-  static Future<KaleyraVideo> configure(Configuration params) => FlutterNativePlatformInterface.instance.configure(params);
+  static Future<KaleyraVideo> configure(Configuration params) =>
+      FlutterNativePlatformInterface.instance.configure(params);
 
   ///
   /// This method allows you to reset the configuration.
@@ -66,19 +65,22 @@ abstract class KaleyraVideo {
   /// Connect the plugin
   ///
   /// Throws Exception if the provided session is malformed.
-  /// 
-  connect(Session session) => FlutterNativePlatformInterface.instance.connect(session);
+  ///
+  connect(Session session) =>
+      FlutterNativePlatformInterface.instance.connect(session);
 
   ///
   /// This method returns the current voip push token
-  /// 
+  ///
   /// This function returns a Future<String?> with voipPushToken or null if has not been generated yet.
-  Future<String?> getCurrentVoIPPushToken() => FlutterNativePlatformInterface.instance.getCurrentVoIPPushToken();
+  Future<String?> getCurrentVoIPPushToken() =>
+      FlutterNativePlatformInterface.instance.getCurrentVoIPPushToken();
 
   ///
   /// Start Call with the callee defined
   ///
-  startCall(CreateCallOptions callOptions) => FlutterNativePlatformInterface.instance.startCall(callOptions);
+  startCall(CreateCallOptions callOptions) =>
+      FlutterNativePlatformInterface.instance.startCall(callOptions);
 
   ///
   /// Stop the plugin
@@ -92,42 +94,52 @@ abstract class KaleyraVideo {
 
   ///
   /// Call this method to handle a notification
-  /// 
+  ///
   /// Pass the notification payload as a JSON String
   ///
-  handlePushNotificationPayload(String payload) => FlutterNativePlatformInterface.instance.handlePushNotificationPayload(payload);
+  handlePushNotificationPayload(String payload) =>
+      FlutterNativePlatformInterface.instance
+          .handlePushNotificationPayload(payload);
 
   ///
   /// Call this method to remove all the user details previously provided.
   ///
-  removeUsersDetails() => FlutterNativePlatformInterface.instance.removeUsersDetails();
+  removeUsersDetails() =>
+      FlutterNativePlatformInterface.instance.removeUsersDetails();
 
   ///
   /// Call this method to provide the details for each user to be used to set up the UI
   ///
-  addUsersDetails(List<UserDetails> userDetails) => FlutterNativePlatformInterface.instance.addUsersDetails(userDetails);
+  addUsersDetails(List<UserDetails> userDetails) =>
+      FlutterNativePlatformInterface.instance.addUsersDetails(userDetails);
 
-  setUserDetailsFormat(UserDetailsFormat format) => FlutterNativePlatformInterface.instance.setUserDetailsFormat(format);
+  setUserDetailsFormat(UserDetailsFormat format) =>
+      FlutterNativePlatformInterface.instance.setUserDetailsFormat(format);
 
   ///
   /// Set the UI display mode for the current call
-  /// 
+  ///
   /// Possible values for [mode] param are 'background', 'foreground' and 'foregroundPictureInPicture'
   ///
-  setDisplayModeForCurrentCall(CallDisplayMode mode) => FlutterNativePlatformInterface.instance.setDisplayModeForCurrentCall(mode);
+  setDisplayModeForCurrentCall(CallDisplayMode mode) =>
+      FlutterNativePlatformInterface.instance
+          .setDisplayModeForCurrentCall(mode);
 
   ///
   /// Verify the user for the current call
   ///
-  verifyCurrentCall(bool verify) => FlutterNativePlatformInterface.instance.verifyCurrentCall(verify);
+  verifyCurrentCall(bool verify) =>
+      FlutterNativePlatformInterface.instance.verifyCurrentCall(verify);
 
   ///
   /// Open chat
   ///
-  startChat(String userID) => FlutterNativePlatformInterface.instance.startChat(userID);
+  startChat(String userID) =>
+      FlutterNativePlatformInterface.instance.startChat(userID);
 
   ///
   /// Start Call from url
   ///
-  startCallFrom(String url) => FlutterNativePlatformInterface.instance.startCallFrom(url);
+  startCallFrom(String url) =>
+      FlutterNativePlatformInterface.instance.startCallFrom(url);
 }

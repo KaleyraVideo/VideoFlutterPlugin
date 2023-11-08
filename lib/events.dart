@@ -12,7 +12,6 @@ part of 'kaleyra_video_flutter_plugin.dart';
 /// ```
 ///
 abstract class Events {
-  
   /// @nodoc
   Events();
 
@@ -38,7 +37,7 @@ abstract class Events {
 
   ///
   /// Used to notify chat module status changed
-  /// 
+  ///
   Function(String state)? onChatModuleStatusChanged;
 
   ///

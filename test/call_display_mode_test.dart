@@ -5,6 +5,7 @@ void main() {
   test('CallDisplayMode enum cases name value', () {
     expect(CallDisplayMode.background.name, "background");
     expect(CallDisplayMode.foreground.name, "foreground");
-    expect(CallDisplayMode.foregroundPictureInPicture.name, "foregroundPictureInPicture");
+    expect(CallDisplayMode.foregroundPictureInPicture.name,
+        "foregroundPictureInPicture");
   });
 }

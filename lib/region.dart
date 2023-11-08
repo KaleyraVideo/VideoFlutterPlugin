@@ -7,7 +7,6 @@ part of 'kaleyra_video_flutter_plugin.dart';
 /// A region where your integration will run
 ///
 class Region {
-
   ///
   /// @nodoc
   ///
@@ -17,11 +16,11 @@ class Region {
   Region({required this.name});
 
   ///
-  /// Europe region 
+  /// Europe region
   ///
   factory Region.europe() = EuropeRegion;
 
-  /// 
+  ///
   /// India region
   ///
   factory Region.india() = IndiaRegion;

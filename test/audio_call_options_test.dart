@@ -20,16 +20,16 @@ void main() {
   });
 
   group('JSON encode', () {
-    test('AudioCallOptions toMapJson() function should return a valid Map<String, dynamic> object', () {
+    test(
+        'AudioCallOptions toMapJson() function should return a valid Map<String, dynamic> object',
+        () {
       final sut = AudioCallOptions(
-          recordingType: RecordingType.manual, type: AudioCallType.audioUpgradable);
+          recordingType: RecordingType.manual,
+          type: AudioCallType.audioUpgradable);
 
       var json = sut.toMapJson();
 
-      expect(json, {
-        "recordingType": "manual",
-        "type": "audioUpgradable"
-      });
+      expect(json, {"recordingType": "manual", "type": "audioUpgradable"});
     });
 
     test('AudioCallOptions toMapJson() when recordingType is missing', () {
@@ -37,10 +37,7 @@ void main() {
 
       var json = sut.toMapJson();
 
-      expect(json, {
-        "recordingType": null,
-        "type": "audioUpgradable"
-      });
+      expect(json, {"recordingType": null, "type": "audioUpgradable"});
     });
   });
 }

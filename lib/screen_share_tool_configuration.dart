@@ -6,7 +6,7 @@ part of 'kaleyra_video_flutter_plugin.dart';
 /// Screen Share tool configuration
 ///
 /// Set to enable the screen sharing feature
-/// 
+///
 /// <b><font color="blue">default</font>: no screen share</b>
 class ScreenShareToolConfiguration {
   ScreenShareToolConfiguration({
@@ -15,12 +15,12 @@ class ScreenShareToolConfiguration {
   });
 
   /// Set to true to enable the in app screen share
-  /// 
+  ///
   /// <b><font color="blue">default</font>: false</b>
   bool? inApp;
 
   /// Set to true to enable the whole device screen share
-  /// 
+  ///
   /// <b><font color="blue">default</font>: false</b>
   bool? wholeDevice;
 

@@ -8,8 +8,8 @@ import 'kaleyra_video_flutter_plugin.dart';
 ///
 /// @nodoc
 ///
-abstract class FlutterNativePlatformInterface extends PlatformInterface with KaleyraVideo {
-
+abstract class FlutterNativePlatformInterface extends PlatformInterface
+    with KaleyraVideo {
   /// Constructs a FlutterNativePlatformInterface.
   FlutterNativePlatformInterface() : super(token: _token);
 

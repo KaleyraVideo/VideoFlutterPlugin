@@ -23,13 +23,17 @@ void main() {
   });
 
   group('Configuration subclasses', () {
-    test('SandboxEnvironment class should create Configuration with sandbox name', () {
+    test(
+        'SandboxEnvironment class should create Configuration with sandbox name',
+        () {
       final sut = SandboxEnvironment();
 
       expect(sut.name, "sandbox");
     });
 
-    test('ProductionEnvironment class should create Configuration with production name', () {
+    test(
+        'ProductionEnvironment class should create Configuration with production name',
+        () {
       final sut = ProductionEnvironment();
 
       expect(sut.name, "production");

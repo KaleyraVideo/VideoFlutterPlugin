@@ -61,9 +61,7 @@ void main() {
       });
     });
 
-    test(
-        'Region toJson() function should return a valid JSON string',
-        () {
+    test('Region toJson() function should return a valid JSON string', () {
       final sut = Region(name: "region_name");
 
       var jsonString = sut.toJson();

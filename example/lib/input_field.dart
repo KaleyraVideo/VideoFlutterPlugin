@@ -13,7 +13,8 @@ class InputField extends StatelessWidget {
       {super.key,
       required this.controller,
       required this.labelText,
-      this.hintText, required this.enabled});
+      this.hintText,
+      required this.enabled});
 
   @override
   Widget build(BuildContext context) {

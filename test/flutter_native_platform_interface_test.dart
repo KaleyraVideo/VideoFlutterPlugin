@@ -8,8 +8,7 @@ void main() {
 
     FlutterNativePlatformInterface.instance = dummyInstance;
 
-    expect(
-        FlutterNativePlatformInterface.instance, dummyInstance);
+    expect(FlutterNativePlatformInterface.instance, dummyInstance);
   });
 }
 

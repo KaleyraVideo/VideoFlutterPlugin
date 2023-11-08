@@ -11,12 +11,12 @@ class UserDetailsFormat {
   });
 
   /// Format to be used when displaying an android notification
-  /// 
+  ///
   /// <b><font color="blue">default</font>: equals to UserDetailsFormatter.default</b>
   String? androidNotification;
 
   /// Format to be used to display a user details on the call/chat UI
-  /// 
+  ///
   /// <b><font color="blue">default</font>: ${userAlias}</b>
   String userDetailsFormatDefault;
 

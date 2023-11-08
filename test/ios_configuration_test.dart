@@ -44,7 +44,8 @@ void main() {
       });
     });
 
-    test('IosConfiguration toMapJson() when optional properties are missing', () {
+    test('IosConfiguration toMapJson() when optional properties are missing',
+        () {
       final sut = IosConfiguration();
 
       var json = sut.toMapJson();

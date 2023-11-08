@@ -33,7 +33,6 @@ void main() {
   });
 
   group('UserDetails JSON encode', () {
-
     test(
         'UserDetails toMapJson() function should return a valid Map<String, dynamic> object',
         () {
@@ -57,8 +56,7 @@ void main() {
       });
     });
 
-    test('UserDetails toMapJson() when optional properties are missing',
-        () {
+    test('UserDetails toMapJson() when optional properties are missing', () {
       final sut = UserDetails(userID: "user_id");
 
       var json = sut.toMapJson();
@@ -73,9 +71,7 @@ void main() {
       });
     });
 
-    test(
-        'UserDetails toJson() function should return a valid JSON string',
-        () {
+    test('UserDetails toJson() function should return a valid JSON string', () {
       final sut = UserDetails(
           userID: "user_id",
           nickName: "nick_name",

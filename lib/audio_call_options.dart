@@ -7,7 +7,6 @@ part of 'kaleyra_video_flutter_plugin.dart';
 ///
 /// Defining this object will enable an option to start an audio call from chat UI
 class AudioCallOptions extends CallOptions {
-
   AudioCallOptions({
     recordingType,
     required this.type,
@@ -23,7 +22,7 @@ class AudioCallOptions extends CallOptions {
   /// @nodoc
   @override
   Map<String, dynamic> toMapJson() => {
-    "recordingType": recordingType?.name,
-    "type": type.name,
-  };
+        "recordingType": recordingType?.name,
+        "type": type.name,
+      };
 }

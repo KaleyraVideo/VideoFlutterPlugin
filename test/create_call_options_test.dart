@@ -29,7 +29,7 @@ void main() {
     test(
         'CreateCallOptions toMapJson() function should return a valid Map<String, dynamic> object',
         () {
-     final sut = CreateCallOptions(
+      final sut = CreateCallOptions(
           callees: ["user_1", "user_2", "user_3"],
           callType: CallType.audioUpgradable,
           recordingType: RecordingType.manual);

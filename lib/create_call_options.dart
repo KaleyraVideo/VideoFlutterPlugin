@@ -18,7 +18,7 @@ class CreateCallOptions {
   CallType callType;
 
   /// May have three different values, none, automatic, manual
-  /// 
+  ///
   /// <b><font color="blue">default</font>: none</b>
   RecordingType? recordingType;
 
@@ -27,8 +27,8 @@ class CreateCallOptions {
 
   /// @nodoc
   Map<String, dynamic> toMapJson() => {
-    "callees": List<dynamic>.from(callees),
-    "callType": callType.name,
-    "recordingType": recordingType?.name ?? RecordingType.none.name,
-  };
+        "callees": List<dynamic>.from(callees),
+        "callType": callType.name,
+        "recordingType": recordingType?.name ?? RecordingType.none.name,
+      };
 }

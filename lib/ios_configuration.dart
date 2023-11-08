@@ -13,15 +13,15 @@ class IosConfiguration {
   });
 
   /// Specify the callkit configuration to enable the usage and it's behaviour
-  /// 
+  ///
   /// <b><font color="blue">default</font>: enabled</b>
   CallKitConfiguration? callkit;
 
   /// Specify the voip handling strategy.
-  /// 
+  ///
   /// This allows you to disable or leave the plugin behaviour for handling the voip
   /// notifications.
-  /// 
+  ///
   /// <b><font color="blue">default</font>: VoipHandlingStrategy.automatic </b>
   VoipHandlingStrategy? voipHandlingStrategy;
 

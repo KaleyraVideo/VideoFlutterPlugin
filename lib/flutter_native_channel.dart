@@ -12,10 +12,9 @@ import 'kaleyra_video_flutter_plugin.dart';
 import 'channel_events.dart';
 
 /// An implementation of [FlutterNativePlatformInterface] that uses method channels.
-/// 
+///
 /// @nodoc
 class FlutterNativeChannel extends FlutterNativePlatformInterface {
-
   @override
   ChannelEvents get events => _channelEvents;
 
@@ -23,7 +22,8 @@ class FlutterNativeChannel extends FlutterNativePlatformInterface {
   static const dartChannel = MethodChannel('kaleyra_dart_channel');
 
   @visibleForTesting
-  static const MethodChannel nativeChannel = MethodChannel('kaleyra_native_channel');
+  static const MethodChannel nativeChannel =
+      MethodChannel('kaleyra_native_channel');
 
   final _channelEvents = ChannelEvents(channel: dartChannel);
 
@@ -39,14 +39,17 @@ class FlutterNativeChannel extends FlutterNativePlatformInterface {
       return instance!;
     }
 
-    await nativeChannel.invokeMethod('configureBridge', configuration.toJson()).whenComplete(() => instance = FlutterNativeChannel());
+    await nativeChannel
+        .invokeMethod('configureBridge', configuration.toJson())
+        .whenComplete(() => instance = FlutterNativeChannel());
     return instance!;
   }
 
   @override
   void connect(Session session) {
     if (session.userId == "") throw Exception("Expected a not empty userId!");
-    _channelEvents.accessTokenRequest = (String userId) => session.accessTokenProvider(userId);
+    _channelEvents.accessTokenRequest =
+        (String userId) => session.accessTokenProvider(userId);
     nativeChannel.invokeMethod('connect', session.userId);
   }
 
@@ -55,21 +58,25 @@ class FlutterNativeChannel extends FlutterNativePlatformInterface {
     if (Platform.isIOS) {
       return nativeChannel.invokeMethod("getCurrentVoIPPushToken");
     } else {
-      return Future.error("getCurrentVoIPPushToken() not implemented on this platform");
+      return Future.error(
+          "getCurrentVoIPPushToken() not implemented on this platform");
     }
-  } 
+  }
 
   @override
   void reset() => nativeChannel.invokeMethod("reset");
 
   @override
-  void startCall(CreateCallOptions callOptions) => nativeChannel.invokeMethod("startCall", callOptions.toJson());
+  void startCall(CreateCallOptions callOptions) =>
+      nativeChannel.invokeMethod("startCall", callOptions.toJson());
 
   @override
-  void startChat(String userID) => nativeChannel.invokeMethod("startChat", userID);
+  void startChat(String userID) =>
+      nativeChannel.invokeMethod("startChat", userID);
 
   @override
-  void startCallFrom(String url) => nativeChannel.invokeMethod("startCallUrl", jsonEncode(url));
+  void startCallFrom(String url) =>
+      nativeChannel.invokeMethod("startCallUrl", jsonEncode(url));
 
   @override
   void disconnect() => nativeChannel.invokeMethod("disconnect");
@@ -78,20 +85,26 @@ class FlutterNativeChannel extends FlutterNativePlatformInterface {
   void clearUserCache() => nativeChannel.invokeMethod("clearUserCache");
 
   @override
-  void handlePushNotificationPayload(String payload) => nativeChannel.invokeMethod("handlePushNotificationPayload", jsonEncode(payload));
+  void handlePushNotificationPayload(String payload) => nativeChannel
+      .invokeMethod("handlePushNotificationPayload", jsonEncode(payload));
 
   @override
   void removeUsersDetails() => nativeChannel.invokeMethod("removeUsersDetails");
 
   @override
-  void addUsersDetails(List<UserDetails> userDetails) => nativeChannel.invokeMethod("addUsersDetails", List<dynamic>.from(userDetails.map((x) => x.toJson())));
+  void addUsersDetails(List<UserDetails> userDetails) =>
+      nativeChannel.invokeMethod("addUsersDetails",
+          List<dynamic>.from(userDetails.map((x) => x.toJson())));
 
   @override
-  void setUserDetailsFormat(UserDetailsFormat format) => nativeChannel.invokeMethod("setUserDetailsFormat", format.toJson());
+  void setUserDetailsFormat(UserDetailsFormat format) =>
+      nativeChannel.invokeMethod("setUserDetailsFormat", format.toJson());
 
   @override
-  void setDisplayModeForCurrentCall(CallDisplayMode mode) => nativeChannel.invokeMethod("setDisplayModeForCurrentCall", mode.name);
+  void setDisplayModeForCurrentCall(CallDisplayMode mode) =>
+      nativeChannel.invokeMethod("setDisplayModeForCurrentCall", mode.name);
 
   @override
-  void verifyCurrentCall(bool verify) => nativeChannel.invokeMethod("verifyCurrentCall", verify);
+  void verifyCurrentCall(bool verify) =>
+      nativeChannel.invokeMethod("verifyCurrentCall", verify);
 }

@@ -15,7 +15,7 @@ class Session {
   /// The user id you want to connect
   String userId;
 
-  /// The accessTokenProvider 
+  /// The accessTokenProvider
   Future<String> Function(String) accessTokenProvider = (userId) async {
     return "";
   };

@@ -37,11 +37,11 @@ class UserDetails {
 
   /// @nodoc
   Map<String, dynamic> toMapJson() => {
-    "userID": userID,
-    "firstName": firstName,
-    "lastName": lastName,
-    "email": email,
-    "nickName": nickName,
-    "profileImageURL": profileImageUrl,
-  };
+        "userID": userID,
+        "firstName": firstName,
+        "lastName": lastName,
+        "email": email,
+        "nickName": nickName,
+        "profileImageURL": profileImageUrl,
+      };
 }

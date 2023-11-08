@@ -7,6 +7,7 @@ void main() {
       accessTokenProvider(userId) async {
         return "";
       }
+
       final sut = Session("user_id", accessTokenProvider);
 
       expect(sut.userId, "user_id");

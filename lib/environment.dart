@@ -7,13 +7,12 @@ part of 'kaleyra_video_flutter_plugin.dart';
 /// Available environments
 ///
 class Environment {
-
   /// @nodoc
   final String name;
 
   ///
   /// @nodoc
-  /// 
+  ///
   Environment({required this.name});
 
   ///
@@ -30,9 +29,7 @@ class Environment {
   String toJson() => json.encode(toMapJson());
 
   /// @nodoc
-  Map<String, dynamic> toMapJson() => {
-    "name": name
-  };
+  Map<String, dynamic> toMapJson() => {"name": name};
 }
 
 /// @nodoc

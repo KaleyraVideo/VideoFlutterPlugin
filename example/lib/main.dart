@@ -34,7 +34,9 @@ Future<void> initKaleyraVideo() async {
     region: Region(name: region),
     logEnabled: true,
     tools: Tools(
-        chat: ChatToolConfiguration(audioCallOption: AudioCallOptions(type: AudioCallType.audio), videoCallOption: CallOptions()),
+        chat: ChatToolConfiguration(
+            audioCallOption: AudioCallOptions(type: AudioCallType.audio),
+            videoCallOption: CallOptions()),
         feedback: true,
         fileShare: true,
         screenShare: ScreenShareToolConfiguration(),
@@ -51,12 +53,19 @@ Future<void> initKaleyraVideo() async {
 
   if (!signedUser.isSignedIn) return;
   connect(signedUser.userID!);
-  plugin?.events.oniOSVoipPushTokenUpdated = (token) => {NotificationProxy.registerForVoipNotifications(userId: signedUser.userID!, voipToken: token)};
-  plugin?.events.onCallModuleStatusChanged = (status) => {debugPrint("ExampleKaleyraVideoFlutterPlugin >> callModuleStatus = $status")};
+  plugin?.events.oniOSVoipPushTokenUpdated = (token) => {
+        NotificationProxy.registerForVoipNotifications(
+            userId: signedUser.userID!, voipToken: token)
+      };
+  plugin?.events.onCallModuleStatusChanged = (status) => {
+        debugPrint(
+            "ExampleKaleyraVideoFlutterPlugin >> callModuleStatus = $status")
+      };
   NotificationProxy.registerForPushNotifications(userId: signedUser.userID!);
 }
 
-void connect(String userID) => plugin?.connect(Session(userID, NetworkExampleApi.getAccessToken));
+void connect(String userID) =>
+    plugin?.connect(Session(userID, NetworkExampleApi.getAccessToken));
 
 void disconnect() => plugin?.disconnect();
 
@@ -67,10 +76,12 @@ Future<void> backgroundMessageCallback(String payload) async {
 }
 
 @pragma('vm:entry-point')
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) => backgroundMessageCallback(message.data["message"]!);
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) =>
+    backgroundMessageCallback(message.data["message"]!);
 
 @pragma('vm:entry-point')
-Future<void> huaweiBackgroundMessageCallback(huawei.RemoteMessage message) => backgroundMessageCallback(message.dataOfMap!["message"]!);
+Future<void> huaweiBackgroundMessageCallback(huawei.RemoteMessage message) =>
+    backgroundMessageCallback(message.dataOfMap!["message"]!);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -98,9 +109,12 @@ class _MyAppState extends State<MyApp> {
     _signedUserController.text = signedUser.userID!;
   }
 
-  void _call() => plugin?.startCall(CreateCallOptions(callees: _usersToContactController.text.trim().split(","), callType: CallType.audioVideo));
+  void _call() => plugin?.startCall(CreateCallOptions(
+      callees: _usersToContactController.text.trim().split(","),
+      callType: CallType.audioVideo));
 
-  void _chat() => plugin?.startChat(_usersToContactController.text.trim().split(",").first);
+  void _chat() =>
+      plugin?.startChat(_usersToContactController.text.trim().split(",").first);
 
   final _signedUserController = TextEditingController();
   final _usersToContactController = TextEditingController();
@@ -116,7 +130,8 @@ class _MyAppState extends State<MyApp> {
   void _handlePressSignOut() async {
     _usersToContactController.text = "";
     var userID = signedUser.userID;
-    if (userID != null) NotificationProxy.unregisterNotifications(userId: userID);
+    if (userID != null)
+      NotificationProxy.unregisterNotifications(userId: userID);
     signedUser.signOut();
     disconnect();
     setState(() => {});
@@ -129,15 +144,33 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(title: const Text('KaleyraVideoFlutter')),
         body: ScrollableColumn(children: [
           const KaleyraLogoHeader(),
-          InputField(labelText: "userID", controller: _signedUserController, enabled: !signedUser.isSignedIn),
+          InputField(
+              labelText: "userID",
+              controller: _signedUserController,
+              enabled: !signedUser.isSignedIn),
           Row(children: [
-            ActionButton(label: "Sign in", onPressed: _handlePressSignIn, enabled: !signedUser.isSignedIn),
-            ActionButton(label: "Sign out", onPressed: _handlePressSignOut, enabled: signedUser.isSignedIn)
+            ActionButton(
+                label: "Sign in",
+                onPressed: _handlePressSignIn,
+                enabled: !signedUser.isSignedIn),
+            ActionButton(
+                label: "Sign out",
+                onPressed: _handlePressSignOut,
+                enabled: signedUser.isSignedIn)
           ]),
-          InputField(labelText: "Enter users to call/chat", controller: _usersToContactController, enabled: signedUser.isSignedIn),
+          InputField(
+              labelText: "Enter users to call/chat",
+              controller: _usersToContactController,
+              enabled: signedUser.isSignedIn),
           Row(children: [
-            ActionButton(label: "Make a call", onPressed: _call, enabled: signedUser.isSignedIn),
-            ActionButton(label: "Make a chat", onPressed: _chat, enabled: signedUser.isSignedIn),
+            ActionButton(
+                label: "Make a call",
+                onPressed: _call,
+                enabled: signedUser.isSignedIn),
+            ActionButton(
+                label: "Make a chat",
+                onPressed: _chat,
+                enabled: signedUser.isSignedIn),
           ]),
         ]),
       ),

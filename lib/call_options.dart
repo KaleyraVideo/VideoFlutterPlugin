@@ -12,7 +12,7 @@ class CallOptions {
   });
 
   /// May have three different values, none, automatic, manual
-  /// 
+  ///
   /// <b><font color="blue">default</font>: none</b>
   RecordingType? recordingType;
 
@@ -21,6 +21,6 @@ class CallOptions {
 
   /// @nodoc
   Map<String, dynamic> toMapJson() => {
-    "recordingType": recordingType?.name,
-  };
+        "recordingType": recordingType?.name,
+      };
 }

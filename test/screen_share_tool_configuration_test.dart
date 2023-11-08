@@ -39,7 +39,8 @@ void main() {
       });
     });
 
-    test('ScreenShareToolConfiguration toMapJson() when optional properties are missing',
+    test(
+        'ScreenShareToolConfiguration toMapJson() when optional properties are missing',
         () {
       final sut = ScreenShareToolConfiguration();
 

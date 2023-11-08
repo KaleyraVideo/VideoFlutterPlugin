@@ -38,15 +38,23 @@ class NetworkExampleApi {
   }
 
   unregisterForNotifications(String userId, String token) async {
-    final uri = Uri.parse('https://${_endpoint()}/mobile_push_notifications/rest/device/$userId/$appID/$token');
-    await http.delete(uri).then((value) => {log("notification unregister success")}, onError: (error) => {log("notification unregister error=$error")});
+    final uri = Uri.parse(
+        'https://${_endpoint()}/mobile_push_notifications/rest/device/$userId/$appID/$token');
+    await http.delete(uri).then(
+        (value) => {log("notification unregister success")},
+        onError: (error) => {log("notification unregister error=$error")});
   }
 
   // this function is an utility function to register the device token for push notifications
   // Use your own server for push notification delivery and managing
-  registerForNotifications({required String userId, PushProvider? pushProvider, required String pushToken, required PushType pushType}) async {
+  registerForNotifications(
+      {required String userId,
+      PushProvider? pushProvider,
+      required String pushToken,
+      required PushType pushType}) async {
     if (pushToken.isEmpty) return;
-    final uri = Uri.parse('https://${_endpoint()}/mobile_push_notifications/rest/device');
+    final uri = Uri.parse(
+        'https://${_endpoint()}/mobile_push_notifications/rest/device');
     final headers = {'Content-Type': 'application/json'};
     Map<String, dynamic> body = {
       'user_alias': userId,
@@ -67,13 +75,13 @@ class NetworkExampleApi {
           body: jsonBody,
           encoding: encoding,
         )
-        .then((value) => {log("subscribed for notifications")}, onError: (error) => {log("Failed to subscribe for notifications error=$error")});
+        .then((value) => {log("subscribed for notifications")},
+            onError: (error) =>
+                {log("Failed to subscribe for notifications error=$error")});
   }
 
-  static String _endpoint() => "${env == "production" ? "api" : "api.$env"}.${region.substring(0, 2)}.bandyer.com";
+  static String _endpoint() =>
+      "${env == "production" ? "api" : "api.$env"}.${region.substring(0, 2)}.bandyer.com";
 }
 
-enum PushType {
-  voip,
-  alert
-}
+enum PushType { voip, alert }

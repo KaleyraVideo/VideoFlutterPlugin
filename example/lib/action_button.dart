@@ -9,7 +9,11 @@ class ActionButton extends StatelessWidget {
   final VoidCallback? onPressed;
   bool enabled;
 
-  ActionButton({super.key, required this.label, required this.onPressed, required this.enabled});
+  ActionButton(
+      {super.key,
+      required this.label,
+      required this.onPressed,
+      required this.enabled});
 
   @override
   Widget build(BuildContext context) => Flexible(

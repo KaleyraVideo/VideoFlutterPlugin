@@ -5,7 +5,13 @@ part of 'kaleyra_video_flutter_plugin.dart';
 
 /// Generic configuration for the Kaleyra Video plugin
 class Configuration {
-  Configuration({required this.appID, required this.environment, required this.region, this.tools, this.iosConfig, this.logEnabled});
+  Configuration(
+      {required this.appID,
+      required this.environment,
+      required this.region,
+      this.tools,
+      this.iosConfig,
+      this.logEnabled});
 
   /// This key will be provided to you by us.
   final String appID;
@@ -21,7 +27,6 @@ class Configuration {
 
   /// Define the tools to use
   final Tools? tools;
-
 
   /// Define to customize the iOS configuration
   final IosConfiguration? iosConfig;

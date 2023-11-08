@@ -90,8 +90,7 @@ void main() {
       });
     });
 
-    test('Tools toMapJson() when optional properties are missing',
-        () {
+    test('Tools toMapJson() when optional properties are missing', () {
       final sut = Tools();
 
       var json = sut.toMapJson();
@@ -112,7 +111,8 @@ void main() {
 
       var jsonString = sut.toJson();
 
-      expect(jsonString, "{\"chat\":null,\"feedback\":false,\"fileShare\":false,\"screenShare\":null,\"whiteboard\":false}");
+      expect(jsonString,
+          "{\"chat\":null,\"feedback\":false,\"fileShare\":false,\"screenShare\":null,\"whiteboard\":false}");
     });
   });
 }
