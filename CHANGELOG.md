@@ -1,6 +1,11 @@
 ## 1.1.0
 
-
+- Updated to version 1.1.0
+- Format files to dart format convention
+- Bump Bandyer iOS SDK pod version to 3.10.0
+- git subrepo pull ios/native-bridge
+- Update release.yml
+- Update README.md
 
 ## 1.0.2
 
