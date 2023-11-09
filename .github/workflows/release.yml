@@ -21,11 +21,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
+      with: 
+        fetch-depth: 0
     - name: Setting up environment 
       run: |
         pip install pyyaml
-        git pull
     - name: Update package version
       run: |
         set -o pipefail
