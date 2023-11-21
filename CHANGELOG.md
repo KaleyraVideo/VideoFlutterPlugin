@@ -1,3 +1,10 @@
+## 1.1.1
+
+- git subrepo pull ios/native-bridge
+- Update release.yml
+- Update CHANGELOG.md
+- Update release.yml
+
 ## 1.1.0
 
 - Updated to version 1.1.0
