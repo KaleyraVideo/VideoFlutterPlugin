@@ -133,6 +133,10 @@ Here's an example of a device token: **dec105f879924349fd2fa9aa8bb8b70431d5f41d5
 To connect the plugin to the Kaleyra Video system you will need to provide a Session object.
 The session needs a userID and a function returning a Future<String> with the access token for that user
 
+> [!IMPORTANT]
+> - The *userID* should aready exists in our service. Your backend needs to create it by invoking this api [create_user](https://developers.kaleyra.io/reference/video-v2-user-post)
+> - The *accessToken* should be generated from your backend by invoking this api [get_credentials](https://developers.kaleyra.io/reference/video-v2-sdk-post). Be aware that it expires. The callback will be called multiple times every time a new token is needed to refresh the user session.
+
 ```dart
 kaleyraVideo.connect(Session("usr_xxx", (userId) async {
     // get token for user_xxx
