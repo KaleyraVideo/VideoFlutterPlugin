@@ -129,11 +129,11 @@ private extension Tools {
             builder.chat()
         }
 
-        if fileShare != nil {
+        if fileShare ?? false {
             builder.fileshare()
         }
 
-        if whiteboard != nil {
+        if whiteboard ?? false {
             builder.whiteboard(uploadEnabled: true)
         }
 

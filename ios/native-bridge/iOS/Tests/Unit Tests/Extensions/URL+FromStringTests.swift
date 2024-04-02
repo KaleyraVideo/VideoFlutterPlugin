@@ -17,7 +17,7 @@ final class URL_FromStringTests: UnitTestCase {
     }
 
     func testURLFromStringWithMalformedUrlStringShouldThrowAnException() {
-        let malformedUrlString = "§#@Malformed!"
+        let malformedUrlString = "htt s://§#@Malformed!{"
 
         assertThrows(try URL.fromString(malformedUrlString), equalTo(VideoHybridNativeBridgeError.unableToInitializeURLError(urlString: malformedUrlString)))
     }
