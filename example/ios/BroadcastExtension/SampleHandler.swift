@@ -7,7 +7,7 @@ import BandyerBroadcastExtension
 class SampleHandler: RPBroadcastSampleHandler {
 
   override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
-      BroadcastExtension.instance.start(appGroupIdentifier: "group.com.kaleyraVideo.AppName", setupInfo: nil) { [unowned self] error in
+      BroadcastExtension.instance.start(appGroupIdentifier: "group.com.kaleyra.VideoShared", setupInfo: nil) { [unowned self] error in
           self.finishBroadcastWithError(error)
       }
   }

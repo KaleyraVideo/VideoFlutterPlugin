@@ -5,9 +5,9 @@
 	<key>broadcast</key>
 	<dict>
 		<key>appGroupIdentifier</key>
-		<string>group.com.kaleyraVideo.AppName</string>
+		<string>group.com.kaleyra.VideoShared</string>
 		<key>extensionBundleIdentifier</key>
-		<string>com.kaleyraVideo.AppName.Extension</string>
+		<string>com.kaleyra.VideoFlutterExample.BroadcastExtension</string>
 	</dict>
 </dict>
 </plist>
