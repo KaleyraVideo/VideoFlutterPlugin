@@ -32,8 +32,8 @@ class UsersDetailsProvider: NSObject, UserDetailsProvider {
     }
 
     private func handleFor(userIds: [String]) -> CXHandle {
-        guard !userIds.isEmpty else { return .init(type: .generic, value: "Unknown") }
+        guard !userIds.isEmpty else { return .init(type: .generic, value: "") }
         let details = detailsFor(userIds: userIds)
-        return .init(type: .generic, value: formatter.string(for: details) ?? "Unknown" )
+        return .init(type: .generic, value: formatter.string(for: details) ?? userIds.joined(separator: ", ") )
     }
 }

@@ -1,9 +1,9 @@
 PODS:
-  - Bandyer (3.11.0):
-    - Bandyer/Core (= 3.11.0)
-    - Bandyer/WebRTC (= 3.11.0)
-  - Bandyer/Core (3.11.0)
-  - Bandyer/WebRTC (3.11.0)
+  - Bandyer (3.11.1):
+    - Bandyer/Core (= 3.11.1)
+    - Bandyer/WebRTC (= 3.11.1)
+  - Bandyer/Core (3.11.1)
+  - Bandyer/WebRTC (3.11.1)
   - SwiftHamcrest (2.2.4)
 
 DEPENDENCIES:
@@ -16,7 +16,7 @@ SPEC REPOS:
     - SwiftHamcrest
 
 SPEC CHECKSUMS:
-  Bandyer: aad5f024c79d1935147cfae4c0457182da41c137
+  Bandyer: 310861e4191a19084a712b8a42a6e83e2c17f159
   SwiftHamcrest: a45dd878978049c0953259aa01c34fd7258d0340
 
 PODFILE CHECKSUM: 66fc4f81333eb6e98b7f40196dbf5ee1fa5c1996

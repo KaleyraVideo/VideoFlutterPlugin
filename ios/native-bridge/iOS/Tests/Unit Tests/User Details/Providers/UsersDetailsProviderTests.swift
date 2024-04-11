@@ -82,7 +82,7 @@ class UsersDetailsProviderTests: UnitTestCase {
         assertThat(completionSpy.invocations, equalTo([.init(type: .generic, value: "Alice Appleseed, Bob Appleseed")]))
     }
 
-    func testCreatesUnknownContactHandleWhenEmptyAliasesArrayIsProvided() {
+    func testCreatesEmptyContactHandleWhenEmptyAliasesArrayIsProvided() {
         let cache = makePopulatedCache()
         let formatter = makeDetailsFormatter()
         let sut = makeSUT(cache: cache, formatter: formatter)
@@ -90,7 +90,18 @@ class UsersDetailsProviderTests: UnitTestCase {
         let completionSpy = makeCompletionHandleSpy()
         sut.provideHandle([], completion: completionSpy.callable(_:))
 
-        assertThat(completionSpy.invocations, equalTo([.init(type: .generic, value: "Unknown")]))
+        assertThat(completionSpy.invocations, equalTo([.init(type: .generic, value: "")]))
+    }
+
+    func testCreatesContactHandleConcatenatingUserIdsWhenNilFormattedStringIsProvided() {
+        let cache = makePopulatedCache()
+        let formatter = makeNilFormatter()
+        let sut = makeSUT(cache: cache, formatter: formatter)
+
+        let completionSpy = makeCompletionHandleSpy()
+        sut.provideHandle(["alice", "dave"], completion: completionSpy.callable(_:))
+
+        assertThat(completionSpy.invocations, equalTo([.init(type: .generic, value: "alice, dave")]))
     }
 
     // MARK: - Helpers
@@ -112,6 +123,10 @@ class UsersDetailsProviderTests: UnitTestCase {
         .init(format: format)
     }
 
+    private func makeNilFormatter() -> NilFormatter {
+        .init()
+    }
+
     private func makeCompletionDetailsSpy() -> CompletionSpy<[Bandyer.UserDetails]> {
         makeCompletionSpy()
     }
@@ -122,5 +137,14 @@ class UsersDetailsProviderTests: UnitTestCase {
 
     private func makeCompletionSpy<T>() -> CompletionSpy<T> {
         .init()
+    }
+
+    // MARK: - Doubles
+
+    private class NilFormatter: Formatter {
+
+        override func string(for obj: Any?) -> String? {
+            nil
+        }
     }
 }
