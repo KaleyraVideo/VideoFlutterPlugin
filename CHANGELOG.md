@@ -1,3 +1,9 @@
+## 1.1.3
+
+- Bump Bandyer iOS SDK pod version to 3.11.1
+- Update sample app dependency
+- Configure KaleyraVideoConfig.plist file in iOS sample project with correct appGroupIdentifier and extensionBundleIdentifier
+
 ## 1.1.2
 
 - Bump Bandyer iOS SDK pod version to 3.11.0
