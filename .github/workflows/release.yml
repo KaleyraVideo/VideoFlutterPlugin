@@ -7,11 +7,11 @@ on:
         type: choice
         description: What kind of release do you want to do?
         required: true
-        options: 
-        - 
-        - patch
-        - minor
-        - major
+        options:
+          -
+          - patch
+          - minor
+          - major
 
 jobs:
   release-plugin:
@@ -20,22 +20,22 @@ jobs:
       name: release_environment
 
     steps:
-    - uses: actions/checkout@v2
-      with: 
-        fetch-depth: 0
-    - name: Setting up environment 
-      run: |
-        pip install pyyaml
-    - name: Update package version
-      run: |
-        set -o pipefail
-        new_version=$(python update_plugin_version.py ${{ github.event.inputs.release_kind }})
-        last_commit_hash=$(git log -1 --format="%H")
-        last_tag_commit_hash=$(git log -1 --format=format:"%H" $(git describe --tags --abbrev=0))
-        changelog=$(git log $last_commit_hash...$last_tag_commit_hash --pretty=format:"- %s")
-        new_version_changelog="## $new_version\n\n$changelog"
-        echo $new_version_changelog
-        echo -e "$new_version_changelog\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
-        git add .
-        git commit -m "Updated to version $new_version" 
-        git push
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setting up environment
+        run: |
+          pip install pyyaml
+      - name: Update package version
+        run: |
+          set -o pipefail
+          new_version=$(python update_plugin_version.py ${{ github.event.inputs.release_kind }})
+          last_commit_hash=$(git log -1 --format="%H")
+          last_tag_commit_hash=$(git log -1 --format=format:"%H" $(git describe --tags --abbrev=0))
+          changelog=$(git log $last_commit_hash...$last_tag_commit_hash --pretty=format:"- %s")
+          new_version_changelog="## $new_version\n\n$changelog"
+          echo $new_version_changelog
+          echo -e "$new_version_changelog\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
+          git add .
+          git commit -m "Updated to version $new_version" 
+          git push
