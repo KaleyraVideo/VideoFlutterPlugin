@@ -1,3 +1,7 @@
+## 1.2.1
+
+- Bump Bandyer iOS SDK pod version to 3.12.1
+
 ## 1.2.0
 
 - git subrepo pull ios/native-bridge

@@ -7,7 +7,7 @@ import Foundation
 class _KaleyraVideoHybridVersionInfo: NSObject {
 
     @objc
-    static let krvVersion: String = "1.2.0"
+    static let krvVersion: String = "1.2.1"
 
     @objc
     static let krvPlatform: String = "flutter"
