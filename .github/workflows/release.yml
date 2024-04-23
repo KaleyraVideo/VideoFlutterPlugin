@@ -45,6 +45,13 @@ jobs:
           new_version_changelog="## $new_version\n\n$changelog"
           echo $new_version_changelog
           echo -e "$new_version_changelog\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
+      - name: Install dependencies
+        uses: MobileDevOps/flutter-sdk-action@v1.0.0
+      - run: |  
+           cd example
+           flutter pub get
+           cd ios
+           pod update Bandyer
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: Updated to version ${{ steps.output_tag.outputs.TAG }}"
