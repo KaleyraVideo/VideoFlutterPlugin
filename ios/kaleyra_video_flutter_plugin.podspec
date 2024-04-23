@@ -14,8 +14,11 @@ Pod::Spec.new do |s|
 
   s.source_files = "Classes/**/*.{h,m,mm,swift}", "native-bridge/iOS/Source/**/*.swift"
 
+  podfile = Pod::Podfile.from_file(Pathname.new('native-bridge/iOS/Podfile'))
+  pod = podfile.dependencies.select { |pod| pod.name == "Bandyer" }
+
   s.dependency 'Flutter'
-  s.dependency 'Bandyer', '~> 3.12.1'
+  s.dependency 'Bandyer', pod[0].requirement.to_s
   s.platform = :ios, '10.0'
 
   # Flutter.framework does not contain a i386 slice.
