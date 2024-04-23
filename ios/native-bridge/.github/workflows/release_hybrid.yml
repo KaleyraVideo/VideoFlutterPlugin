@@ -1,0 +1,40 @@
+name: Release hybrid
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [closed]
+jobs:
+    release_flutter:
+      if: github.head_ref == 'prepare_release_native' && github.event.pull_request.merged == true
+      runs-on: ubuntu-latest
+      steps:
+          - name: Generate a token
+            id: generate_token
+            uses: actions/create-github-app-token@v1
+            with:
+              app-id: ${{ secrets.APP_ID }}
+              private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          - uses: actions/checkout@v4
+            with:
+              ref: prepare_release_native
+              token: ${{steps.generate_token.outputs.token}}
+          - name: Test labels
+            run: echo ${{ contains(github.event.pull_request.labels.*.name, 'minor') && 'minor' || 'patch' }}
+
+    clean:
+      needs: [release_flutter]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Generate a token
+          id: generate_token
+          uses: actions/create-github-app-token@v1
+          with:
+            app-id: ${{ secrets.APP_ID }}
+            private-key: ${{ secrets.APP_PRIVATE_KEY }}
+        - name: Delete pr-* branches
+          uses: dawidd6/action-delete-branch@v3
+          with:
+            github_token: ${{steps.generate_token.outputs.token}}
+            branches: update_native
