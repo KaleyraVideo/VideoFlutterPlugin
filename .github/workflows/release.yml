@@ -33,6 +33,13 @@ jobs:
       - name: Setting up environment
         run: |
           pip install pyyaml
+      - uses: karlludwigweise/git-subtree@v1
+        with:
+          pat: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          repo: https://github.com/KaleyraVideo/VideoHybridNativeBridge.git
+          action: pull
+          prefix: ios/native-bridge
+          message: chore: update native-bridge
       - name: Update package version
         id: output_tag
         run: |
@@ -54,5 +61,5 @@ jobs:
            pod update Bandyer
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: Updated to version ${{ steps.output_tag.outputs.TAG }}"
+          commit_message: "chore: updated to version ${{ steps.output_tag.outputs.TAG }}"
           tagging_message: "${{ steps.output_tag.outputs.TAG }}"
