@@ -1,3 +1,15 @@
+## 1.3.0
+
+- git subrepo pull ios/native-bridge
+- chore: update release CI
+- chore: update release.yml
+- Update release.yml
+- chore: update release.yml
+- chore: use ios version of the sdk declared in the podfile of the native-bridge
+- git subrepo pull ios/native-bridge
+- chore: update ci to auto release with bot
+- chore: indent ci files
+
 ## 1.2.1
 
 - Bump Bandyer iOS SDK pod version to 3.12.1

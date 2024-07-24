@@ -59,7 +59,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.11.5):
     - GoogleUtilities/Logger
-  - kaleyra_video_flutter_plugin (1.2.0):
+  - kaleyra_video_flutter_plugin (1.3.0):
     - Bandyer (~> 3.12.1)
     - Flutter
   - nanopb (2.30909.0):
@@ -121,10 +121,10 @@ SPEC CHECKSUMS:
   FirebaseCoreInternal: b342e37cd4f5b4454ec34308f073420e7920858e
   FirebaseInstallations: b28af1b9f997f1a799efe818c94695a3728c352f
   FirebaseMessaging: bb2c4f6422a753038fe137d90ae7c1af57251316
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
   GoogleUtilities: 13e2c67ede716b8741c7989e26893d151b2b2084
-  kaleyra_video_flutter_plugin: 23cb549ee58f39b9b20c690ca4a47386d133772f
+  kaleyra_video_flutter_plugin: 4fe1a150dd33b308c2c408553a23f58d73ab6f07
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
