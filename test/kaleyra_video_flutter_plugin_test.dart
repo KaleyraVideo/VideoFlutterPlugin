@@ -147,30 +147,6 @@ void main() {
     });
 
     test(
-        'KaleyraVideo verifyCurrentCall should forward invocation to FlutterNativePlatformInterface.instance',
-        () {
-      final instance = _makeFlutterNativePlatformInterfaceMock();
-      final sut = _makeSUT();
-
-      _mockFlutterNativePlatformInterface(instance);
-      sut.verifyCurrentCall(false);
-
-      expect(instance.verifyCurrentCallInvocations, [false]);
-    });
-
-    test(
-        'KaleyraVideo startChat should forward invocation to FlutterNativePlatformInterface.instance',
-        () {
-      final instance = _makeFlutterNativePlatformInterfaceMock();
-      final sut = _makeSUT();
-
-      _mockFlutterNativePlatformInterface(instance);
-      sut.verifyCurrentCall(false);
-
-      expect(instance.verifyCurrentCallInvocations, [false]);
-    });
-
-    test(
         'KaleyraVideo startCallFrom should forward invocation to FlutterNativePlatformInterface.instance',
         () {
       final instance = _makeFlutterNativePlatformInterfaceMock();
@@ -217,7 +193,6 @@ class _FlutterNativePlatformInterfaceMock extends Mock
   int removeUsersDetailsInvocationsCount = 0;
   List<List<UserDetails>> addUsersDetailsInvocations = [];
   List<CallDisplayMode> setDisplayModeForCurrentCallInvocations = [];
-  List<bool> verifyCurrentCallInvocations = [];
   List<String> startCallFromInvocations = [];
 
   @override
@@ -276,11 +251,6 @@ class _FlutterNativePlatformInterfaceMock extends Mock
   @override
   setDisplayModeForCurrentCall(CallDisplayMode mode) {
     setDisplayModeForCurrentCallInvocations.add(mode);
-  }
-
-  @override
-  verifyCurrentCall(bool verify) {
-    verifyCurrentCallInvocations.add(verify);
   }
 
   @override

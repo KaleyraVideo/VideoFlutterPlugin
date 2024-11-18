@@ -113,12 +113,6 @@ abstract class KaleyraVideo {
           .setDisplayModeForCurrentCall(mode);
 
   ///
-  /// Verify the user for the current call
-  ///
-  verifyCurrentCall(bool verify) =>
-      FlutterNativePlatformInterface.instance.verifyCurrentCall(verify);
-
-  ///
   /// Open chat
   ///
   startChat(String userID) =>

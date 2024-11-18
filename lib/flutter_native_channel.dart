@@ -95,8 +95,4 @@ class FlutterNativeChannel extends FlutterNativePlatformInterface {
   @override
   void setDisplayModeForCurrentCall(CallDisplayMode mode) =>
       nativeChannel.invokeMethod("setDisplayModeForCurrentCall", mode.name);
-
-  @override
-  void verifyCurrentCall(bool verify) =>
-      nativeChannel.invokeMethod("verifyCurrentCall", verify);
 }

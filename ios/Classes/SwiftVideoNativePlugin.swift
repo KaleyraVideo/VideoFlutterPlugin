@@ -72,8 +72,6 @@ public class SwiftVideoNativePlugin: NSObject, FlutterPlugin {
                     plugin.removeUsersDetails()
                 case ("setDisplayModeForCurrentCall", let mode as String):
                     plugin.setDisplayModeForCurrentCall(mode)
-                case ("verifyCurrentCall", let verify as Bool):
-                    try plugin.verifyCurrentCall(verify)
                 default:
                     throw VideoHybridNativeBridgeError.unsupportedFunctionCallError(method: call.method)
             }
