@@ -17,7 +17,7 @@ public class SwiftVideoNativePlugin: NSObject, FlutterPlugin {
     }
 
     private lazy var plugin: VideoHybridNativeBridge = .init(emitter: self.eventEmitter,
-                                                             rootViewController: nil,
+                                                             rootViewController: UIApplication.shared.delegate?.window??.rootViewController,
                                                              accessTokenProviderFactory: accessTokenProviderFactory)
 
     // MARK: - Init
