@@ -97,10 +97,6 @@ class FlutterNativeChannel extends FlutterNativePlatformInterface {
           List<dynamic>.from(userDetails.map((x) => x.toJson())));
 
   @override
-  void setUserDetailsFormat(UserDetailsFormat format) =>
-      nativeChannel.invokeMethod("setUserDetailsFormat", format.toJson());
-
-  @override
   void setDisplayModeForCurrentCall(CallDisplayMode mode) =>
       nativeChannel.invokeMethod("setDisplayModeForCurrentCall", mode.name);
 

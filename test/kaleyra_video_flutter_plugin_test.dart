@@ -146,19 +146,6 @@ void main() {
     });
 
     test(
-        'KaleyraVideo setUserDetailsFormat should forward invocation to FlutterNativePlatformInterface.instance',
-        () {
-      final format = UserDetailsFormat(userDetailsFormatDefault: "default");
-      final instance = _makeFlutterNativePlatformInterfaceMock();
-      final sut = _makeSUT();
-
-      _mockFlutterNativePlatformInterface(instance);
-      sut.setUserDetailsFormat(format);
-
-      expect(instance.setUserDetailsFormatInvocations, [format]);
-    });
-
-    test(
         'KaleyraVideo setDisplayModeForCurrentCall should forward invocation to FlutterNativePlatformInterface.instance',
         () {
       final instance = _makeFlutterNativePlatformInterfaceMock();
@@ -242,7 +229,6 @@ class _FlutterNativePlatformInterfaceMock extends Mock
   List<String> handlePushNotificationPayloadInvocations = [];
   int removeUsersDetailsInvocationsCount = 0;
   List<List<UserDetails>> addUsersDetailsInvocations = [];
-  List<UserDetailsFormat> setUserDetailsFormatInvocations = [];
   List<CallDisplayMode> setDisplayModeForCurrentCallInvocations = [];
   List<bool> verifyCurrentCallInvocations = [];
   List<String> startCallFromInvocations = [];
@@ -303,11 +289,6 @@ class _FlutterNativePlatformInterfaceMock extends Mock
   @override
   addUsersDetails(List<UserDetails> userDetails) {
     addUsersDetailsInvocations.add(userDetails);
-  }
-
-  @override
-  setUserDetailsFormat(UserDetailsFormat format) {
-    setUserDetailsFormatInvocations.add(format);
   }
 
   @override

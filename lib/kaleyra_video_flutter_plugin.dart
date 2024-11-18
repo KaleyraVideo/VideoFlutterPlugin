@@ -41,8 +41,6 @@ part 'tools.dart';
 
 part 'user_details.dart';
 
-part 'user_details_format.dart';
-
 part 'voip_handling_strategy.dart';
 
 /// KaleyraVideo
@@ -112,9 +110,6 @@ abstract class KaleyraVideo {
   ///
   addUsersDetails(List<UserDetails> userDetails) =>
       FlutterNativePlatformInterface.instance.addUsersDetails(userDetails);
-
-  setUserDetailsFormat(UserDetailsFormat format) =>
-      FlutterNativePlatformInterface.instance.setUserDetailsFormat(format);
 
   ///
   /// Set the UI display mode for the current call

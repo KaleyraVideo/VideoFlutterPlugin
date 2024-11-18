@@ -56,8 +56,6 @@ public class SwiftVideoNativePlugin: NSObject, FlutterPlugin {
                     returnResult = try plugin.getCurrentVoIPPushToken()
                 case ("reset", _):
                     plugin.reset()
-                case ("setUserDetailsFormat", let json as String):
-                    plugin.setUserDetailsFormat(try UserDetailsFormat.decodeJSON(json))
                 case ("startCall", let json as String):
                     try plugin.startCall(try CreateCallOptions.decodeJSON(json))
                 case ("startChat", let userID as String):
