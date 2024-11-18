@@ -3,7 +3,7 @@
 
 import Flutter
 import UIKit
-import Bandyer
+import KaleyraVideoSDK
 
 @available(iOS 12.0, *)
 public class SwiftVideoNativePlugin: NSObject, FlutterPlugin {
