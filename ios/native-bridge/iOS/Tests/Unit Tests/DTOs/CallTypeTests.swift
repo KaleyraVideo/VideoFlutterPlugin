@@ -2,11 +2,10 @@
 // See LICENSE for licensing information
 
 import XCTest
-import Bandyer
+import KaleyraVideoSDK
 import Hamcrest
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 class CallTypeTests: UnitTestCase {
 
     func testBandyerCallType() {

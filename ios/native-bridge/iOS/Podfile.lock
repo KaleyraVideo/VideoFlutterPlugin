@@ -1,24 +1,24 @@
 PODS:
-  - Bandyer (3.12.1):
-    - Bandyer/Core (= 3.12.1)
-    - Bandyer/WebRTC (= 3.12.1)
-  - Bandyer/Core (3.12.1)
-  - Bandyer/WebRTC (3.12.1)
+  - KaleyraVideoSDK (4.0.0):
+    - KaleyraVideoSDK/Core (= 4.0.0)
+    - KaleyraVideoSDK/WebRTC (= 4.0.0)
+  - KaleyraVideoSDK/Core (4.0.0)
+  - KaleyraVideoSDK/WebRTC (4.0.0)
   - SwiftHamcrest (2.2.4)
 
 DEPENDENCIES:
-  - Bandyer (~> 3.12.1)
+  - KaleyraVideoSDK (~> 4.0.0)
   - SwiftHamcrest (~> 2.2)
 
 SPEC REPOS:
   trunk:
-    - Bandyer
+    - KaleyraVideoSDK
     - SwiftHamcrest
 
 SPEC CHECKSUMS:
-  Bandyer: 85a49f0c6c3e2084075991dc05a37ae3b54ca9d8
+  KaleyraVideoSDK: 2350e37e969a0b69bc36f0ea77c4c580b1579fa9
   SwiftHamcrest: a45dd878978049c0953259aa01c34fd7258d0340
 
-PODFILE CHECKSUM: eec3e41640e9473d6444b76c82ece16fcb50757e
+PODFILE CHECKSUM: b048d01ca8b52521a6098cef14d564781e2b7242
 
 COCOAPODS: 1.15.2

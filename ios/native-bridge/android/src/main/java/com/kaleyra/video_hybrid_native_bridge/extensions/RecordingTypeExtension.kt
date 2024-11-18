@@ -3,13 +3,11 @@
 
 package com.kaleyra.video_hybrid_native_bridge.extensions
 
-import com.bandyer.android_sdk.intent.call.CallRecordingType
-import com.bandyer.android_sdk.intent.call.CallRecordingType.AUTOMATIC
-import com.bandyer.android_sdk.intent.call.CallRecordingType.MANUAL
+import com.kaleyra.video.conference.Call
 import com.kaleyra.video_hybrid_native_bridge.RecordingType
 
-internal fun RecordingType?.toSDK(): CallRecordingType = when (this) {
-    RecordingType.Manual    -> MANUAL
-    RecordingType.Automatic -> AUTOMATIC
-    else                    -> CallRecordingType.NONE
+internal fun RecordingType?.toSDK() = when (this) {
+    RecordingType.Manual    -> Call.Recording.manual()
+    RecordingType.Automatic -> Call.Recording.automatic()
+    else                    -> Call.Recording.disabled()
 }

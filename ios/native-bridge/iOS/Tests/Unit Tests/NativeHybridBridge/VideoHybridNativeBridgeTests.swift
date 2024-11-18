@@ -3,11 +3,10 @@
 
 import Foundation
 import Hamcrest
-import Bandyer
+import KaleyraVideoSDK
 import PushKit
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 final class VideoHybridNativeBridgeTests: UnitTestCase {
 
     private var sut: VideoHybridNativeBridgeSpy!
@@ -21,7 +20,8 @@ final class VideoHybridNativeBridgeTests: UnitTestCase {
     }
 
     override func tearDownWithError() throws {
-        BandyerSDK.logLevel = .off
+        KaleyraVideo.logLevel = .off
+        KaleyraVideo.instance.reset()
         sut = nil
 
         try super.tearDownWithError()
@@ -31,7 +31,7 @@ final class VideoHybridNativeBridgeTests: UnitTestCase {
 
     func testConvenientInit() {
         let sutSpy = VideoHybridNativeBridgeInitSpy(emitter: EventEmitterSpy(),
-                                                rootViewController: nil) {
+                                                    rootViewController: nil) {
             AccessTokenProviderStub()
         }
 
@@ -42,7 +42,7 @@ final class VideoHybridNativeBridgeTests: UnitTestCase {
 
     func testConfigureSDKShouldConfigureBandyerSDK() throws {
         let config = makeKaleyraVideoConfiguration()
-        let expectedSdkConfig = try config.makeBandyerConfig()
+        let expectedSdkConfig = try config.makeKaleyraVideoSDKConfig()
 
         try sut.configureSDK(config)
         assertThat(sut.sdkSpy.configureInvocations, hasCount(1))
@@ -51,33 +51,14 @@ final class VideoHybridNativeBridgeTests: UnitTestCase {
         assert(config: sdkConf, equalTo: expectedSdkConfig)
     }
 
-    func testConfigureWithDisabledVoipShouldNotPassARegistryDelegateDuringSDKConfiguration() throws {
-        let config = makeKaleyraVideoConfiguration(voipStrategy: .disabled)
+    func testConfigureSDKShouldConfigureConference() throws {
+        let sut = VideoHybridNativeBridge(emitter: EventEmitterDummy(), rootViewController: nil) { AccessTokenProviderStub() }
+        let config = makeKaleyraVideoConfiguration()
+        let expectedTools = config.makeToolsConfig()
 
         try sut.configureSDK(config)
-        let sdkConf = try unwrap(sut.sdkSpy.configureInvocations.first)
 
-        assertThat(sdkConf.voip.pushRegistryDelegate, nilValue())
-    }
-
-    func testConfigureWithAutomaticVoipShouldPassARegistryDelegateDuringSDKConfiguration() throws {
-        let config = makeKaleyraVideoConfiguration(voipStrategy: .automatic)
-
-        try sut.configureSDK(config)
-        let sdkConf = try unwrap(sut.sdkSpy.configureInvocations.first)
-
-        assertThat(sdkConf.voip.pushRegistryDelegate, presentAnd(instanceOf(PushTokenEventsReporter.self)))
-    }
-
-    func testMultipleConfigureSDKShouldNotInstantiatePushRegistryDelegateMultipleTimes() throws {
-        let config = makeKaleyraVideoConfiguration(voipStrategy: .automatic)
-
-        try sut.configureSDK(config)
-        let pushRegistryDelegate = try unwrap(sut.sdkSpy.configureInvocations.first?.voip.pushRegistryDelegate)
-        try sut.configureSDK(config)
-        let lastSdkConf = try unwrap(sut.sdkSpy.configureInvocations.last)
-
-        assertThat(lastSdkConf.voip.pushRegistryDelegate, presentAnd(instanceOfAnd(sameInstance(pushRegistryDelegate))))
+        assertThat(KaleyraVideo.instance.conference?.settings.tools, presentAnd(equalTo(expectedTools)))
     }
 
     func testConfigureSDKShouldSetUserDetailsProvider() throws {
@@ -93,7 +74,7 @@ final class VideoHybridNativeBridgeTests: UnitTestCase {
 
         try sut.configureSDK(config)
 
-        assertThat(BandyerSDK.logLevel, equalTo(.all))
+        assertThat(KaleyraVideo.logLevel, equalTo(.all))
     }
 
     func testConfigureSDKShouldStartEventsReporter() throws {
@@ -128,26 +109,20 @@ final class VideoHybridNativeBridgeTests: UnitTestCase {
     func testCallClientStateDescriptionShouldReturnActualCallClientStateDescriptionString() throws {
         try configureSUT()
 
-        sut.sdkSpy.callClientStub.state = .stopped
-        assertThat(try sut.callClientStateDescription(), equalTo(Bandyer.CallClientState.stopped.description))
+        sut.sdkSpy.conferenceStub.state = .disconnected(error: nil)
+        assertThat(try sut.callClientStateDescription(), equalTo(KaleyraVideoSDK.ClientState.disconnected(error: nil).description))
 
-        sut.sdkSpy.callClientStub.state = .starting
-        assertThat(try sut.callClientStateDescription(), equalTo(Bandyer.CallClientState.starting.description))
+        sut.sdkSpy.conferenceStub.state = .connecting
+        assertThat(try sut.callClientStateDescription(), equalTo(KaleyraVideoSDK.ClientState.connecting.description))
 
-        sut.sdkSpy.callClientStub.state = .running
-        assertThat(try sut.callClientStateDescription(), equalTo(Bandyer.CallClientState.running.description))
+        sut.sdkSpy.conferenceStub.state = .connected
+        assertThat(try sut.callClientStateDescription(), equalTo(KaleyraVideoSDK.ClientState.connected.description))
 
-        sut.sdkSpy.callClientStub.state = .resuming
-        assertThat(try sut.callClientStateDescription(), equalTo(Bandyer.CallClientState.resuming.description))
+        sut.sdkSpy.conferenceStub.state = .reconnecting
+        assertThat(try sut.callClientStateDescription(), equalTo(KaleyraVideoSDK.ClientState.reconnecting.description))
 
-        sut.sdkSpy.callClientStub.state = .paused
-        assertThat(try sut.callClientStateDescription(), equalTo(Bandyer.CallClientState.paused.description))
-
-        sut.sdkSpy.callClientStub.state = .reconnecting
-        assertThat(try sut.callClientStateDescription(), equalTo(Bandyer.CallClientState.reconnecting.description))
-
-        sut.sdkSpy.callClientStub.state = .failed
-        assertThat(try sut.callClientStateDescription(), equalTo(Bandyer.CallClientState.failed.description))
+        sut.sdkSpy.conferenceStub.state = .disconnected(error: anyNSError())
+        assertThat(try sut.callClientStateDescription(), equalTo(KaleyraVideoSDK.ClientState.disconnected(error: anyNSError()).description))
     }
 
     // MARK: - Connect
@@ -182,23 +157,10 @@ final class VideoHybridNativeBridgeTests: UnitTestCase {
         let token = "5b4b68e78c03e2d3b4a7e29e2b7d4429aa497538ac6c8520c6a7c278b5e4047e"
 
         try sut.configureSDK(config)
-        let sdkConf = try unwrap(sut.sdkSpy.configureInvocations.first)
-        let registry = try unwrap(sdkConf.voip.pushRegistryDelegate as? PushTokenEventsReporter)
-        registry.pushRegistry(PKPushRegistry(queue: nil), didUpdate: makeCredentials(token: token), for: .voIP)
+        sut.reporterSpy.mockVoIPToken(token)
         let lastToken = try sut.getCurrentVoIPPushToken()
 
         assertThat(lastToken, presentAnd(equalTo(token)))
-    }
-
-    // MARK: - Set UserDetails Format
-
-    func testSetUserDetailsFormatShouldSetAFormatterOnFormatterProxy() {
-        let format = makeUserDetailsFormat(userDetailsFormatDefault: "default_format")
-
-        sut.setUserDetailsFormat(format)
-
-        assertThat(sut.formatterProxy.formatter, presentAnd(instanceOf(UserDetailsFormatter.self)))
-        assertThat((sut.formatterProxy.formatter as? UserDetailsFormatter)?.format, presentAnd(equalTo("default_format")))
     }
 
     // MARK: - Start Call
@@ -285,35 +247,6 @@ final class VideoHybridNativeBridgeTests: UnitTestCase {
         assertThat(sut.usersCacheSpy.purgeInvocations, hasCount(1))
     }
 
-    // MARK: - Verify Current Call
-
-    func testVerifyCurrentCallShouldThrowIfCalledBeforeConfiguration() {
-        assertThrows(try sut.verifyCurrentCall(true), equalTo(VideoHybridNativeBridgeError.sdkNotConfiguredError()))
-    }
-
-    func testVerifyCurrentCallWhileThereIsNoInProgressCallInCallReistryShouldDoNothing() throws {
-        try configureSUT()
-        sut.sdkSpy.callRegistry = makeCallRegistryMocked()
-        try sut.verifyCurrentCall(true)
-
-        assertThat(sut.sdkSpy.verifiedUserInvocations, hasCount(0))
-    }
-
-    func testVerifyCurrentCallWithAnInProgressCallInCallRegistryShouldInvokeVerifiedUserOnBandyerSDK() throws {
-        let registry = makeCallRegistryMocked()
-        let call = makeCallDummy()
-
-        registry.addInProgressCall(call)
-        try configureSUT()
-        sut.sdkSpy.callRegistry = registry
-        try sut.verifyCurrentCall(true)
-
-        assertThat(sut.sdkSpy.verifiedUserInvocations, hasCount(1))
-        assertThat(sut.sdkSpy.verifiedUserInvocations.first?.verified, presentAnd(isTrue()))
-        assertThat(sut.sdkSpy.verifiedUserInvocations.first?.call, presentAnd(instanceOfAnd(equalTo(call))))
-        assertThat(sut.sdkSpy.verifiedUserInvocations.first?.completion, nilValue())
-    }
-
     // MARK: - Reset
 
     func testResetShouldResetBandyerSDK() {
@@ -349,10 +282,6 @@ final class VideoHybridNativeBridgeTests: UnitTestCase {
                            whiteboard: false))
     }
 
-    private func makeUserDetailsFormat(userDetailsFormatDefault: String = "") -> UserDetailsFormat {
-        .init(androidNotification: nil, userDetailsFormatDefault: userDetailsFormatDefault)
-    }
-
     private func makeCreateCallOptions() -> CreateCallOptions {
         .init(callees: ["bob", "alice"], callType: .audioVideo, recordingType: RecordingType.none)
     }
@@ -362,11 +291,7 @@ final class VideoHybridNativeBridgeTests: UnitTestCase {
     }
 
     private func makeUserDetails() -> KaleyraVideoHybridNativeBridge.UserDetails {
-        .init(email: nil, firstName: nil, lastName: nil, nickName: nil, profileImageURL: nil, userID: "user_id")
-    }
-
-    private func makeCallRegistryMocked() -> CallRegistryMocked {
-        .init()
+        .init(imageURL: nil, name: nil, userID: "user_id")
     }
 
     private func makeCallDummy() -> CallDummy {
@@ -391,20 +316,16 @@ final class VideoHybridNativeBridgeTests: UnitTestCase {
 
     // MARK: - Assertions
 
-    func assert(config: Bandyer.Config, equalTo otherConfig: Bandyer.Config) {
+    func assert(config: KaleyraVideoSDK.Config, equalTo otherConfig: KaleyraVideoSDK.Config) {
         assertThat(config.appID, equalTo(otherConfig.appID))
         assertThat(config.region, equalTo(otherConfig.region))
         assertThat(config.environment, equalTo(otherConfig.environment))
         assertThat(config.callKit, equalTo(otherConfig.callKit))
         assertThat(config.voip, equalTo(otherConfig.voip))
-        assertThat(config.tools, equalTo(otherConfig.tools))
-        assertThat(config.camera, equalTo(otherConfig.camera))
-        assertThat(config.speakerHijackingStrategy, equalTo(otherConfig.speakerHijackingStrategy))
         assertThat(config.shouldListenForDirectIncomingCalls, equalTo(otherConfig.shouldListenForDirectIncomingCalls))
     }
 }
 
-@available(iOS 12.0, *)
 private class AccessTokenProviderFactorySpy {
 
     private(set) var madeAccessTokenProviders = [AccessTokenProviderStub]()
@@ -416,13 +337,11 @@ private class AccessTokenProviderFactorySpy {
     }
 }
 
-@available(iOS 12.0, *)
 private class VideoHybridNativeBridgeSpy: VideoHybridNativeBridge {
 
-    let sdkSpy: BandyerSDKProtocolSpy = .init()
+    let sdkSpy: KaleyraVideoSDKProtocolSpy = .init()
     let reporterSpy: SDKEventReporterSpy = .init()
     let uiPresenterSpy: UserInterfacePresenterSpy = .init()
-    let formatterProxy: FormatterProxy = .init()
     let usersCacheSpy: UsersDetailsCacheSpy = .init()
     let accessTokenProviderFactorySpy: AccessTokenProviderFactorySpy = .init()
 
@@ -431,41 +350,37 @@ private class VideoHybridNativeBridgeSpy: VideoHybridNativeBridge {
                    reporter: reporterSpy,
                    emitter: EventEmitterDummy(),
                    uiPresenter: uiPresenterSpy,
-                   formatterProxy: formatterProxy,
                    usersCache: usersCacheSpy,
                    accessTokenProviderFactory: accessTokenProviderFactorySpy.accessTokenProviderFactory)
     }
 }
 
-@available(iOS 12.0, *)
 private class VideoHybridNativeBridgeInitSpy: VideoHybridNativeBridge {
 
     let uiPresenter: UserInterfacePresenter
 
-    override init(sdk: BandyerSDKProtocol,
-                  reporter: SDKEventReporter,
-                  emitter: EventEmitter,
-                  uiPresenter: UserInterfacePresenter,
-                  formatterProxy: FormatterProxy,
+    override init(sdk: any KaleyraVideoSDKProtocol, 
+                  reporter: any SDKEventReporter,
+                  emitter: any EventEmitter,
+                  uiPresenter: any UserInterfacePresenter,
                   usersCache: UsersDetailsCache,
-                  accessTokenProviderFactory: @escaping () -> AccessTokenProvider) {
+                  accessTokenProviderFactory: @escaping () -> any AccessTokenProvider) {
         self.uiPresenter = uiPresenter
 
-        super.init(sdk: sdk,
-                   reporter: reporter,
+        super.init(sdk: sdk, reporter: reporter,
                    emitter: emitter,
                    uiPresenter: uiPresenter,
-                   formatterProxy: formatterProxy,
                    usersCache: usersCache,
                    accessTokenProviderFactory: accessTokenProviderFactory)
     }
 }
 
-@available(iOS 12.0, *)
 private class SDKEventReporterSpy: SDKEventReporter {
 
     private(set) var startInvocations: [()] = []
     private(set) var stopInvocations: [()] = []
+
+    private(set) var lastVoIPToken: String?
 
     func start() {
         startInvocations.append(())
@@ -474,21 +389,23 @@ private class SDKEventReporterSpy: SDKEventReporter {
     func stop() {
         stopInvocations.append(())
     }
+
+    func mockVoIPToken(_ token: String) {
+        lastVoIPToken = token
+    }
 }
 
-@available(iOS 12.0, *)
 private class AccessTokenProviderStub: AccessTokenProvider {
 
     func provideAccessToken(userId: String, completion: @escaping (Result<String, Error>) -> Void) {}
 }
 
-@available(iOS 12.0, *)
 private class UsersDetailsCacheSpy: UsersDetailsCache {
 
-    private(set) var setItemsInvocations = [[Bandyer.UserDetails]]()
+    private(set) var setItemsInvocations = [[KaleyraVideoSDK.UserDetails]]()
     private(set) var purgeInvocations: [()] = []
 
-    override func setItems(_ items: [Bandyer.UserDetails]) {
+    override func setItems(_ items: [KaleyraVideoSDK.UserDetails]) {
         setItemsInvocations.append(items)
     }
 

@@ -2,104 +2,60 @@
 // See LICENSE for licensing information
 
 import Foundation
-import Bandyer
+import Combine
+import KaleyraVideoSDK
 
-@available(iOS 12.0, *)
-class CallDummy: NSObject, Bandyer.Call {
+class CallDummy: NSObject, KaleyraVideoSDK.Call {
 
-    let uuid: UUID = .init()
+    let id: UUID = .init()
 
-    let sid: String? = nil
+    let serverId: String? = nil
 
-    let options: Bandyer.CallOptions? = nil
+    let options: KaleyraVideoSDK.CallOptions? = nil
 
-    let endReason: Bandyer.CallEndReason = .none
-
-    let declineReason: Bandyer.CallDeclineReason = .none
-
-    func add(observer: Bandyer.CallObserver) {}
-
-    func add(observer: Bandyer.CallObserver, queue: DispatchQueue?) {}
-
-    func remove(observer: Bandyer.CallObserver) {}
-
-    func add(recordingObserver: Bandyer.CallRecordingObserver) {}
-
-    func add(recordingObserver: Bandyer.CallRecordingObserver, queue: DispatchQueue?) {}
-
-    func remove(recordingObserver: Bandyer.CallRecordingObserver) {}
-
-    let participants: Bandyer.CallParticipants = CallParticipantsDummy()
-
-    let isGroupCall: Bool = false
-
-    let isIncoming: Bool = false
-
-    let isOutgoing: Bool = false
-
-    let callType: Bandyer.CallType = .audioVideo
-
-    let hasVideo: Bool = true
-
-    let isAudioVideo: Bool = true
-
-    let isAudioUpgradable: Bool = false
-
-    let isAudioOnly: Bool = false
-
-    let canUpgradeToVideo: Bool = false
-
-    let didUpgradeToVideo: Bool = false
-
-    let state: Bandyer.CallState = .idle
-
-    let recordingState: Bandyer.CallRecordingState = .stopped
-
-    let connectingDate: Date? = nil
-
-    let connectedDate: Date? = nil
-
-    let endDate: Date? = nil
-
-    let isMuted: Bool = false
-}
-
-@available(iOS 12.0, *)
-private class CallParticipantsDummy: NSObject, Bandyer.CallParticipants {
-
-    var all: [Bandyer.CallParticipant] = []
-
-    var participantsIds: [String] = []
-
-    func participant(identifiedBy identifier: String) -> Bandyer.CallParticipant? {
-        nil
+    var optionsPublisher: AnyPublisher<KaleyraVideoSDK.CallOptions?, Never> {
+        PassthroughSubject().eraseToAnyPublisher()
     }
 
-    var caller: Bandyer.CallParticipant = CallParticipantDummy()
+    let participants: any KaleyraVideoSDK.CallParticipants = CallParticipantsDummy()
 
-    var callerId: String = ""
-
-    var callees: [Bandyer.CallParticipant] = []
-
-    var calleesIds: [String] = []
-
-    func callee(identifiedBy identifier: String) -> Bandyer.CallParticipant? {
-        nil
+    var participantsPublisher: AnyPublisher<any KaleyraVideoSDK.CallParticipants, Never> {
+        PassthroughSubject().eraseToAnyPublisher()
     }
 
-    func add(observer: Bandyer.CallParticipantsObserver) {}
+    var isGroupCall: Bool = false
 
-    func add(observer: Bandyer.CallParticipantsObserver, queue: DispatchQueue?) {}
+    var isOutgoing: Bool = false
 
-    func remove(observer: Bandyer.CallParticipantsObserver) {}
+    var hasUpgradedToVideo: Bool = false
+
+    var upgradePublisher: AnyPublisher<Bool, Never> {
+        PassthroughSubject().eraseToAnyPublisher()
+    }
+
+    var state: KaleyraVideoSDK.CallState = .disconnected
+
+    var statePublisher: AnyPublisher<KaleyraVideoSDK.CallState, Never> {
+        PassthroughSubject().eraseToAnyPublisher()
+    }
+
+    var recording: KaleyraVideoSDK.CallRecording { fatalError() }
+
+    func upgradeToVideo(completion: @escaping (Result<Void, any Error>) -> Void) {}
+
+    func end(completion: @escaping (Result<Void, any Error>) -> Void) {}
 }
 
-@available(iOS 12.0, *)
-private class CallParticipantDummy: NSObject, Bandyer.CallParticipant {
+private class CallParticipantsDummy: NSObject, KaleyraVideoSDK.CallParticipants {
+
+    var all: [any KaleyraVideoSDK.CallParticipant] = []
+
+    var caller: any KaleyraVideoSDK.CallParticipant = CallParticipantDummy()
+
+    var callees: [any KaleyraVideoSDK.CallParticipant] = []
+}
+
+private class CallParticipantDummy: NSObject, KaleyraVideoSDK.CallParticipant {
 
     var userId: String = ""
-
-    var state: Bandyer.CallParticipantState = .unknown
-
-    var didUpgradeToVideo: Bool = false
 }

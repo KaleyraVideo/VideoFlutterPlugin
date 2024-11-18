@@ -5,7 +5,6 @@ import Foundation
 import Hamcrest
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 final class WindowViewControllerPresenterTests: UnitTestCase {
 
     // MARK: - Init
@@ -265,7 +264,6 @@ final class WindowViewControllerPresenterTests: UnitTestCase {
     }
 }
 
-@available(iOS 12.0, *)
 private class WindowFactorySpy {
 
     private(set) var madeWindows = [UIWindow]()
@@ -279,7 +277,6 @@ private class WindowFactorySpy {
     }()
 }
 
-@available(iOS 12.0, *)
 private class ViewControllerFactorySpy {
 
     private(set) var madeViewControllers = [ViewControllerSpy]()
@@ -294,7 +291,6 @@ private class ViewControllerFactorySpy {
     }()
 }
 
-@available(iOS 12.0, *)
 private class ViewController_WindowRootViewControllerMocked: UIViewController {
 
     private class MockedWindow: UIWindow {

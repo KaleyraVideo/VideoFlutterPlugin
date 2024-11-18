@@ -3,15 +3,18 @@
 
 package com.kaleyra.video_hybrid_native_bridge
 
-import com.bandyer.android_sdk.client.BandyerSDKInstance
+import com.kaleyra.video.User
+import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.connector.VideoSDKCachedUserConnector
 import com.kaleyra.video_hybrid_native_bridge.events.EventsReporter
 import com.kaleyra.video_hybrid_native_bridge.mock.MockVideoHybridBridgeRepository
 import com.kaleyra.video_hybrid_native_bridge.repository.ConnectedUserEntity
 import com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -19,13 +22,22 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.Date
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(RandomRunner::class)
 class SDKConnectorTests {
 
-    private val sdk = mockk<BandyerSDKInstance>(relaxed = true)
-    private val tokenProvider = mockk<CrossPlatformAccessTokenProvider>(relaxed = true)
+    private val sdk = mockk<KaleyraVideo>(relaxed = true) {
+        every { connect("userId", any()) } answers  {
+            CompletableDeferred(object : User { override val userId = "userId" })
+        }
+    }
+    private val tokenProvider = mockk<CrossPlatformAccessTokenProvider>(relaxed = true) {
+        every { provideAccessToken("userId", any()) } answers {
+            secondArg<(Result<String>) -> Unit>().invoke(Result.success(firstArg()))
+        }
+    }
     private val eventsReporter = mockk<EventsReporter>(relaxed = true)
     private val repository = MockVideoHybridBridgeRepository()
 
@@ -42,25 +54,22 @@ class SDKConnectorTests {
 
     @Test
     fun connect() = runTest(CoroutineName("io")) {
-        val sdkConnector =
-            VideoSDKCachedUserConnector(sdk, repository, tokenProvider, eventsReporter, this)
-        val session = slot<com.bandyer.android_sdk.client.Session>()
+        val sdkConnector = VideoSDKCachedUserConnector(sdk, repository, tokenProvider, eventsReporter, this)
         sdkConnector.connect("userId")
         advanceUntilIdle()
-        verify { sdk.connect(capture(session)) }
+        val slot = slot<suspend (Date) -> Result<String>>()
+        verify { sdk.connect(userId = "userId", capture(slot)) }
         verify { eventsReporter.start() }
         with(repository.connectedUserDao) {
             verify { insert(any()) }
         }
-        assertEquals(session.captured.accessTokenProvider, sdkConnector.accessTokenProviderProxy)
+        assertEquals(Result.success("userId"), slot.captured.invoke(Date()))
         assertEquals("userId", sdkConnector.lastConnectedUserId)
-        assertEquals("userId", session.captured.userId)
     }
 
     @Test
     fun disconnect() = runTest(CoroutineName("io")) {
-        val sdkConnector =
-            VideoSDKCachedUserConnector(sdk, repository, tokenProvider, eventsReporter, this)
+        val sdkConnector = VideoSDKCachedUserConnector(sdk, repository, tokenProvider, eventsReporter, this)
         sdkConnector.connect("userId")
         sdkConnector.disconnect()
         advanceUntilIdle()
@@ -71,8 +80,7 @@ class SDKConnectorTests {
 
     @Test
     fun clearUserCache() = runTest(CoroutineName("io")) {
-        val sdkConnector =
-            VideoSDKCachedUserConnector(sdk, repository, tokenProvider, eventsReporter, this)
+        val sdkConnector = VideoSDKCachedUserConnector(sdk, repository, tokenProvider, eventsReporter, this)
         sdkConnector.connect("userId")
         sdkConnector.clearUserCache()
         advanceUntilIdle()

@@ -6,17 +6,13 @@ package com.kaleyra.video_hybrid_native_bridge.repository
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-
 /**
  * @suppress
  * @author kristiyan
  */
 @Entity
 data class UserDetailsEntity(
-    @PrimaryKey val userAlias: String,
-    var firstName: String? = null,
-    var lastName: String? = null,
-    var nickName: String? = null,
-    var email: String? = null,
+    @PrimaryKey val userID: String,
+    var name: String? = null,
     var imageUrl: String? = null
 )

@@ -29,7 +29,7 @@ class MockVideoHybridBridgeRepository(
     val userDao = mockk<UserDetailsDao> {
         every { all } returns mockList
         every { getUserDetailsEntity(any()) } answers {
-            mockList.firstOrNull { it.userAlias == arg(0) }
+            mockList.firstOrNull { it.userID == arg(0) }
         }
         every { insert(any()) } answers {
             mockList.addAll(arg(0))
@@ -74,7 +74,7 @@ class MockVideoHybridBridgeRepository(
         return connectedUserDao
     }
 
-    override fun createOpenHelper(config: DatabaseConfiguration?): SupportSQLiteOpenHelper = mockk()
+    override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper = mockk()
 
     override fun createInvalidationTracker(): InvalidationTracker = mockk()
 

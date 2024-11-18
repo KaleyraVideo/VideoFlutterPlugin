@@ -2,12 +2,11 @@
 // See LICENSE for licensing information
 
 import Foundation
-import Bandyer
+import KaleyraVideoSDK
 
-@available(iOS 12.0, *)
 extension Environment {
 
-    var bandyerEnvironment: Bandyer.Environment? {
+    var kaleyraEnvironment: KaleyraVideoSDK.Environment? {
         switch name.lowercased() {
             case "production":
                 return .production

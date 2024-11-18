@@ -2,27 +2,26 @@
 // See LICENSE for licensing information
 
 import Foundation
-import Bandyer
+import KaleyraVideoSDK
 
-@available(iOS 12.0, *)
 class UsersDetailsCache {
 
-    private lazy var items = [String : Bandyer.UserDetails]()
+    private lazy var items = [String : KaleyraVideoSDK.UserDetails]()
     private let lock: Locking = NSRecursiveLock()
 
-    func setItem(_ item: Bandyer.UserDetails, forKey key: String) {
+    func setItem(_ item: KaleyraVideoSDK.UserDetails, forKey key: String) {
         lock.sync {
             items[key] = item
         }
     }
 
-    func setItems(_ items: [Bandyer.UserDetails]) {
+    func setItems(_ items: [KaleyraVideoSDK.UserDetails]) {
         lock.sync {
-            items.forEach { setItem($0, forKey: $0.userID) }
+            items.forEach { setItem($0, forKey: $0.userId) }
         }
     }
 
-    func item(forKey key: String) -> Bandyer.UserDetails? {
+    func item(forKey key: String) -> KaleyraVideoSDK.UserDetails? {
         lock.sync {
             items[key]
         }

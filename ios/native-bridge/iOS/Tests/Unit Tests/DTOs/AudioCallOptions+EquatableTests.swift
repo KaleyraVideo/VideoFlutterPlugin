@@ -3,10 +3,9 @@
 
 import Foundation
 import Hamcrest
-import Bandyer
+import KaleyraVideoSDK
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 final class AudioCallOptions_EquatableTests: UnitTestCase {
 
     func testEquatable() {

@@ -3,74 +3,71 @@
 
 package com.kaleyra.video_hybrid_native_bridge.events
 
-import com.bandyer.android_sdk.call.CallException
-import com.bandyer.android_sdk.call.CallModule
-import com.bandyer.android_sdk.client.BandyerSDK
-import com.bandyer.android_sdk.intent.call.Call
-import com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner
+import com.kaleyra.video.conference.Call
+import com.kaleyra.video_common_ui.CallUI
+import com.kaleyra.video_common_ui.ConferenceUI
+import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.events.reporter.CallEventsReporter
+import com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.job
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(RandomRunner::class)
 class CallEventsReporterTest {
 
-    private val callModule = mockk<CallModule>(relaxed = true)
-    private val sdk = mockk<BandyerSDK>(relaxed = true) {
-        every { callModule } returns this@CallEventsReporterTest.callModule
+    private val conference = mockk<ConferenceUI>(relaxed = true)
+    private val sdk = mockk<KaleyraVideo>(relaxed = true) {
+        every { conference } returns this@CallEventsReporterTest.conference
     }
 
     private val eventsEmitter = mockk<EventsEmitter>(relaxed = true)
-    private val callEventsReporter = CallEventsReporter(sdk, eventsEmitter)
-    private val mockCall = mockk<Call> {
-        every { callInfo } returns mockk {
-            every { callId } returns "callID"
-        }
+    private val mockCall = mockk<CallUI> {
+        every { id } returns "callID"
     }
 
     @Test
-    fun onStartAddObserver() {
+    fun testStart() = runTest {
+        every { conference.call } returns MutableStateFlow(mockCall)
+        val callEventsReporter = CallEventsReporter(sdk, eventsEmitter, backgroundScope)
+        callEventsReporter.start()
+        assertEquals(1, backgroundScope.coroutineContext.job.children.count { it.isActive })
+    }
+
+    @Test
+    fun testMultipleStartOnlyOneJob() = runTest {
+        every { conference.call } returns MutableStateFlow(mockCall)
+        val callEventsReporter = CallEventsReporter(sdk, eventsEmitter, backgroundScope)
+        callEventsReporter.start()
+        callEventsReporter.start()
+        assertEquals(true, backgroundScope.coroutineContext.job.children.find { it.isCancelled } != null)
+        assertEquals(true, backgroundScope.coroutineContext.job.children.find { it.isActive } != null)
+    }
+
+    @Test
+    fun testStop() = runTest {
+        every { conference.call } returns MutableStateFlow(mockCall)
+        val callEventsReporter = CallEventsReporter(sdk, eventsEmitter, backgroundScope)
+        callEventsReporter.start()
+        callEventsReporter.stop()
+        assertEquals(true, backgroundScope.coroutineContext.job.children.find { it.isCancelled } != null)
+    }
+
+    @Test
+    fun onCallEndedWithErrorSendEvent() = runTest(UnconfinedTestDispatcher()) {
+        every { conference.call } returns MutableStateFlow(mockCall)
+        every { mockCall.state } returns MutableStateFlow(Call.State.Disconnected.Ended.Error.Companion)
+        val callEventsReporter = CallEventsReporter(sdk, eventsEmitter, backgroundScope)
         callEventsReporter.start()
         verify {
-            callModule.addCallObserver(callEventsReporter)
-            callModule.addCallUIObserver(callEventsReporter)
-        }
-    }
-
-    @Test
-    fun onStopRemoveObserver() {
-        callEventsReporter.stop()
-        verify {
-            callModule.removeCallObserver(callEventsReporter)
-            callModule.removeCallUIObserver(callEventsReporter)
-        }
-    }
-
-    @Test
-    fun onCallEndedWithErrorSendEvent() {
-        callEventsReporter.onCallEndedWithError(mockCall, CallException("error"))
-        verify {
-            eventsEmitter.sendEvent(Events.CallError, "error")
-        }
-    }
-
-    @Test
-    fun onCallActivityEndedWithErrorSendEvent() {
-        callEventsReporter.onActivityError(mockCall, mockk(), CallException("error"))
-        verify {
-            eventsEmitter.sendEvent(Events.CallError, "error")
-        }
-    }
-
-    @Test
-    fun onCallEndedWithErrorAndActivityEndedWithErrorSendEventOnce() {
-        callEventsReporter.onCallEndedWithError(mockCall, CallException("error"))
-        callEventsReporter.onActivityError(mockCall, mockk(), CallException("error"))
-        verify(atMost = 1) {
-            eventsEmitter.sendEvent(Events.CallError, "error")
+            eventsEmitter.sendEvent(Events.CallError, "An error has occurred")
         }
     }
 }

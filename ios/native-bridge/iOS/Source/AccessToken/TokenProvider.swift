@@ -2,9 +2,8 @@
 // See LICENSE for licensing information
 
 import Foundation
-import Bandyer
+import KaleyraVideoSDK
 
-@available(iOS 12.0, *)
 class TokenProvider: AccessTokenProvider {
 
     // MARK: - Nested Types

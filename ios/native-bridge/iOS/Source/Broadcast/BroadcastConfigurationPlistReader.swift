@@ -3,7 +3,6 @@
 
 import Foundation
 
-@available(iOS 12.0, *)
 struct BroadcastConfigurationPlistReader {
 
     struct BroadcastConfig {

@@ -15,24 +15,24 @@ class RegionTest {
     @Test
     fun europe() {
         val region = Region("europe")
-        assertEquals(com.kaleyra.collaboration_suite_networking.Region.Eu, region.toSDK())
+        assertEquals(com.kaleyra.video.configuration.Region.Europe, region.toSDK())
     }
 
     @Test
     fun india() {
         val region = Region("india")
-        assertEquals(com.kaleyra.collaboration_suite_networking.Region.In, region.toSDK())
+        assertEquals(com.kaleyra.video.configuration.Region.India, region.toSDK())
     }
 
     @Test
     fun us() {
         val region = Region("us")
-        assertEquals(com.kaleyra.collaboration_suite_networking.Region.Us, region.toSDK())
+        assertEquals(com.kaleyra.video.configuration.Region.US, region.toSDK())
     }
 
     @Test
     fun custom() {
         val region = Region("custom")
-        assertEquals(com.kaleyra.collaboration_suite_networking.Region.create("custom"), region.toSDK())
+        assertEquals(com.kaleyra.video.configuration.Region.create("custom"), region.toSDK())
     }
 }

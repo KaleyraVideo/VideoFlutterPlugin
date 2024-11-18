@@ -205,6 +205,8 @@ data class Region (
 )
 
 /**
+ * Video Module Tools
+ *
  * Define the tools to use
  */
 data class Tools (
@@ -355,53 +357,17 @@ data class Session (
  */
 data class UserDetails (
     /**
-     * Email of the user
-     */
-    val email: String? = null,
-
-    /**
-     * First name of the user
-     */
-    val firstName: String? = null,
-
-    /**
-     * Last name of the user
-     */
-    val lastName: String? = null,
-
-    /**
-     * Nickname for the user
-     */
-    val nickName: String? = null,
-
-    /**
      * Image url to use as placeholder for the user.
      */
-    val profileImageURL: String? = null,
+    val imageURL: String? = null,
+
+    /**
+     * The user's display name.
+     */
+    val name: String? = null,
 
     /**
      * User identifier
      */
     val userID: String
-)
-
-/**
- * This is used to display the user details in the call/chat UI
- */
-data class UserDetailsFormat (
-    /**
-     * Format to be used when displaying an android notification
-     * <br/>
-     * <br/>
-     * <b><font color="blue">default</font>: equals to UserDetailsFormatter.default</b>
-     */
-    val androidNotification: String? = null,
-
-    /**
-     * Format to be used to display a user details on the call/chat UI
-     * <br/>
-     * <br/>
-     * <b><font color="blue">default</font>: ${userAlias}</b>
-     */
-    val default: String
 )

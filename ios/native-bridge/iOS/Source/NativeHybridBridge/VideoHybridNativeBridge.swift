@@ -2,22 +2,18 @@
 // See LICENSE for licensing information
 
 import Foundation
-import Bandyer
+import KaleyraVideoSDK
 
-@available(iOS 12.0, *)
 class VideoHybridNativeBridge {
 
     // MARK: - Properties
 
-    private let sdk: BandyerSDKProtocol
+    private let sdk: KaleyraVideoSDKProtocol
     private let reporter: SDKEventReporter
     private let emitter: EventEmitter
     private let uiPresenter: UserInterfacePresenter
-    private let formatterProxy: FormatterProxy
     private let usersCache: UsersDetailsCache
     private let accessTokenProviderFactory: () -> AccessTokenProvider
-
-    private var pushTokenEventReporter: PushTokenEventsReporter?
 
     private var isConfigured: Bool {
         sdk.config != nil
@@ -25,18 +21,16 @@ class VideoHybridNativeBridge {
 
     //  MARK: - Init
 
-    init(sdk: BandyerSDKProtocol,
+    init(sdk: KaleyraVideoSDKProtocol,
          reporter: SDKEventReporter,
          emitter: EventEmitter,
          uiPresenter: UserInterfacePresenter,
-         formatterProxy: FormatterProxy,
          usersCache: UsersDetailsCache,
          accessTokenProviderFactory: @escaping () -> AccessTokenProvider) {
         self.sdk = sdk
         self.reporter = reporter
         self.emitter = emitter
         self.uiPresenter = uiPresenter
-        self.formatterProxy = formatterProxy
         self.usersCache = usersCache
         self.accessTokenProviderFactory = accessTokenProviderFactory
     }
@@ -44,14 +38,12 @@ class VideoHybridNativeBridge {
     convenience init(emitter: EventEmitter,
                      rootViewController: UIViewController?,
                      accessTokenProviderFactory: @escaping () -> AccessTokenProvider) {
-        let sdk = BandyerSDK.instance
-        let formatterProxy = FormatterProxy()
+        let sdk = KaleyraVideo.instance
 
         self.init(sdk: sdk,
                   reporter: EventsReporter(emitter: emitter, sdk: sdk),
                   emitter: emitter,
-                  uiPresenter: MainQueueRelay(KaleyraVideoSDKUserInterfacePresenter(rootViewController: rootViewController, formatter: formatterProxy)),
-                  formatterProxy: formatterProxy,
+                  uiPresenter: MainQueueRelay(KaleyraVideoSDKUserInterfacePresenter(rootViewController: rootViewController)),
                   usersCache: .init(),
                   accessTokenProviderFactory: accessTokenProviderFactory)
     }
@@ -59,16 +51,17 @@ class VideoHybridNativeBridge {
     // MARK: - Plugin Implementation
 
     func configureSDK(_ config: KaleyraVideoConfiguration) throws {
-        configurePushEventsReporterIfNeeded(config: config)
 
         if config.logEnabled ?? false {
-            BandyerSDK.logLevel = .all
+            KaleyraVideo.logLevel = .all
+
         }
 
-        let sdkConfig = try config.makeBandyerConfig(registryDelegate: pushTokenEventReporter)
+        let sdkConfig = try config.makeKaleyraVideoSDKConfig()
 
-        sdk.userDetailsProvider = UsersDetailsProvider(cache: usersCache, formatter: formatterProxy)
-        sdk.configure(sdkConfig)
+        sdk.userDetailsProvider = UsersDetailsProvider(cache: usersCache)
+        try sdk.configure(sdkConfig)
+        sdk.conference?.settings.tools = config.makeToolsConfig()
 
         reporter.start()
 
@@ -78,23 +71,19 @@ class VideoHybridNativeBridge {
     func callClientStateDescription() throws -> String {
         try checkIsConfigured()
 
-        return sdk.callClient.state.description
+        return sdk.conference?.state.description ?? ""
     }
 
     func connect(userID: String) throws {
         try checkIsConfigured()
         let provider = accessTokenProviderFactory()
-        sdk.connect(Bandyer.Session(userId: userID, tokenProvider: provider))
+        try sdk.connect(userId: userID, provider: provider)
     }
 
     func getCurrentVoIPPushToken() throws -> String? {
         try checkIsConfigured()
 
-        return pushTokenEventReporter?.lastToken
-    }
-
-    func setUserDetailsFormat(_ format: UserDetailsFormat) {
-        formatterProxy.formatter = UserDetailsFormatter(format: format.userDetailsFormatDefault)
+        return reporter.lastVoIPToken
     }
 
     func startCall(_ options: CreateCallOptions) throws {
@@ -129,25 +118,11 @@ class VideoHybridNativeBridge {
         usersCache.purge()
     }
 
-    func verifyCurrentCall(_ verify: Bool) throws {
-        try checkIsConfigured()
-        guard let call = sdk.callRegistry.calls.first else { return }
-
-        sdk.verifiedUser(verify, for: call, completion: nil)
-    }
-
     func reset() {
         sdk.reset()
     }
 
     // MARK: - Private Functions
-
-    private func configurePushEventsReporterIfNeeded(config: KaleyraVideoConfiguration) {
-        guard config.voipStrategy == .automatic else { return }
-        guard pushTokenEventReporter == nil else { return }
-
-        pushTokenEventReporter = PushTokenEventsReporter(emitter: emitter)
-    }
 
     private func checkIsConfigured() throws {
         guard isConfigured else {
@@ -159,10 +134,6 @@ class VideoHybridNativeBridge {
 
     func clearUserCache() {
         debugPrint("clearUserCache() is not supported for iOS platform.")
-    }
-
-    func handlePushNotificationPayload(_ json: String) {
-        debugPrint("handlePushNotificationPayload(_) is not supported for iOS platform - json: \(json)")
     }
 
     func setDisplayModeForCurrentCall(_ mode: String) {

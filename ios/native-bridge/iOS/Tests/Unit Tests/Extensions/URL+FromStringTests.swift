@@ -5,7 +5,6 @@ import XCTest
 import Hamcrest
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 final class URL_FromStringTests: UnitTestCase {
 
     func testURLFromStringShouldReturnAURLInitializedUsingProvidedString() throws {

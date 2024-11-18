@@ -8,9 +8,9 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.JobIntentService
-import com.kaleyra.video_hybrid_native_bridge.VideoSDKHybridBridge
 import com.kaleyra.video_hybrid_native_bridge.ContextContainer
 import com.kaleyra.video_hybrid_native_bridge.CrossPlatformAccessTokenProvider
+import com.kaleyra.video_hybrid_native_bridge.VideoSDKHybridBridge
 import com.kaleyra.video_hybrid_native_bridge.events.Events
 import com.kaleyra.video_hybrid_native_bridge.events.EventsEmitter
 import com.kaleyra.video_hybrid_native_bridge.events.EventsReporter
@@ -59,7 +59,6 @@ class KaleyraVideoNotificationService : JobIntentService() {
                 plugin.addUsersDetails(plugin.cachedUserDetails.toTypedArray())
                 plugin.configureBridge(savedConfiguration)
                 plugin.connect(savedUsed)
-                plugin.handlePushNotificationPayload(webHookPayload)
             }
         } catch (exception: Throwable) {
             Log.e("KaleyraNotService", "" + exception.message)

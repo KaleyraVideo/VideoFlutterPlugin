@@ -4,7 +4,6 @@
 import Foundation
 import UIKit
 
-@available(iOS 12.0, *)
 class PresentingViewControllerViewControllerPresenter: ViewControllerPresenter {
 
     // MARK: - Properties

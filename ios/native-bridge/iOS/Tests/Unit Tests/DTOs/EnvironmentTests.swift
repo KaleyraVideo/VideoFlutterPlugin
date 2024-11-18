@@ -3,19 +3,18 @@
 
 import XCTest
 import Hamcrest
-import Bandyer
+import KaleyraVideoSDK
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 class EnvironmentTests: UnitTestCase {
 
     func testBandyerEnvironment() {
-        assertThat(Environment(name: "production").bandyerEnvironment, equalTo(.production))
-        assertThat(Environment(name: "PRODUCTION").bandyerEnvironment, equalTo(.production))
-        assertThat(Environment(name: "ProDUCtioN").bandyerEnvironment, equalTo(.production))
-        assertThat(Environment(name: "sandbox").bandyerEnvironment, equalTo(.sandbox))
-        assertThat(Environment(name: "SANDBOX").bandyerEnvironment, equalTo(.sandbox))
-        assertThat(Environment(name: "sAndBoX").bandyerEnvironment, equalTo(.sandbox))
+        assertThat(Environment(name: "production").kaleyraEnvironment, equalTo(.production))
+        assertThat(Environment(name: "PRODUCTION").kaleyraEnvironment, equalTo(.production))
+        assertThat(Environment(name: "ProDUCtioN").kaleyraEnvironment, equalTo(.production))
+        assertThat(Environment(name: "sandbox").kaleyraEnvironment, equalTo(.sandbox))
+        assertThat(Environment(name: "SANDBOX").kaleyraEnvironment, equalTo(.sandbox))
+        assertThat(Environment(name: "sAndBoX").kaleyraEnvironment, equalTo(.sandbox))
     }
 
 }

@@ -2,17 +2,14 @@
 // See LICENSE for licensing information
 
 import Foundation
-import Bandyer
+import KaleyraVideoSDK
 
-@available(iOS 12.0, *)
 protocol CallWindowProtocol: AnyObject {
 
     var isHidden: Bool { get set }
-    var callDelegate: Bandyer.CallWindowDelegate? { get set }
 
-    func setConfiguration(_ configuration: Bandyer.CallViewControllerConfiguration?)
-    func presentCallViewController(for intent: Bandyer.Intent, completion: ((Error?) -> Void)?)
+    func makeKeyAndVisible()
+    func set(rootViewController controller: UIViewController?, animated: Bool, completion: ((Bool) -> Void)?)
 }
 
-@available(iOS 12.0, *)
 extension CallWindow: CallWindowProtocol {}

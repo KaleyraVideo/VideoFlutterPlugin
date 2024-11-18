@@ -3,16 +3,14 @@
 
 import Foundation
 import Hamcrest
-import Bandyer
+import KaleyraVideoSDK
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 final class KaleyraVideoSDKUserInterfacePresenterTests: UnitTestCase {
 
-    private var sdkSpy: BandyerSDKProtocolSpy!
+    private var sdkSpy: KaleyraVideoSDKProtocolSpy!
     private var viewControllerPresenterSpy: ViewControllerPresenterSpy!
     private var callWindowSpy: CallWindowSpy!
-    private var formatterDummy: FormatterDummy!
     private var sut: KaleyraVideoSDKUserInterfacePresenter!
 
     // MARK: - Lifecycle
@@ -23,45 +21,26 @@ final class KaleyraVideoSDKUserInterfacePresenterTests: UnitTestCase {
         sdkSpy = makeBandyerSDKProtocolSpy()
         viewControllerPresenterSpy = makeViewControllerPresenterSpy()
         callWindowSpy = makeCallWindowSpy()
-        formatterDummy = makeFormatterDummy()
-        sut = makeSUT(sdk: sdkSpy, viewControllerPresenter: viewControllerPresenterSpy, callWindow: callWindowSpy, formatter: formatterDummy)
-
-        BandyerSDK.instance.configure(try! ConfigBuilder(appID: "app_id", environment: .sandbox, region: .europe).build())
+        sut = makeSUT(sdk: sdkSpy, viewControllerPresenter: viewControllerPresenterSpy, callWindow: callWindowSpy)
+        try KaleyraVideo.instance.configure(.init(appID: "app_id", region: .europe, environment: .sandbox))
     }
 
     override func tearDownWithError() throws {
         sut = nil
         sdkSpy = nil
         viewControllerPresenterSpy = nil
-        formatterDummy = nil
+        KaleyraVideo.instance.reset()
 
         try super.tearDownWithError()
     }
 
-    // MARK: - Init
-
-    func testShouldSetSelfAsCallWindowDelegate() {
-        let callWindow = makeCallWindowSpy()
-        let sut = makeSUT(sdk: makeBandyerSDKProtocolSpy(), viewControllerPresenter: makeViewControllerPresenterSpy(), callWindow: callWindow, formatter: makeFormatterDummy())
-
-        assertThat(callWindow.callDelegate, presentAnd(instanceOfAnd(equalTo(sut))))
-    }
-
     // MARK: - Configure
-
-    func testConfigureShouldSetSelfAsIncomingCallObserver() {
-        sut.configure(with: makeUserInterfacePresenterConfiguration())
-
-        assertThat(sdkSpy.callClientStub.hasIncomingCallObserver(sut), isTrue())
-    }
 
     func testConfigureShouldSetupNotificationCoordinator() {
         sut.configure(with: makeUserInterfacePresenterConfiguration())
 
-        assertThat(sdkSpy.notificationsCoordinatorSpy.chatListener, presentAnd(instanceOfAnd(equalTo(sut))))
-        assertThat(sdkSpy.notificationsCoordinatorSpy.fileShareListener, presentAnd(instanceOfAnd(equalTo(sut))))
-        assertThat(sdkSpy.notificationsCoordinatorSpy.formatter, presentAnd(instanceOfAnd(sameInstance(formatterDummy))))
-        assertThat(sdkSpy.notificationsCoordinatorSpy.startInvocations, hasCount(1))
+        assertThat(sdkSpy.conversationStub.notificationsSpy.delegate, presentAnd(instanceOfAnd(sameInstance(sut))))
+        assertThat(sdkSpy.conversationStub.notificationsSpy.startInvocations, hasCount(1))
     }
 
     // MARK: - Present Chat UI
@@ -69,40 +48,21 @@ final class KaleyraVideoSDKUserInterfacePresenterTests: UnitTestCase {
     func testPresentChatShouldPresentAChannelViewControllerOnViewControllerPresenter() {
         sut.presentChat(with: "user_id")
 
-        assert(presenter: viewControllerPresenterSpy, hasPresented: ChannelViewController.self)
-    }
-
-    func testPresentChatShouldCreateAndPassToChannelViewControllerAnOpenChatIntent() throws {
-        let expectedIntent = makeOpenChatIntent(userID: "user_id")
-
-        sut.presentChat(with: "user_id")
-        let channelVC = try unwrap(viewControllerPresenterSpy.presentInvocations.first?.viewController as? ChannelViewController)
-
-        assertThat(channelVC.intent, presentAnd(equalTo(expectedIntent)))
+        assert(presenter: viewControllerPresenterSpy, hasPresented: ChatViewController.self)
     }
 
     func testPresentChatShouldConfigureChannelViewController() throws {
         sut.presentChat(with: "user_id")
-        let channelVC = try unwrap(viewControllerPresenterSpy.presentInvocations.first?.viewController as? ChannelViewController)
+        let channelVC = try unwrap(viewControllerPresenterSpy.presentInvocations.first?.viewController as? ChatViewController)
 
         assertThat(channelVC.delegate, presentAnd(instanceOfAnd(equalTo(sut))))
         assertThat(channelVC.configuration, present())
     }
 
-    func testCallWindowOpenChatWithIntentShouldPresentChatUI() throws {
-        let intent = makeOpenChatIntent()
-
-        sut.callWindow(makeCallWindow(), openChatWith: intent)
-
-        assert(presenter: viewControllerPresenterSpy, hasPresented: ChannelViewController.self)
-        let channelVC = try unwrap(viewControllerPresenterSpy.presentInvocations.first?.viewController as? ChannelViewController)
-        assertThat(channelVC.intent, presentAnd(equalTo(intent)))
-    }
-
     func testChannelViewControllerDidFinishShouldDismissUsingViewControllerPresenter() {
-        let controller = makeChannelViewController()
+        let controller = makeChatViewController()
 
-        sut.channelViewControllerDidFinish(controller)
+        sut.chatViewControllerDidFinish(controller)
 
         assertThat(viewControllerPresenterSpy.dismissInvocations, hasCount(1))
         assertThat(viewControllerPresenterSpy.dismissInvocations.first?.viewController, presentAnd(instanceOfAnd(equalTo(controller))))
@@ -124,121 +84,77 @@ final class KaleyraVideoSDKUserInterfacePresenterTests: UnitTestCase {
         let completion = try unwrap(viewControllerPresenterSpy.dismissAllInvocations.first?.completion)
         completion()
 
-        assert(presenter: viewControllerPresenterSpy, hasPresented: ChannelViewController.self)
+        assert(presenter: viewControllerPresenterSpy, hasPresented: ChatViewController.self)
     }
 
     // MARK: - Present Call UI
 
-    func testPresentCallShouldSetCallViewControllerConfigurationOnCallWindow() {
-        sut.configure(with: makeUserInterfacePresenterConfiguration(showsFeedbackWhenCallEnds: true))
-        sut.presentCall(makeCreateCallOptions())
-
-        assertThat(callWindowSpy.setConfigurationInvocations, hasCount(1))
-        assertThat(callWindowSpy.setConfigurationInvocations.first??.isFeedbackEnabled, presentAnd(isTrue()))
-        assertThat(callWindowSpy.setConfigurationInvocations.first??.formatter, present())
-    }
-
-    func testPresentCallShouldCallPresentCallViewControllerOnCallWindow() {
+    func testPresentCallShouldCreateTheCallOnConferenceObject() {
         let options = makeCreateCallOptions(callees: ["user_id", "other_user_id"],
                                             callType: .audioUpgradable,
                                             recordingType: .manual)
 
         sut.presentCall(options)
 
-        assertThat(callWindowSpy.presentCallViewControllerInvocations, hasCount(1))
-        assertThat(callWindowSpy.presentCallViewControllerInvocations.first?.intent, presentAnd(instanceOfAnd(equalTo(options.makeStartOutgoingCallIntent()))))
-        assertThat(callWindowSpy.presentCallViewControllerInvocations.first?.completion, present())
+        assertThat(sdkSpy.conferenceStub.callInvocations, hasCount(1))
+        assertThat(sdkSpy.conferenceStub.callInvocations.first?.callees, presentAnd(equalTo(["user_id", "other_user_id"])))
+        assertThat(sdkSpy.conferenceStub.callInvocations.first?.options.type, presentAnd(equalTo(.audioUpgradable)))
+        assertThat(sdkSpy.conferenceStub.callInvocations.first?.options.recording, presentAnd(equalTo(.manual)))
     }
 
-    func testPresentCallFromUrlShouldCallPresentCallViewControllerOnCallWindow() throws {
+    func testPresentCallFromUrlShouldCreateTheCallOnConferenceObject() throws {
         let url = try URL.fromString("https://www.kaleyra.com")
-        let expectedIntent = JoinURLIntent(url: url)
 
         sut.presentCall(url)
-
-        assertThat(callWindowSpy.presentCallViewControllerInvocations, hasCount(1))
-        assertThat(callWindowSpy.presentCallViewControllerInvocations.first?.intent, presentAnd(instanceOfAnd(equalTo(expectedIntent))))
-        assertThat(callWindowSpy.presentCallViewControllerInvocations.first?.completion, present())
-    }
-
-    func testDetectedIncomingCallShouldCallPresentCallViewControllerOnCallWindow() {
-        let call = makeCall()
-        let expectedIntent = HandleIncomingCallIntent(call: call)
-
-        sut.callClient(makeCallClient(), didReceiveIncomingCall: call)
-
-        assertThat(callWindowSpy.presentCallViewControllerInvocations, hasCount(1))
-        assertThat(callWindowSpy.presentCallViewControllerInvocations.first?.intent, presentAnd(instanceOfAnd(equalTo(expectedIntent))))
-        assertThat(callWindowSpy.presentCallViewControllerInvocations.first?.completion, present())
-    }
-
-    func testPresentCallViewControllerErrorShouldDisplayAnAlert() throws {
-        let options = makeCreateCallOptions()
-
-        sut.presentCall(options)
-        let completion = try unwrap(callWindowSpy.presentCallViewControllerInvocations.first?.completion)
-        completion(anyNSError())
-
-        assertThat(viewControllerPresenterSpy.displayAlertInvocations, hasCount(1))
-        assertThat(viewControllerPresenterSpy.displayAlertInvocations.first?.title, presentAnd(equalTo("Warning")))
-        assertThat(viewControllerPresenterSpy.displayAlertInvocations.first?.message, presentAnd(equalTo("Another call ongoing")))
-        assertThat(viewControllerPresenterSpy.displayAlertInvocations.first?.dismissButtonText, presentAnd(equalTo("OK")))
-    }
-
-    func testCallWindowDidFinishShouldHideCallWindow() {
-        callWindowSpy.isHidden = false
-        sut.callWindowDidFinish(makeCallWindow())
-
-        assertThat(callWindowSpy.isHidden, isTrue())
+        assertThat(sdkSpy.conferenceStub.joinInvocations, hasCount(1))
+        assertThat(sdkSpy.conferenceStub.joinInvocations.first?.url, presentAnd(equalTo(URL(string: "https://www.kaleyra.com"))))
     }
 
     func testChannelViewControllerDidTapAudioCallWithUsersShouldNotPresentCallViewControllerIfDisabledInConfig() {
         let config = makeUserInterfacePresenterConfiguration(chatHasAudioButton: false)
 
         sut.configure(with: config)
-        sut.channelViewController(makeChannelViewController(), didTapAudioCallWith: ["user_id"])
+        sut.chatViewControllerDidTapAudioCallButton(makeChatViewController())
 
-        assertThat(viewControllerPresenterSpy.presentInvocations, hasCount(0))
+        assertThat(sdkSpy.conferenceStub.callInvocations, hasCount(0))
     }
 
     func testChannelViewControllerDidTapAudioCallWithUsersShouldPresentCallWiewController() {
-        let expectedIntent = StartOutgoingCallIntent(callees: ["user_id"], options: makeAudioCallOptions().callOptions)
         let config = makeUserInterfacePresenterConfiguration(chatHasAudioButton: true)
 
         sut.configure(with: config)
-        sut.channelViewController(makeChannelViewController(), didTapAudioCallWith: ["user_id"])
+        sut.chatViewControllerDidTapAudioCallButton(makeChatViewController())
 
-        assertThat(callWindowSpy.presentCallViewControllerInvocations, hasCount(1))
-        assertThat(callWindowSpy.presentCallViewControllerInvocations.first?.intent, presentAnd(instanceOfAnd(equalTo(expectedIntent))))
+        assertThat(sdkSpy.conferenceStub.callInvocations, hasCount(1))
+        assertThat(sdkSpy.conferenceStub.callInvocations.first?.options.type, presentAnd(equalTo(.audioUpgradable)))
     }
 
     func testChannelViewControllerDidTapVideoCallWithWithUsersShouldNotPresentCallViewControllerIfDisabledInConfig() {
         let config = makeUserInterfacePresenterConfiguration(chatHasVideoButton: false)
 
         sut.configure(with: config)
-        sut.channelViewController(makeChannelViewController(), didTapVideoCallWith: ["user_id"])
+        sut.chatViewControllerDidTapVideoCallButton(makeChatViewController())
 
-        assertThat(viewControllerPresenterSpy.presentInvocations, hasCount(0))
+        assertThat(sdkSpy.conferenceStub.callInvocations, hasCount(0))
     }
 
     func testChannelViewControllerDidTapVideoCallWithUsersShouldPresentCallWiewController() {
-        let expectedIntent = StartOutgoingCallIntent(callees: ["user_id"], options: makeCallOptions().callOptions)
         let config = makeUserInterfacePresenterConfiguration(chatHasVideoButton: true)
 
         sut.configure(with: config)
-        sut.channelViewController(makeChannelViewController(), didTapVideoCallWith: ["user_id"])
+        sut.chatViewControllerDidTapVideoCallButton(makeChatViewController())
 
-        assertThat(callWindowSpy.presentCallViewControllerInvocations, hasCount(1))
-        assertThat(callWindowSpy.presentCallViewControllerInvocations.first?.intent, presentAnd(instanceOfAnd(equalTo(expectedIntent))))
+        assertThat(sdkSpy.conferenceStub.callInvocations, hasCount(1))
+        assertThat(sdkSpy.conferenceStub.callInvocations.first?.options.type, presentAnd(equalTo(.audioVideo)))
     }
 
     // MARK: - Helpers
 
-    private func makeSUT(sdk: BandyerSDKProtocol, viewControllerPresenter: ViewControllerPresenter, callWindow: CallWindowProtocol, formatter: Formatter) -> KaleyraVideoSDKUserInterfacePresenter {
-        .init(sdk: sdk, viewControllerPresenter: viewControllerPresenter, callWindow: callWindow, formatter: formatter)
+    private func makeSUT(sdk: KaleyraVideoSDKProtocol, viewControllerPresenter: ViewControllerPresenter, callWindow: CallWindowProtocol) -> KaleyraVideoSDKUserInterfacePresenter {
+        .init(sdk: sdk, viewControllerPresenter: viewControllerPresenter, callWindow: callWindow)
     }
 
-    private func makeBandyerSDKProtocolSpy() -> BandyerSDKProtocolSpy {
+    private func makeBandyerSDKProtocolSpy() -> KaleyraVideoSDKProtocolSpy {
         .init()
     }
 
@@ -274,10 +190,6 @@ final class KaleyraVideoSDKUserInterfacePresenterTests: UnitTestCase {
         .init(recordingType: .manual)
     }
 
-    private func makeFormatterDummy() -> FormatterDummy {
-        .init()
-    }
-
     private func makeCreateCallOptions(callees: [String] = ["user_id"],
                                        callType: KaleyraVideoHybridNativeBridge.CallType = .audioVideo,
                                        recordingType: KaleyraVideoHybridNativeBridge.RecordingType = .none) -> CreateCallOptions {
@@ -288,23 +200,16 @@ final class KaleyraVideoSDKUserInterfacePresenterTests: UnitTestCase {
         .init()
     }
 
-    private func makeCallClient() -> CallClientStub {
-        .init()
-    }
-
     private func makeCallWindow() -> CallWindow {
-        guard let window = CallWindow.instance else {
-            return CallWindow()
-        }
-        return window
-    }
-
-    private func makeOpenChatIntent(userID: String = "user_id") -> OpenChatIntent {
-        .openChat(with: userID)
-    }
-
-    private func makeChannelViewController() -> ChannelViewController {
         .init()
+    }
+
+    private func makeOpenChatIntent(userID: String = "user_id") -> ChatViewController.Intent {
+        .participant(id: userID)
+    }
+
+    private func makeChatViewController() -> ChatViewController {
+        .init(intent: .participant(id: "user_id"), configuration: .init())
     }
 
     // MARK: - Assertions
@@ -316,7 +221,6 @@ final class KaleyraVideoSDKUserInterfacePresenterTests: UnitTestCase {
     }
 }
 
-@available(iOS 12.0, *)
 private class ViewControllerPresenterSpy: ViewControllerPresenter {
 
     private(set) var isPresenting: Bool = false
@@ -351,22 +255,18 @@ private class ViewControllerPresenterSpy: ViewControllerPresenter {
     }
 }
 
-@available(iOS 12.0, *)
 private class CallWindowSpy: CallWindowProtocol {
 
     var isHidden: Bool = false
-    var callDelegate: Bandyer.CallWindowDelegate?
 
-    private(set) var setConfigurationInvocations = [CallViewControllerConfiguration?]()
-    private(set) var presentCallViewControllerInvocations = [(intent: Bandyer.Intent, completion: ((Error?) -> Void)?)]()
+    private(set) var makeKeyAndVisibleInvocations: [Void] = []
+    private(set) var setRootViewControllerInvocations = [(controller: UIViewController?, animated: Bool, completion: ((Bool) -> Void)?)]()
 
-    func setConfiguration(_ configuration: CallViewControllerConfiguration?) {
-        setConfigurationInvocations.append(configuration)
+    func makeKeyAndVisible() {
+        makeKeyAndVisibleInvocations.append(())
     }
 
-    func presentCallViewController(for intent: Bandyer.Intent, completion: ((Error?) -> Void)?) {
-        presentCallViewControllerInvocations.append((intent: intent, completion: completion))
+    func set(rootViewController controller: UIViewController?, animated: Bool, completion: ((Bool) -> Void)?) {
+        setRootViewControllerInvocations.append((controller: controller, animated: animated, completion: completion))
     }
 }
-
-private class FormatterDummy: Formatter {}

@@ -3,8 +3,10 @@
 
 package com.kaleyra.video_hybrid_native_bridge.extensions
 
-import com.bandyer.android_sdk.intent.call.CallRecordingType
-import com.bandyer.android_sdk.tool_configuration.screen_share.ScreenShareOptionSet
+import com.kaleyra.video.conference.Call
+import com.kaleyra.video_common_ui.CallUI
+import com.kaleyra.video_common_ui.ChatUI
+import com.kaleyra.video_common_ui.ChatUI.Action.CreateCall
 import com.kaleyra.video_hybrid_native_bridge.AudioCallOptions
 import com.kaleyra.video_hybrid_native_bridge.AudioCallType.Audio
 import com.kaleyra.video_hybrid_native_bridge.AudioCallType.AudioUpgradable
@@ -29,84 +31,57 @@ class ToolsTest {
     @Test
     fun screenShareNone() {
         val tools = Tools()
-        val callConfiguration = tools.toCallConfiguration(null, CreateCallOptionsProxy())
-        assertEquals(null, callConfiguration.capabilitySet.screenShare)
+        val callActions = tools.toCallActions()
+        val expected = CallUI.Action.default.toMutableSet()
+        assertEquals(expected, callActions)
     }
 
     @Test
     fun screenShareInApp() {
         val tools = Tools(screenShare = ScreenShareToolConfiguration(true))
-        val callConfiguration = tools.toCallConfiguration(null, CreateCallOptionsProxy())
-        assertEquals(ScreenShareOptionSet.APP_ONLY, callConfiguration.capabilitySet.screenShare!!.optionSet.mode)
+        val callActions = tools.toCallActions()
+        val expected = CallUI.Action.default.toMutableSet() + CallUI.Action.ScreenShare
+        assertEquals(expected, callActions)
     }
 
     @Test
     fun screenShareWholeDevice() {
         val tools = Tools(screenShare = ScreenShareToolConfiguration(wholeDevice = true))
-        val callConfiguration = tools.toCallConfiguration(null, CreateCallOptionsProxy())
-        assertEquals(ScreenShareOptionSet.WHOLE_DEVICE, callConfiguration.capabilitySet.screenShare!!.optionSet.mode)
+        val callActions = tools.toCallActions()
+        val expected = CallUI.Action.default.toMutableSet() + CallUI.Action.ScreenShare
+        assertEquals(expected, callActions)
     }
 
     @Test
     fun screenShareWholeInAppAndWholeDevice() {
         val tools = Tools(screenShare = ScreenShareToolConfiguration(inApp = true, wholeDevice = true))
-        val callConfiguration = tools.toCallConfiguration(null, CreateCallOptionsProxy())
-        assertEquals(ScreenShareOptionSet.USER_SELECTION, callConfiguration.capabilitySet.screenShare!!.optionSet.mode)
+        val callActions = tools.toCallActions()
+        val expected = CallUI.Action.default.toMutableSet() + CallUI.Action.ScreenShare
+        assertEquals(expected, callActions)
     }
 
     @Test
     fun fileShare() {
         val tools = Tools(fileShare = true)
-        val callConfiguration = tools.toCallConfiguration(null, CreateCallOptionsProxy())
-        assertEquals(true, callConfiguration.capabilitySet.fileShare != null)
+        val callActions = tools.toCallActions()
+        val expected = CallUI.Action.default.toMutableSet() + CallUI.Action.FileShare
+        assertEquals(expected, callActions)
     }
 
     @Test
     fun whiteboard() {
         val tools = Tools(whiteboard = true)
-        val callConfiguration = tools.toCallConfiguration(null, CreateCallOptionsProxy())
-        assertEquals(true, callConfiguration.capabilitySet.whiteboard != null)
-    }
-
-    @Test
-    fun feedback() {
-        val tools = Tools(feedback = true)
-        val callConfiguration = tools.toCallConfiguration(null, CreateCallOptionsProxy())
-        assertEquals(true, callConfiguration.optionSet.feedbackEnabled)
-    }
-
-    @Test
-    fun recordingTypeNone() {
-        val tools = Tools()
-        val creationOptions = CreateCallOptionsProxy(CreateCallOptions(listOf(), CallType.Audio, None))
-        val callConfiguration = tools.toCallConfiguration(null, creationOptions)
-        assertEquals(CallRecordingType.NONE, callConfiguration.optionSet.callRecordingType)
-    }
-
-    @Test
-    fun recordingTypeManual() {
-        val tools = Tools()
-        val creationOptions = CreateCallOptionsProxy(CreateCallOptions(listOf(), CallType.Audio, Manual))
-        val callConfiguration = tools.toCallConfiguration(null, creationOptions)
-        assertEquals(CallRecordingType.MANUAL, callConfiguration.optionSet.callRecordingType)
-    }
-
-    @Test
-    fun recordingTypeAutomatic() {
-        val tools = Tools()
-        val creationOptions = CreateCallOptionsProxy(CreateCallOptions(listOf(), CallType.Audio, Automatic))
-        val callConfiguration = tools.toCallConfiguration(null, creationOptions)
-        assertEquals(CallRecordingType.AUTOMATIC, callConfiguration.optionSet.callRecordingType)
+        val callActions = tools.toCallActions()
+        val expected = CallUI.Action.default.toMutableSet() + CallUI.Action.OpenWhiteboard.Full
+        assertEquals(expected, callActions)
     }
 
     @Test
     fun chat() {
         val tools = Tools(chat = ChatToolConfiguration(audioCallOption = AudioCallOptions(type = Audio)))
-        val chatConfiguration = tools.toChatConfiguration()!!
+        val chatActions = tools.toChatActions()
 
-        assertEquals(true, chatConfiguration.capabilitySet.audioCallConfiguration != null)
-        assertEquals(null, chatConfiguration.capabilitySet.audioUpgradableCallConfiguration)
-        assertEquals(null, chatConfiguration.capabilitySet.audioVideoCallConfiguration)
+        assertEquals(setOf(CreateCall(preferredType = Call.PreferredType.audioOnly())), chatActions)
     }
 
     @Test
@@ -114,26 +89,21 @@ class ToolsTest {
         val chatConf = ChatToolConfiguration(audioCallOption = AudioCallOptions(Manual, type = AudioUpgradable), videoCallOption = CallOptions(Automatic))
         val tools = Tools(feedback = true, chat = chatConf, whiteboard = true, fileShare = true, screenShare = ScreenShareToolConfiguration(true, true))
 
-        val chatConfiguration = tools.toChatConfiguration()!!
-        val callConfiguration = tools.toCallConfiguration(chatConfiguration, CreateCallOptionsProxy(CreateCallOptions(listOf(), CallType.Audio, Automatic)))
+        // TODO add test for recording on chat
+        val chatActions = tools.toChatActions()
+        val callActions = tools.toCallActions()
 
-        assertEquals(CallRecordingType.AUTOMATIC, callConfiguration.optionSet.callRecordingType)
-        assertEquals(true, callConfiguration.optionSet.feedbackEnabled)
-        assertEquals(true, callConfiguration.capabilitySet.whiteboard != null)
-        assertEquals(true, callConfiguration.capabilitySet.fileShare != null)
-        assertEquals(ScreenShareOptionSet.USER_SELECTION, callConfiguration.capabilitySet.screenShare!!.optionSet.mode)
+        assertEquals(true, callActions.firstOrNull { it == CallUI.Action.OpenWhiteboard.Full } != null)
+        assertEquals(true, callActions.firstOrNull { it == CallUI.Action.FileShare } != null)
+        assertEquals(true, callActions.firstOrNull { it == CallUI.Action.ScreenShare } != null)
 
-        assertEquals(CallRecordingType.MANUAL, chatConfiguration.capabilitySet.audioUpgradableCallConfiguration!!.optionSet.callRecordingType)
-        assertEquals(true, chatConfiguration.capabilitySet.audioUpgradableCallConfiguration!!.optionSet.feedbackEnabled)
-        assertEquals(true, chatConfiguration.capabilitySet.audioUpgradableCallConfiguration!!.capabilitySet.whiteboard != null)
-        assertEquals(true, chatConfiguration.capabilitySet.audioUpgradableCallConfiguration!!.capabilitySet.fileShare != null)
-        assertEquals(ScreenShareOptionSet.USER_SELECTION, chatConfiguration.capabilitySet.audioUpgradableCallConfiguration!!.capabilitySet.screenShare!!.optionSet.mode)
-
-        assertEquals(CallRecordingType.AUTOMATIC, chatConfiguration.capabilitySet.audioVideoCallConfiguration!!.optionSet.callRecordingType)
-        assertEquals(true, chatConfiguration.capabilitySet.audioVideoCallConfiguration!!.optionSet.feedbackEnabled)
-        assertEquals(true, chatConfiguration.capabilitySet.audioVideoCallConfiguration!!.capabilitySet.whiteboard != null)
-        assertEquals(true, chatConfiguration.capabilitySet.audioVideoCallConfiguration!!.capabilitySet.fileShare != null)
-        assertEquals(ScreenShareOptionSet.USER_SELECTION, chatConfiguration.capabilitySet.audioVideoCallConfiguration!!.capabilitySet.screenShare!!.optionSet.mode)
+        assertEquals(
+            setOf(
+                CreateCall(preferredType = Call.PreferredType.audioUpgradable()),
+                CreateCall(preferredType = Call.PreferredType.audioVideo()),
+            ),
+            chatActions
+        )
     }
 
 }

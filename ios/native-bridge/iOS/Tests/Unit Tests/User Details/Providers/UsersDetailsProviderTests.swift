@@ -4,104 +4,39 @@
 import XCTest
 import CallKit
 import Hamcrest
-import Bandyer
+import KaleyraVideoSDK
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 class UsersDetailsProviderTests: UnitTestCase {
 
-    private let alice = UserDetails(userID: "alice", firstname: "Alice", lastname: "Appleseed")
-    private let bob = UserDetails(userID: "bob", firstname: "Bob", lastname: "Appleseed")
-    private let charlie = UserDetails(userID: "charlie", firstname: "Charlie", lastname: "Appleseed")
-    private let emily = UserDetails(userID: "emily")
+    private let alice = UserDetails(userId: "alice", name: "Alice Appleseed")
+    private let bob = UserDetails(userId: "bob", name: "Bob Appleseed")
+    private let charlie = UserDetails(userId: "charlie", name: "Charlie Appleseed")
+    private let emily = UserDetails(userId: "emily")
 
     // MARK: - Tests
 
     func testFetchesUsersDetailsFromCache() {
         let cache = makePopulatedCache()
-        let sut = makeSUT(cache: cache, formatter: .init())
+        let sut = makeSUT(cache: cache)
 
         let completionSpy = makeCompletionDetailsSpy()
         sut.provideDetails(["alice", "bob"], completion: completionSpy.callable(_:))
         
-        assertThat(completionSpy.invocations, equalTo([[alice, bob]]))
+        assertThat(completionSpy.invocations, hasCount(1))
+        assertThat(try? completionSpy.invocations.first?.get(), presentAnd(equalTo([alice, bob])))
     }
 
     func testCreatesItemWhenOneCouldNotBeFoundInTheCache() {
         let cache = makePopulatedCache()
-        let sut = makeSUT(cache: cache, formatter: .init())
+        let sut = makeSUT(cache: cache)
 
         let completionSpy = makeCompletionDetailsSpy()
         sut.provideDetails(["alice", "dave"], completion: completionSpy.callable(_:))
 
-        let missingItem = UserDetails(userID: "dave")
-        assertThat(completionSpy.invocations, equalTo([[alice, missingItem]]))
-    }
-
-    func testCreatesGenericHandleWithValueFormattedByTheFormatterProvidedInInitialization() {
-        let cache = makePopulatedCache()
-        let formatter = makeDetailsFormatter()
-        let sut = makeSUT(cache: cache, formatter: formatter)
-
-        let completionSpy = makeCompletionHandleSpy()
-        sut.provideHandle(["alice"], completion: completionSpy.callable(_:))
-
-        assertThat(completionSpy.invocations, equalTo([.init(type: .generic, value: "Alice Appleseed")]))
-    }
-
-    func testCreatesGenericContactHandleWhenItemIsMissingFromCache() {
-        let cache = makePopulatedCache()
-        let formatter = makeDetailsFormatter()
-        let sut = makeSUT(cache: cache, formatter: formatter)
-
-        let completionSpy = makeCompletionHandleSpy()
-        sut.provideHandle(["missing"], completion: completionSpy.callable(_:))
-
-        assertThat(completionSpy.invocations, equalTo([.init(type: .generic, value: "missing")]))
-    }
-
-    func testCreatesGenericContactHandleWithAliasAsHandleValueWhenItemIsMissingTheRequestedValues() {
-        let cache = makePopulatedCache()
-        let formatter = makeDetailsFormatter()
-        let sut = makeSUT(cache: cache, formatter: formatter)
-
-        let completionSpy = makeCompletionHandleSpy()
-        sut.provideHandle(["emily"], completion: completionSpy.callable(_:))
-
-        assertThat(completionSpy.invocations, equalTo([.init(type: .generic, value: "emily")]))
-    }
-
-    func testCreatesGenericContactHandleConcatenatingItemsFullnamesAsHandleValue() {
-        let cache = makePopulatedCache()
-        let formatter = makeDetailsFormatter()
-        let sut = makeSUT(cache: cache, formatter: formatter)
-
-        let completionSpy = makeCompletionHandleSpy()
-        sut.provideHandle(["alice", "bob"], completion: completionSpy.callable(_:))
-
-        assertThat(completionSpy.invocations, equalTo([.init(type: .generic, value: "Alice Appleseed, Bob Appleseed")]))
-    }
-
-    func testCreatesEmptyContactHandleWhenEmptyAliasesArrayIsProvided() {
-        let cache = makePopulatedCache()
-        let formatter = makeDetailsFormatter()
-        let sut = makeSUT(cache: cache, formatter: formatter)
-
-        let completionSpy = makeCompletionHandleSpy()
-        sut.provideHandle([], completion: completionSpy.callable(_:))
-
-        assertThat(completionSpy.invocations, equalTo([.init(type: .generic, value: "")]))
-    }
-
-    func testCreatesContactHandleConcatenatingUserIdsWhenNilFormattedStringIsProvided() {
-        let cache = makePopulatedCache()
-        let formatter = makeNilFormatter()
-        let sut = makeSUT(cache: cache, formatter: formatter)
-
-        let completionSpy = makeCompletionHandleSpy()
-        sut.provideHandle(["alice", "dave"], completion: completionSpy.callable(_:))
-
-        assertThat(completionSpy.invocations, equalTo([.init(type: .generic, value: "alice, dave")]))
+        let missingItem = UserDetails(userId: "dave")
+        assertThat(completionSpy.invocations, hasCount(1))
+        assertThat(try? completionSpy.invocations.first?.get(), presentAnd(equalTo([alice, missingItem])))
     }
 
     // MARK: - Helpers
@@ -115,19 +50,11 @@ class UsersDetailsProviderTests: UnitTestCase {
         return cache
     }
 
-    private func makeSUT(cache: UsersDetailsCache, formatter: Formatter) -> UsersDetailsProvider {
-        .init(cache: cache, formatter: formatter)
+    private func makeSUT(cache: UsersDetailsCache) -> UsersDetailsProvider {
+        .init(cache: cache)
     }
 
-    private func makeDetailsFormatter(format: String = "${firstname} ${lastname}") -> UserDetailsFormatter {
-        .init(format: format)
-    }
-
-    private func makeNilFormatter() -> NilFormatter {
-        .init()
-    }
-
-    private func makeCompletionDetailsSpy() -> CompletionSpy<[Bandyer.UserDetails]> {
+    private func makeCompletionDetailsSpy() -> CompletionSpy<Result<[KaleyraVideoSDK.UserDetails], any Error>> {
         makeCompletionSpy()
     }
 

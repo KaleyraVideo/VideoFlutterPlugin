@@ -3,85 +3,123 @@
 
 package com.kaleyra.video_hybrid_native_bridge.ui
 
-import com.bandyer.android_sdk.client.BandyerSDKInstance
-import com.bandyer.android_sdk.intent.call.Call
-import com.bandyer.android_sdk.intent.call.CallDisplayMode.BACKGROUND
+import com.kaleyra.video.conference.Call
+import com.kaleyra.video.conference.Conference
+import com.kaleyra.video_common_ui.CallUI
+import com.kaleyra.video_common_ui.ConferenceUI
+import com.kaleyra.video_common_ui.ConversationUI
+import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.CallDisplayMode.Background
 import com.kaleyra.video_hybrid_native_bridge.CallType.Audio
 import com.kaleyra.video_hybrid_native_bridge.CallType.AudioUpgradable
 import com.kaleyra.video_hybrid_native_bridge.CallType.AudioVideo
 import com.kaleyra.video_hybrid_native_bridge.CreateCallOptions
-import com.kaleyra.video_hybrid_native_bridge.mock.IntentMock
+import com.kaleyra.video_hybrid_native_bridge.RecordingType
+import com.kaleyra.video_hybrid_native_bridge.configurator.CachedSDKConfigurator
 import com.kaleyra.video_hybrid_native_bridge.mock.MockContextContainer
 import com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(RandomRunner::class)
-class SDKUserInterfacePresenterTest{
+class SDKUserInterfacePresenterTest {
 
     private val contextContainer = MockContextContainer()
-    private val sdk = mockk<BandyerSDKInstance>(relaxed = true)
-    private val sdkUserInterfacePresenter = SDKUserInterfacePresenter(sdk, contextContainer)
+    private val sdk = mockk<KaleyraVideo>(relaxed = true)
+    private val configurator = mockk<CachedSDKConfigurator>(relaxed = true) {
+        every { lastConfiguration?.tools?.feedback } returns true
+    }
+    private val sdkUserInterfacePresenter =
+        SDKUserInterfacePresenter(sdk, contextContainer, configurator)
 
     @Test
     fun presentAudioCallWithOptions() {
-        IntentMock.Call.mock()
-        val options = CreateCallOptions(listOf("callee"), Audio)
+        val conference = mockk<ConferenceUI>(relaxed = true)
+        val slot = slot<Conference.CreationOptions.() -> Unit>()
+        every { sdk.conference } returns conference
+        every { conference.call(any(), capture(slot)) } returns Result.success(mockk(relaxed = true))
+        val options = CreateCallOptions(listOf("callee"), Audio, recordingType = RecordingType.Automatic)
         sdkUserInterfacePresenter.startCall(options)
-        verify { contextContainer.context.startActivity(any()) }
-        assertEquals(arrayListOf("callee"), IntentMock.Call.callees.captured)
-        assertEquals(true, IntentMock.Call.isAudio)
+
+        val defaultOptions = Conference.CreationOptions()
+        slot.captured.invoke(defaultOptions)
+        assertEquals(Call.PreferredType.audioOnly(), defaultOptions.preferredType)
+        assertEquals(Call.Recording.automatic(), defaultOptions.recordingType)
+        verify { conference.call(userIDs = listOf("callee"), any()) }
     }
 
     @Test
     fun presentAudioUpgradableCallWithOptions() {
-        IntentMock.Call.mock()
-        val options = CreateCallOptions(listOf("callee"), AudioUpgradable)
+        val conference = mockk<ConferenceUI>(relaxed = true)
+        val slot = slot<Conference.CreationOptions.() -> Unit>()
+        every { sdk.conference } returns conference
+        every { conference.call(any(), capture(slot)) } returns Result.success(mockk(relaxed = true))
+        val options = CreateCallOptions(listOf("callee"), AudioUpgradable, recordingType = RecordingType.None)
         sdkUserInterfacePresenter.startCall(options)
-        verify { contextContainer.context.startActivity(any()) }
-        assertEquals(arrayListOf("callee"), IntentMock.Call.callees.captured)
-        assertEquals(true, IntentMock.Call.isAudioUpgradable)
+
+        val defaultOptions = Conference.CreationOptions()
+        slot.captured.invoke(defaultOptions)
+        assertEquals(Call.PreferredType.audioUpgradable(), defaultOptions.preferredType)
+        assertEquals(Call.Recording.disabled(), defaultOptions.recordingType)
+        verify { conference.call(userIDs = listOf("callee"), any()) }
     }
 
     @Test
     fun presentAudioVideoCallWithOptions() {
-        IntentMock.Call.mock()
+        val conference = mockk<ConferenceUI>(relaxed = true)
+        val slot = slot<Conference.CreationOptions.() -> Unit>()
+        every { sdk.conference } returns conference
+        every { conference.call(any(), capture(slot)) } returns Result.success(mockk(relaxed = true))
+        val options = CreateCallOptions(listOf("callee"), AudioVideo, recordingType = RecordingType.Manual)
+        sdkUserInterfacePresenter.startCall(options)
+
+        val defaultOptions = Conference.CreationOptions()
+        slot.captured.invoke(defaultOptions)
+        assertEquals(Call.PreferredType.audioVideo(), defaultOptions.preferredType)
+        assertEquals(Call.Recording.manual(), defaultOptions.recordingType)
+        verify { conference.call(userIDs = listOf("callee"), any()) }
+    }
+
+    @Test
+    fun startCallWithFeedback() {
+        val conference = mockk<ConferenceUI>(relaxed = true)
+        val call = CallUI(mockk(), this::class.java)
+        every { sdk.conference } returns conference
+        every { conference.call(any(), any()) } returns Result.success(call)
         val options = CreateCallOptions(listOf("callee"), AudioVideo)
         sdkUserInterfacePresenter.startCall(options)
-        verify { contextContainer.context.startActivity(any()) }
-        assertEquals(arrayListOf("callee"), IntentMock.Call.callees.captured)
-        assertEquals(true, IntentMock.Call.isAudioVideo)
+
+        assertEquals(true, call.withFeedback)
     }
 
     @Test
     fun presentCallWithUrl() {
-        IntentMock.Call.mock()
+        val conference = mockk<ConferenceUI>(relaxed = true)
+        every { sdk.conference } returns conference
         sdkUserInterfacePresenter.startCallUrl("https://url")
-        verify { contextContainer.context.startActivity(any()) }
-        assertEquals("https://url", IntentMock.Call.joinUrl.captured)
-        assertEquals(true, IntentMock.Call.isJoin)
+        verify { conference.joinUrl("https://url") }
     }
 
     @Test
     fun presentChat() {
-        IntentMock.Chat.mock()
+        val conversation = mockk<ConversationUI>(relaxed = true)
+        every { sdk.conversation } returns conversation
         sdkUserInterfacePresenter.startChat("user2")
-        verify { contextContainer.context.startActivity(any()) }
-        assertEquals("user2", IntentMock.Chat.participant.captured)
-        assertEquals(true, IntentMock.Chat.isChat)
+        verify { conversation.chat(contextContainer.context, "user2") }
     }
 
     @Test
     fun changeCurrentCallMode() {
-        val mockedCall = mockk<Call>()
-        every { sdk.callModule!!.ongoingCall } returns mockedCall
+        val mockedCall = mockk<CallUI>(relaxed = true)
+        every { sdk.conference.call } returns MutableStateFlow(mockedCall)
         sdkUserInterfacePresenter.setDisplayModeForCurrentCall(Background)
-        verify { sdk.callModule?.setDisplayMode(mockedCall, BACKGROUND) }
+        verify { mockedCall.setDisplayMode(CallUI.DisplayMode.Background) }
     }
 
 }

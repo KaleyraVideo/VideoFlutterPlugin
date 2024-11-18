@@ -3,7 +3,6 @@
 
 import Foundation
 
-@available(iOS 12.0, *)
 protocol AccessTokenRequester {
     func requestAccessToken(request: AccessTokenRequest) throws
 }

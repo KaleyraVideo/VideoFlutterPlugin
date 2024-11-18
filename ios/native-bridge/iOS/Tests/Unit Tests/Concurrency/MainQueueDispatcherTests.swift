@@ -5,7 +5,6 @@ import Foundation
 import Hamcrest
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 final class MainQueueDispatcherTests: UnitTestCase {
     func testPerformsWorkFromTheMainQueueAsynchronously() {
         let exp = expectation(description: "Work performed from the main queue asynchronously")

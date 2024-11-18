@@ -3,41 +3,51 @@
 
 package com.kaleyra.video_hybrid_native_bridge.events.reporter
 
-import androidx.appcompat.app.AppCompatActivity
-import com.bandyer.android_sdk.chat.ChatException
-import com.bandyer.android_sdk.chat.ChatObserver
-import com.bandyer.android_sdk.chat.ChatUIObserver
-import com.bandyer.android_sdk.client.BandyerSDKInstance
-import com.bandyer.android_sdk.intent.chat.Chat
+import com.kaleyra.video.conversation.Chat
+import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.events.Events.ChatError
 import com.kaleyra.video_hybrid_native_bridge.events.EventsEmitter
 import com.kaleyra.video_hybrid_native_bridge.events.EventsReporter
-import java.lang.ref.WeakReference
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 
 class ChatEventsReporter(
-    private val sdk: BandyerSDKInstance,
-    private val eventsEmitter: EventsEmitter
-) : EventsReporter, ChatObserver, ChatUIObserver {
+    private val sdk: KaleyraVideo,
+    private val eventsEmitter: EventsEmitter,
+    private val coroutineScope: CoroutineScope
+) : EventsReporter {
 
     private val failedChats = HashMap<String, Chat>()
 
+    private val chatJobs = HashMap<String, Job>()
+
+    private var job: Job? = null
+
     override fun start() {
-        sdk.chatModule?.addChatObserver(this)
-        sdk.chatModule?.addChatUIObserver(this)
+        stop()
+        job = sdk.conversation.chats
+            .onEach { chats ->
+                chats.forEach { chat ->
+                    chatJobs[chat.id]?.cancel()
+                    chatJobs[chat.id] = chat.state.onEach eachState@ { state ->
+                        if (state is Chat.State.Closed.Error) {
+                            val id = chat.id
+                            if (failedChats.containsKey(id)) return@eachState
+                            failedChats[id] = chat
+                            eventsEmitter.sendEvent(ChatError, state.reason)
+                        }
+                    }.launchIn(coroutineScope)
+                }
+            }
+            .onCompletion { chatJobs.values.forEach { it.cancel() } }
+            .launchIn(coroutineScope)
     }
 
     override fun stop() {
-        sdk.chatModule?.removeChatObserver(this)
-        sdk.chatModule?.removeChatUIObserver(this)
+        job?.cancel()
+        job = null
     }
-
-    override fun onActivityError(chat: Chat, activity: WeakReference<AppCompatActivity>, error: ChatException) {
-        val id = chat.chatInfo.chatId
-        if (failedChats.containsKey(id)) return
-        failedChats[id] = chat
-        eventsEmitter.sendEvent(ChatError, error.localizedMessage)
-    }
-
-    override fun onActivityStarted(chat: Chat, activity: WeakReference<AppCompatActivity>) = Unit
-    override fun onActivityDestroyed(chat: Chat, activity: WeakReference<AppCompatActivity>) = Unit
 }

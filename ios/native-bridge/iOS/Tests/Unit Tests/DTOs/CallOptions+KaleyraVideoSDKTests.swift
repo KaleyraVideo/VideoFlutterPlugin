@@ -4,20 +4,19 @@
 import Foundation
 
 import Hamcrest
-import Bandyer
+import KaleyraVideoSDK
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
-final class CallOptions_BandyerTests: UnitTestCase {
+final class CallOptions_KaleyraVideoSDKTests: UnitTestCase {
 
     func testMakeCallOptions() {
         assertThat(CallOptions(recordingType: .automatic).callOptions,
-                   equalTo(Bandyer.CallOptions(callType: .audioVideo, recordingType: .automatic)))
+                   equalTo(KaleyraVideoSDK.CallOptions(type: .audioVideo, recording: .automatic)))
         assertThat(CallOptions(recordingType: .manual).callOptions,
-                   equalTo(Bandyer.CallOptions(callType: .audioVideo, recordingType: .manual)))
+                   equalTo(KaleyraVideoSDK.CallOptions(type: .audioVideo, recording: .manual)))
         assertThat(CallOptions(recordingType: RecordingType.none).callOptions,
-                   equalTo(Bandyer.CallOptions(callType: .audioVideo, recordingType: .none)))
+                   equalTo(KaleyraVideoSDK.CallOptions(type: .audioVideo, recording: .none)))
         assertThat(CallOptions(recordingType: nil).callOptions,
-                   equalTo(Bandyer.CallOptions(callType: .audioVideo, recordingType: .none)))
+                   equalTo(KaleyraVideoSDK.CallOptions(type: .audioVideo, recording: .none)))
     }
 }

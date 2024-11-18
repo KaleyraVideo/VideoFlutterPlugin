@@ -3,52 +3,44 @@
 
 package com.kaleyra.video_hybrid_native_bridge.events.reporter
 
-import androidx.appcompat.app.AppCompatActivity
-import com.bandyer.android_sdk.call.CallException
-import com.bandyer.android_sdk.call.CallObserver
-import com.bandyer.android_sdk.call.CallUIObserver
-import com.bandyer.android_sdk.client.BandyerSDKInstance
-import com.bandyer.android_sdk.intent.call.Call
+import com.kaleyra.video.conference.Call
+import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.events.Events.CallError
 import com.kaleyra.video_hybrid_native_bridge.events.EventsEmitter
 import com.kaleyra.video_hybrid_native_bridge.events.EventsReporter
-import java.lang.ref.WeakReference
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 class CallEventsReporter(
-    private val sdk: BandyerSDKInstance,
-    private val eventsEmitter: EventsEmitter
-) : EventsReporter, CallObserver, CallUIObserver {
+    private val sdk: KaleyraVideo,
+    private val eventsEmitter: EventsEmitter,
+    private val coroutineScope: CoroutineScope
+) : EventsReporter {
 
     private val failedCalls = HashMap<String, Call>()
 
+    private var job: Job? = null
+
     override fun start() {
-        sdk.callModule!!.addCallObserver(this)
-        sdk.callModule!!.addCallUIObserver(this)
+        stop()
+        job = sdk.conference.call
+            .flatMapLatest { call -> call.state.map { call to it } }
+            .onEach { (call, callState) ->
+                if (callState is Call.State.Disconnected.Ended.Error) {
+                    val id = call.id
+                    if (failedCalls.containsKey(id)) return@onEach
+                    failedCalls[id] = call
+                    eventsEmitter.sendEvent(CallError, callState.reason)
+                }
+            }.launchIn(coroutineScope)
     }
 
     override fun stop() {
-        sdk.callModule!!.removeCallObserver(this)
-        sdk.callModule!!.removeCallUIObserver(this)
+        job?.cancel()
+        job = null
     }
-
-    override fun onCallEndedWithError(call: Call, callException: CallException) {
-        val id = call.callInfo.callId
-        if (failedCalls.containsKey(id)) return
-        failedCalls[id] = call
-        eventsEmitter.sendEvent(CallError, callException.localizedMessage)
-    }
-
-    override fun onActivityError(call: Call, activity: WeakReference<AppCompatActivity>, error: CallException) {
-        val id = call.callInfo.callId
-        if (failedCalls.containsKey(id)) return
-        failedCalls[id] = call
-        eventsEmitter.sendEvent(CallError, error.localizedMessage)
-    }
-
-    override fun onCallCreated(call: Call) = Unit
-    override fun onCallEnded(call: Call) = Unit
-    override fun onCallStarted(call: Call) = Unit
-
-    override fun onActivityDestroyed(call: Call, activity: WeakReference<AppCompatActivity>) = Unit
-    override fun onActivityStarted(call: Call, activity: WeakReference<AppCompatActivity>) = Unit
 }

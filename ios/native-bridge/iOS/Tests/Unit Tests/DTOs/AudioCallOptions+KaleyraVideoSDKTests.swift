@@ -3,22 +3,21 @@
 
 import XCTest
 import Hamcrest
-import Bandyer
+import KaleyraVideoSDK
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
-class AudioCallOptions_BandyerTests: UnitTestCase {
+class AudioCallOptions_KaleyraVideoSDKTests: UnitTestCase {
 
     func testMakeCallOptions() {
         assertThat(AudioCallOptions(recordingType: .automatic, type: .audioUpgradable).callOptions,
-                   equalTo(Bandyer.CallOptions(callType: .audioUpgradable, recordingType: .automatic)))
+                   equalTo(KaleyraVideoSDK.CallOptions(type: .audioUpgradable, recording: .automatic)))
         assertThat(AudioCallOptions(recordingType: .manual, type: .audioUpgradable).callOptions,
-                   equalTo(Bandyer.CallOptions(callType: .audioUpgradable, recordingType: .manual)))
+                   equalTo(KaleyraVideoSDK.CallOptions(type: .audioUpgradable, recording: .manual)))
         assertThat(AudioCallOptions(recordingType: RecordingType.none, type: .audioUpgradable).callOptions,
-                   equalTo(Bandyer.CallOptions(callType: .audioUpgradable, recordingType: .none)))
+                   equalTo(KaleyraVideoSDK.CallOptions(type: .audioUpgradable, recording: .none)))
         assertThat(AudioCallOptions(recordingType: nil, type: .audioUpgradable).callOptions,
-                   equalTo(Bandyer.CallOptions(callType: .audioUpgradable, recordingType: .none)))
+                   equalTo(KaleyraVideoSDK.CallOptions(type: .audioUpgradable, recording: .none)))
         assertThat(AudioCallOptions(recordingType: .automatic, type: .audio).callOptions,
-                   equalTo(Bandyer.CallOptions(callType: .audioOnly, recordingType: .automatic)))
+                   equalTo(KaleyraVideoSDK.CallOptions(type: .audioOnly, recording: .automatic)))
     }
 }

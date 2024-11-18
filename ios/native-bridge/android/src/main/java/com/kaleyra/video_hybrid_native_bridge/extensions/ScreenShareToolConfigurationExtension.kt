@@ -3,13 +3,12 @@
 
 package com.kaleyra.video_hybrid_native_bridge.extensions
 
-import com.bandyer.android_sdk.tool_configuration.screen_share.CustomScreenShareConfiguration
-import com.bandyer.android_sdk.tool_configuration.screen_share.ScreenShareOptionSet
+import com.kaleyra.video_common_ui.CallUI
 import com.kaleyra.video_hybrid_native_bridge.ScreenShareToolConfiguration
 
-internal fun ScreenShareToolConfiguration?.toSDK(): ScreenShareOptionSet? = when {
-    this?.inApp == true && this.wholeDevice == true -> CustomScreenShareConfiguration.Options(ScreenShareOptionSet.USER_SELECTION)
-    this?.inApp == true                             -> CustomScreenShareConfiguration.Options(ScreenShareOptionSet.APP_ONLY)
-    this?.wholeDevice == true                       -> CustomScreenShareConfiguration.Options(ScreenShareOptionSet.WHOLE_DEVICE)
+internal fun ScreenShareToolConfiguration?.toSDK(): CallUI.Action.ScreenShare? = when {
+    this?.inApp == true && this.wholeDevice == true -> CallUI.Action.ScreenShare
+    this?.inApp == true                             -> CallUI.Action.ScreenShare
+    this?.wholeDevice == true                       -> CallUI.Action.ScreenShare
     else                                            -> null
 }

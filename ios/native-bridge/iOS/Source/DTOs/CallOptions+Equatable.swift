@@ -3,7 +3,6 @@
 
 import Foundation
 
-@available(iOS 12.0, *)
 extension CallOptions: Equatable {
 
     static func == (lhs: CallOptions, rhs: CallOptions) -> Bool {

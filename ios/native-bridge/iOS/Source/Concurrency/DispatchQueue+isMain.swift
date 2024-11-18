@@ -4,7 +4,6 @@
 import Foundation
 import Dispatch
 
-@available(iOS 12.0, *)
 public extension DispatchQueue {
 
     private static var mainSpecificKey: DispatchSpecificKey<Void> = {

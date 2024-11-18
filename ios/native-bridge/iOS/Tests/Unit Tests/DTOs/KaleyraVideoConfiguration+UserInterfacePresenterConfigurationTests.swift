@@ -3,10 +3,9 @@
 
 import Foundation
 import Hamcrest
-import Bandyer
+import KaleyraVideoSDK
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 final class KaleyraVideoConfiguration_UserInterfacePresenterConfigurationTests: UnitTestCase {
 
     func testUIPresenterConfiguration_ShowsFeedbackWhenCallEnds() {

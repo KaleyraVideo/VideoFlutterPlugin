@@ -3,118 +3,108 @@
 
 import XCTest
 import Hamcrest
-import Bandyer
+import KaleyraVideoSDK
+import Combine
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 class CallClientEventsReporterTests: UnitTestCase {
 
     private let statusChangedEvent = "callModuleStatusChanged"
 
-    private var client: CallClientStub!
+    private var conference: ConferenceStub!
     private var emitter: EventEmitterSpy!
     private var sut: CallClientEventsReporter!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
 
-        client = .init()
+        conference = .init()
         emitter = .init()
-        sut = .init(client: client, emitter: emitter)
+        sut = .init(conference: conference, emitter: emitter)
     }
 
     override func tearDownWithError() throws {
         sut = nil
         emitter = nil
-        client = nil
+        conference = nil
 
         try super.tearDownWithError()
     }
 
     // MARK: - Tests
 
-    func testStartTwiceShouldSubscribeAsClientObserverOnlyOnce() {
-        sut.start()
-
-        sut.start()
-
-        assertThat(client.clientObservers(), equalTo(1))
-    }
-
     func testOnClientStartingShouldSendEvent() throws {
-        sut.start()
+        sut.startWithImmediateScheduler()
 
-        client.state = .starting
+        conference.state = .connecting
 
         let event = try unwrap(emitter.sentEvents.first)
         assertThat(event.event, equalTo(statusChangedEvent))
-        assertThat(event.args, instanceOfAnd(equalTo("connecting")))
+        assertThat(event.args, presentAnd(instanceOfAnd(equalTo("connecting"))))
     }
 
     func testOnClientRunningShouldSendEvent() throws {
-        sut.start()
+        sut.startWithImmediateScheduler()
 
-        client.state = .running
+        conference.state = .connected
 
         let event = try unwrap(emitter.sentEvents.first)
         assertThat(event.event, equalTo(statusChangedEvent))
-        assertThat(event.args, instanceOfAnd(equalTo("ready")))
+        assertThat(event.args, presentAnd(instanceOfAnd(equalTo("connected"))))
     }
 
     func testOnClientStoppedShouldSendEvent() throws {
-        sut.start()
+        sut.startWithImmediateScheduler()
 
-        client.state = .running
-        client.state = .stopped
-
-        let event = try unwrap(emitter.sentEvents.last)
-        assertThat(event.event, equalTo(statusChangedEvent))
-        assertThat(event.args, instanceOfAnd(equalTo("stopped")))
-    }
-
-    func testOnClientPausedShouldSendEvent() throws {
-        sut.start()
-
-        client.state = .running
-        client.state = .paused
+        conference.state = .connected
+        conference.state = .disconnected(error: nil)
 
         let event = try unwrap(emitter.sentEvents.last)
         assertThat(event.event, equalTo(statusChangedEvent))
-        assertThat(event.args, instanceOfAnd(equalTo("paused")))
+        assertThat(event.args, presentAnd(instanceOfAnd(equalTo("disconnected"))))
     }
 
     func testOnClientReconnectingShouldSendEvent() throws {
-        sut.start()
+        sut.startWithImmediateScheduler()
 
-        client.state = .running
-        client.state = .reconnecting
+        conference.state = .connected
+        conference.state = .reconnecting
 
         let event = try unwrap(emitter.sentEvents.last)
         assertThat(event.event, equalTo(statusChangedEvent))
-        assertThat(event.args, instanceOfAnd(equalTo("reconnecting")))
+        assertThat(event.args, presentAnd(instanceOfAnd(equalTo("reconnecting"))))
     }
 
     func testOnClientFailedShouldSendTwoEvents() throws {
-        sut.start()
+        sut.startWithImmediateScheduler()
 
         let error = anyNSError()
-        client.simulateFailure(error: error)
+        conference.simulateFailure(error: error)
 
         assertThat(emitter.sentEvents, hasCount(2))
         let firstEvent = emitter.sentEvents[0]
         assertThat(firstEvent.event, equalTo("callError"))
-        assertThat(firstEvent.args, instanceOfAnd(equalTo(error.localizedDescription)))
+        assertThat(firstEvent.args, presentAnd(instanceOfAnd(equalTo(error.localizedDescription))))
         let secondEvent = emitter.sentEvents[1]
         assertThat(secondEvent.event, equalTo(statusChangedEvent))
-        assertThat(secondEvent.args, instanceOfAnd(equalTo("failed")))
+        assertThat(secondEvent.args, presentAnd(instanceOfAnd(equalTo("failed"))))
     }
 
     func testStopShouldStopListeningForClientEvents() {
-        sut.start()
+        sut.startWithImmediateScheduler()
 
         sut.stop()
-        client.state = .running
+        conference.state = .connected
 
         assertThat(emitter.sentEvents, empty())
+    }
+
+    // TODO: - Add tests for voip credentials
+}
+
+private extension CallClientEventsReporter {
+
+    func startWithImmediateScheduler() {
+        start(scheduler: ImmediateScheduler.shared)
     }
 }

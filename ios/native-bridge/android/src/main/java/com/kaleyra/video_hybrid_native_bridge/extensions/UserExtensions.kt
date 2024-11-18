@@ -3,7 +3,8 @@
 
 package com.kaleyra.video_hybrid_native_bridge.extensions
 
-import com.bandyer.android_sdk.utils.provider.UserDetails
+import android.net.Uri
+import com.kaleyra.video_common_ui.model.UserDetails
 import com.kaleyra.video_hybrid_native_bridge.repository.UserDetailsEntity
 
 /**
@@ -11,25 +12,31 @@ import com.kaleyra.video_hybrid_native_bridge.repository.UserDetailsEntity
  * @author kristiyan
  */
 internal fun UserDetailsEntity.toSDK(): UserDetails {
-    return UserDetails.Builder(userAlias).also { builder ->
+    return UserDetails(
+        userId = userID,
+        name = name ?: userID,
+        image = imageUrl?.let { Uri.parse(it) } ?: Uri.EMPTY
+    )
+}
 
-        firstName?.let { builder.withFirstName(it) }
-        lastName?.let { builder.withLastName(it) }
-        nickName?.let { builder.withNickName(it) }
+internal fun com.kaleyra.video_hybrid_native_bridge.UserDetails.toSDK(): UserDetails {
+    return UserDetails(
+        userId = userID,
+        name = name ?: userID,
+        image = imageURL?.let { Uri.parse(it) } ?: Uri.EMPTY
+    )
+}
 
-        email?.let { builder.withEmail(it) }
-
-        imageUrl?.let { builder.withImageUrl(it) }
-    }.build()
+internal fun com.kaleyra.video_hybrid_native_bridge.UserDetails.toDatabaseEntity(): UserDetailsEntity {
+    return UserDetailsEntity(
+        userID = userID,
+        name = name,
+        imageUrl = imageURL
+    )
 }
 
 internal fun UserDetailsEntity.toUserDetails(): com.kaleyra.video_hybrid_native_bridge.UserDetails = com.kaleyra.video_hybrid_native_bridge.UserDetails(
-    email = this.email,
-    userID = this.userAlias,
-    firstName = this.firstName,
-    lastName = this.lastName,
-    nickName = this.nickName,
-    profileImageURL = this.imageUrl
+    userID = this.userID,
+    name = this.name,
+    imageURL = this.imageUrl
 )
-
-internal fun UserDetails.toUserDetailsEntity(): UserDetailsEntity = UserDetailsEntity(userAlias, firstName, lastName, nickName, email, imageUrl)

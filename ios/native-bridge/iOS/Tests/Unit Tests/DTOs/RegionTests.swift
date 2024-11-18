@@ -3,28 +3,27 @@
 
 import XCTest
 import Hamcrest
-import Bandyer
+import KaleyraVideoSDK
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 class RegionTests: UnitTestCase {
 
     func testBandyerRegion() {
-        assertThat(Region(name: "europe").bandyerRegion, equalTo(.europe))
-        assertThat(Region(name: "EUROPE").bandyerRegion, equalTo(.europe))
-        assertThat(Region(name: "eUrOPE").bandyerRegion, equalTo(.europe))
-        assertThat(Region(name: "eu").bandyerRegion, equalTo(.europe))
-        assertThat(Region(name: "EU").bandyerRegion, equalTo(.europe))
-        assertThat(Region(name: "india").bandyerRegion, equalTo(.india))
-        assertThat(Region(name: "INDIA").bandyerRegion, equalTo(.india))
-        assertThat(Region(name: "InDIa").bandyerRegion, equalTo(.india))
-        assertThat(Region(name: "in").bandyerRegion, equalTo(.india))
-        assertThat(Region(name: "IN").bandyerRegion, equalTo(.india))
-        assertThat(Region(name: "us").bandyerRegion, equalTo(.us))
-        assertThat(Region(name: "US").bandyerRegion, equalTo(.us))
-        assertThat(Region(name: "uS").bandyerRegion, equalTo(.us))
-        assertThat(Region(name: "usa").bandyerRegion, equalTo(.us))
-        assertThat(Region(name: "USA").bandyerRegion, equalTo(.us))
-        assertThat(Region(name: "UsA").bandyerRegion, equalTo(.us))
+        assertThat(Region(name: "europe").kaleyraRegion, equalTo(.europe))
+        assertThat(Region(name: "EUROPE").kaleyraRegion, equalTo(.europe))
+        assertThat(Region(name: "eUrOPE").kaleyraRegion, equalTo(.europe))
+        assertThat(Region(name: "eu").kaleyraRegion, equalTo(.europe))
+        assertThat(Region(name: "EU").kaleyraRegion, equalTo(.europe))
+        assertThat(Region(name: "india").kaleyraRegion, equalTo(.india))
+        assertThat(Region(name: "INDIA").kaleyraRegion, equalTo(.india))
+        assertThat(Region(name: "InDIa").kaleyraRegion, equalTo(.india))
+        assertThat(Region(name: "in").kaleyraRegion, equalTo(.india))
+        assertThat(Region(name: "IN").kaleyraRegion, equalTo(.india))
+        assertThat(Region(name: "us").kaleyraRegion, equalTo(.us))
+        assertThat(Region(name: "US").kaleyraRegion, equalTo(.us))
+        assertThat(Region(name: "uS").kaleyraRegion, equalTo(.us))
+        assertThat(Region(name: "usa").kaleyraRegion, equalTo(.us))
+        assertThat(Region(name: "USA").kaleyraRegion, equalTo(.us))
+        assertThat(Region(name: "UsA").kaleyraRegion, equalTo(.us))
     }
 }

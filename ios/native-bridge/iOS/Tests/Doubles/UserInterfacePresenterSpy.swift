@@ -4,7 +4,6 @@
 import Foundation
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 class UserInterfacePresenterSpy: UserInterfacePresenter {
 
     private(set) var configureInvocations = [UserInterfacePresenterConfiguration]()

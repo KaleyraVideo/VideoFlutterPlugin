@@ -3,14 +3,16 @@
 
 package com.kaleyra.video_hybrid_native_bridge
 
-import com.bandyer.android_sdk.client.AccessTokenProvider
-import com.bandyer.android_sdk.client.Completion
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-internal class SDKAccessTokenProviderProxy(val tokenProvider: CrossPlatformAccessTokenProvider) : AccessTokenProvider {
-    override fun provideAccessToken(userId: String, completion: Completion<String>) {
-        tokenProvider.provideAccessToken(userId) {
-            if (it.isSuccess) completion.success(it.getOrThrow())
-            else completion.error(it.exceptionOrNull() ?: Throwable("connection error"))
+internal class SDKAccessTokenProviderProxy(val tokenProvider: CrossPlatformAccessTokenProvider) {
+    suspend fun provideAccessToken(userId: String): Result<String> {
+        return suspendCoroutine { continuation ->
+            tokenProvider.provideAccessToken(userId) {
+                if (it.isSuccess) continuation.resume(Result.success(it.getOrThrow()))
+                else continuation.resume(Result.failure(it.exceptionOrNull() ?: Throwable("connection error")))
+            }
         }
     }
 }

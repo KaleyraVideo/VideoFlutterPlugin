@@ -15,18 +15,18 @@ class EnvironmentTest {
     @Test
     fun sandbox() {
         val env = Environment("sandbox")
-        assertEquals(com.kaleyra.collaboration_suite_networking.Environment.Sandbox, env.toSDK())
+        assertEquals(com.kaleyra.video.configuration.Environment.Sandbox, env.toSDK())
     }
 
     @Test
     fun production() {
         val env = Environment("production")
-        assertEquals(com.kaleyra.collaboration_suite_networking.Environment.Production, env.toSDK())
+        assertEquals(com.kaleyra.video.configuration.Environment.Production, env.toSDK())
     }
 
     @Test
     fun custom() {
         val env = Environment("custom")
-        assertEquals(com.kaleyra.collaboration_suite_networking.Environment.create("custom"), env.toSDK())
+        assertEquals(com.kaleyra.video.configuration.Environment.create("custom"), env.toSDK())
     }
 }

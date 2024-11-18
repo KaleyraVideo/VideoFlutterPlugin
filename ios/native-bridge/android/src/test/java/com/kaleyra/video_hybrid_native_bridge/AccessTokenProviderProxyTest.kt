@@ -3,10 +3,11 @@
 
 package com.kaleyra.video_hybrid_native_bridge
 
-import com.kaleyra.video_hybrid_native_bridge.mock.MockCompletion
 import com.kaleyra.video_hybrid_native_bridge.mock.MockTokenProvider.Error
 import com.kaleyra.video_hybrid_native_bridge.mock.MockTokenProvider.Success
 import com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,21 +16,19 @@ import org.junit.runner.RunWith
 class AccessTokenProviderProxyTest {
 
     @Test
-    fun provideSuccess() {
+    fun provideSuccess() = runBlocking {
         val sdkProxy = SDKAccessTokenProviderProxy(Success())
-        val sdkCompletion = MockCompletion()
-        sdkProxy.provideAccessToken("userId", sdkCompletion)
-        assertEquals(true, sdkCompletion.isSuccess)
-        assertEquals("token", sdkCompletion.getSuccessResult)
+        val result = sdkProxy.provideAccessToken("userId")
+        assertEquals(true, result.isSuccess)
+        assertEquals("token", result.getOrNull())
     }
 
     @Test
-    fun provideError() {
+    fun provideError() = runBlocking {
         val sdkProxy = SDKAccessTokenProviderProxy(Error())
-        val sdkCompletion = MockCompletion()
-        sdkProxy.provideAccessToken("userId", sdkCompletion)
-        assertEquals(true, sdkCompletion.isError)
-        assertEquals("failed", sdkCompletion.getErrorResult.message)
+        val result = sdkProxy.provideAccessToken("userId")
+        assertEquals(true, result.isFailure)
+        assertEquals("failed", result.exceptionOrNull()!!.message)
     }
 
 }

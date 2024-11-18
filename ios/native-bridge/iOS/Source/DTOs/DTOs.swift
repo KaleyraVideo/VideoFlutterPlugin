@@ -21,7 +21,6 @@
 //   let kaleyraVideoConfiguration = try KaleyraVideoConfiguration(json)
 //   let session = try Session(json)
 //   let userDetails = try UserDetails(json)
-//   let userDetailsFormat = try UserDetailsFormat(json)
 
 import Foundation
 
@@ -284,31 +283,10 @@ struct Session {
 /// This is used to define the user details in the call/chat UI
 // MARK: - UserDetails
 struct UserDetails {
-    /// Email of the user
-    let email: String?
-    /// First name of the user
-    let firstName: String?
-    /// Last name of the user
-    let lastName: String?
-    /// Nickname for the user
-    let nickName: String?
     /// Image url to use as placeholder for the user.
-    let profileImageURL: String?
+    let imageURL: String?
+    /// The user's display name.
+    let name: String?
     /// User identifier
     let userID: String
-}
-
-/// This is used to display the user details in the call/chat UI
-// MARK: - UserDetailsFormat
-struct UserDetailsFormat {
-    /// Format to be used when displaying an android notification
-    /// <br/>
-    /// <br/>
-    /// <b><font color="blue">default</font>: equals to UserDetailsFormatter.default</b>
-    let androidNotification: String?
-    /// Format to be used to display a user details on the call/chat UI
-    /// <br/>
-    /// <br/>
-    /// <b><font color="blue">default</font>: ${userAlias}</b>
-    let userDetailsFormatDefault: String
 }

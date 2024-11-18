@@ -3,8 +3,7 @@
 
 package com.kaleyra.video_hybrid_native_bridge
 
-import com.bandyer.android_sdk.client.BandyerSDKInstance
-import com.bandyer.android_sdk.intent.call.Call
+import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.CallType.Audio
 import com.kaleyra.video_hybrid_native_bridge.RecordingType.Manual
 import com.kaleyra.video_hybrid_native_bridge.configurator.CachedSDKConfigurator
@@ -14,10 +13,8 @@ import com.kaleyra.video_hybrid_native_bridge.mock.MockContextContainer
 import com.kaleyra.video_hybrid_native_bridge.ui.UserInterfacePresenter
 import com.kaleyra.video_hybrid_native_bridge.user_details.CachedUserDetails
 import com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -25,7 +22,7 @@ import org.junit.runner.RunWith
 class VideoSDKHybridBridgeTest {
 
     private val createCallOptionsPropxy = CreateCallOptionsProxy()
-    private val sdk = mockk<BandyerSDKInstance>(relaxed = true)
+    private val sdk = mockk<KaleyraVideo>(relaxed = true)
     private val uiPresenter = mockk<UserInterfacePresenter>(relaxed = true)
     private val context = MockContextContainer()
     private val cachedUserDetails = mockk<CachedUserDetails>(relaxed = true)
@@ -42,8 +39,7 @@ class VideoSDKHybridBridgeTest {
         connector = connector,
         presenter = uiPresenter,
         configurator = configurator,
-        userDetails = cachedUserDetails,
-        createCallOptionsProxy = createCallOptionsPropxy
+        userDetails = cachedUserDetails
     )
 
     @Test
@@ -51,7 +47,6 @@ class VideoSDKHybridBridgeTest {
         val createCallOptions = CreateCallOptions(listOf(""), Audio, Manual)
         plugin.startCall(createCallOptions)
         verify { uiPresenter.startCall(createCallOptions) }
-        assertEquals(createCallOptions, createCallOptionsPropxy.createCallOptions)
     }
 
     @Test
@@ -67,29 +62,6 @@ class VideoSDKHybridBridgeTest {
         plugin.clearUserCache()
         verify { cachedUserDetails.removeUserDetails() }
         verify { connector.clearUserCache() }
-    }
-
-    @Test
-    fun handlePushNotification() {
-        plugin.handlePushNotificationPayload("ciao\\\\")
-        verify { sdk.handleNotification("ciao") }
-    }
-
-    @Test
-    fun verifyNoOpWithoutCurrentCall() {
-        every { sdk.callModule?.ongoingCall } returns null
-        plugin.verifyCurrentCall(true)
-        val callModule = sdk.callModule
-        verify(exactly = 0) { callModule?.setVerified(any<Call>(), any()) }
-        verify(exactly = 0) { callModule?.setVerified(any<String>(), any()) }
-    }
-
-    @Test
-    fun verifyCurrentCall() {
-        val mockCall = mockk<Call>(relaxed = true)
-        every { sdk.callModule?.ongoingCall } returns mockCall
-        plugin.verifyCurrentCall(true)
-        verify { sdk.callModule?.setVerified(mockCall, true) }
     }
 
 }

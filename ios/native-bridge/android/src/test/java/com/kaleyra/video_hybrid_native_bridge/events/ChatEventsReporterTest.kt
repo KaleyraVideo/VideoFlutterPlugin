@@ -3,67 +3,91 @@
 
 package com.kaleyra.video_hybrid_native_bridge.events
 
-import com.bandyer.android_sdk.chat.ChatException
-import com.bandyer.android_sdk.chat.ChatModule
-import com.bandyer.android_sdk.client.BandyerSDK
-import com.bandyer.android_sdk.intent.chat.Chat
-import com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner
+import com.kaleyra.video.conversation.Chat
+import com.kaleyra.video_common_ui.ChatUI
+import com.kaleyra.video_common_ui.ConversationUI
+import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.events.reporter.ChatEventsReporter
+import com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.job
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(RandomRunner::class)
 class ChatEventsReporterTest {
 
-    private val chatModule = mockk<ChatModule>(relaxed = true)
-    private val sdk = mockk<BandyerSDK>(relaxed = true){
-        every { chatModule } returns this@ChatEventsReporterTest.chatModule
+    private val conversation = mockk<ConversationUI>(relaxed = true)
+    private val sdk = mockk<KaleyraVideo>(relaxed = true){
+        every { conversation } returns this@ChatEventsReporterTest.conversation
     }
     private val eventsEmitter = mockk<EventsEmitter>(relaxed = true)
-    private val chatEventsReporter = ChatEventsReporter(sdk, eventsEmitter)
-    private val chat = mockk<Chat> {
-        every { chatInfo } returns mockk {
-            every { chatId } returns "chat"
-        }
+    private val chat1 = mockk<ChatUI> {
+        every { id } returns "chat1"
+        every { state } returns MutableStateFlow(Chat.State.Closed)
+    }
+    private val chat2 = mockk<ChatUI> {
+        every { id } returns "chat2"
+        every { state } returns MutableStateFlow(Chat.State.Closed)
+    }
+    private val chat3 = mockk<ChatUI> {
+        every { id } returns "chat3"
+        every { state } returns MutableStateFlow(Chat.State.Closed)
     }
 
     @Test
-    fun onStartAddChatObserver() {
+    fun testStart() = runTest(UnconfinedTestDispatcher()) {
+        every { conversation.chats } returns MutableStateFlow(listOf(chat1, chat2))
+        val chatEventsReporter = ChatEventsReporter(sdk, eventsEmitter, backgroundScope)
         chatEventsReporter.start()
-
-        verify {
-            chatModule.addChatObserver(chatEventsReporter)
-            chatModule.addChatUIObserver(chatEventsReporter)
-        }
+        assertEquals(3, backgroundScope.coroutineContext.job.children.count { it.isActive })
     }
 
     @Test
-    fun onStopAddChatObserver() {
+    fun testMultipleStart() = runTest(UnconfinedTestDispatcher()) {
+        every { conversation.chats } returns MutableStateFlow(listOf(chat1, chat2))
+        val chatEventsReporter = ChatEventsReporter(sdk, eventsEmitter, backgroundScope)
+        chatEventsReporter.start()
+        chatEventsReporter.start()
+        advanceUntilIdle()
+        assertEquals(3, backgroundScope.coroutineContext.job.children.count { it.isActive })
+    }
+
+    @Test
+    fun testStop() = runTest(UnconfinedTestDispatcher()) {
+        every { conversation.chats } returns MutableStateFlow(listOf(chat1, chat2))
+        val chatEventsReporter = ChatEventsReporter(sdk, eventsEmitter, backgroundScope)
+        chatEventsReporter.start()
         chatEventsReporter.stop()
-
-        verify {
-            chatModule.removeChatObserver(chatEventsReporter)
-            chatModule.removeChatUIObserver(chatEventsReporter)
-        }
+        assertEquals(0, backgroundScope.coroutineContext.job.children.count { it.isActive })
     }
 
     @Test
-    fun onChatActivityEndedWithErrorSendEvent() {
-        chatEventsReporter.onActivityError(chat, mockk(), ChatException("error"))
-        verify(atMost = 1) {
-            eventsEmitter.sendEvent(Events.ChatError, "error")
-        }
+    fun testJobsOnNewChats() = runTest(UnconfinedTestDispatcher()) {
+        val chats = MutableStateFlow(listOf(chat1, chat2))
+        every { conversation.chats } returns chats
+        val chatEventsReporter = ChatEventsReporter(sdk, eventsEmitter, backgroundScope)
+        chatEventsReporter.start()
+        chats.value = listOf(chat1, chat2, chat3)
+        assertEquals(4, backgroundScope.coroutineContext.job.children.count { it.isActive })
     }
 
     @Test
-    fun onChatActivityEndedWithErrorTwiceShouldSendEventOnlyOnce() {
-        chatEventsReporter.onActivityError(chat, mockk(), ChatException("error"))
-        chatEventsReporter.onActivityError(chat, mockk(), ChatException("error"))
-        verify(atMost = 1) {
-            eventsEmitter.sendEvent(Events.ChatError, "error")
-        }
+    fun onChatActivityEndedWithErrorSendEvent() = runTest(UnconfinedTestDispatcher()) {
+        every { chat2.state } returns MutableStateFlow(Chat.State.Closed.Error)
+        val chats = MutableStateFlow(listOf(chat1, chat2))
+        every { conversation.chats } returns chats
+        val chatEventsReporter = ChatEventsReporter(sdk, eventsEmitter, backgroundScope)
+        chatEventsReporter.start()
+        verify(atMost = 1) { eventsEmitter.sendEvent(Events.ChatError, "An error has occurred") }
     }
 }

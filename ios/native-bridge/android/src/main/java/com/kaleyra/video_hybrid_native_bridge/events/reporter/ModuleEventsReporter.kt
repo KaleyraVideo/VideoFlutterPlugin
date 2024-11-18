@@ -3,32 +3,54 @@
 
 package com.kaleyra.video_hybrid_native_bridge.events.reporter
 
-import com.bandyer.android_sdk.call.CallModule
-import com.bandyer.android_sdk.chat.ChatModule
-import com.bandyer.android_sdk.client.BandyerSDKInstance
-import com.bandyer.android_sdk.module.BandyerModule
-import com.bandyer.android_sdk.module.BandyerModuleObserver
-import com.bandyer.android_sdk.module.BandyerModuleStatus
+import com.kaleyra.video.State
+import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.events.Events.CallModuleStatusChanged
 import com.kaleyra.video_hybrid_native_bridge.events.Events.ChatModuleStatusChanged
 import com.kaleyra.video_hybrid_native_bridge.events.EventsEmitter
 import com.kaleyra.video_hybrid_native_bridge.events.EventsReporter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
 
 class ModuleEventsReporter(
-    val sdk: BandyerSDKInstance,
-    val eventsEmitter: EventsEmitter
-) : EventsReporter, BandyerModuleObserver {
+    val sdk: KaleyraVideo,
+    val eventsEmitter: EventsEmitter,
+    val coroutineScope: CoroutineScope
+) : EventsReporter {
 
-    override fun start() = sdk.addModuleObserver(this)
-    override fun stop() = sdk.removeModuleObserver(this)
+    private var jobs: MutableSet<Job> = mutableSetOf()
 
-    override fun onModuleStatusChanged(module: BandyerModule, moduleStatus: BandyerModuleStatus) = when (module) {
-        is CallModule -> eventsEmitter.sendEvent(CallModuleStatusChanged, moduleStatus.toCrossPlatformModuleStatus())
-        is ChatModule -> eventsEmitter.sendEvent(ChatModuleStatusChanged, moduleStatus.toCrossPlatformModuleStatus())
-        else          -> Unit
+    private var previousCallState: State? = null
+
+    private var previousChatState: State? = null
+
+    override fun start() {
+        stop()
+        jobs += sdk.conference.state
+            .mapNotNull { state ->
+                state.toCrossPlatformModuleStatus(previousCallState).also {
+                    previousCallState = state
+                }
+            }
+            .onEach { state -> eventsEmitter.sendEvent(CallModuleStatusChanged, state) }
+            .launchIn(coroutineScope)
+        jobs += sdk.conversation.state
+            .mapNotNull { state ->
+                state.toCrossPlatformModuleStatus(previousChatState).also {
+                    previousChatState = state
+                }
+            }
+            .onEach { state -> eventsEmitter.sendEvent(ChatModuleStatusChanged, state) }
+            .launchIn(coroutineScope)
     }
 
-    override fun onModuleFailed(module: BandyerModule, throwable: Throwable) = Unit
-    override fun onModulePaused(module: BandyerModule) = Unit
-    override fun onModuleReady(module: BandyerModule) = Unit
+    override fun stop() {
+        previousCallState = null
+        previousChatState = null
+        jobs.forEach { it.cancel() }
+        jobs.clear()
+    }
 }

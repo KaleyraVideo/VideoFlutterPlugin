@@ -2,9 +2,9 @@
 // See LICENSE for licensing information
 
 import Foundation
-import Bandyer
+import Combine
+import KaleyraVideoSDK
 
-@available(iOS 12.0, *)
 struct UserInterfacePresenterConfiguration: Equatable {
 
     enum ChatAudioButtonConfiguration: Equatable {
@@ -32,48 +32,44 @@ struct UserInterfacePresenterConfiguration: Equatable {
     }
 }
 
-@available(iOS 12.0, *)
 class KaleyraVideoSDKUserInterfacePresenter: NSObject, UserInterfacePresenter {
 
     // MARK: - Properties
 
-    private let sdk: BandyerSDKProtocol
+    private let sdk: KaleyraVideoSDKProtocol
     private let viewControllerPresenter: ViewControllerPresenter
     private let callWindow: CallWindowProtocol
-    private let formatter: Formatter
 
     private var configuration = UserInterfacePresenterConfiguration(showsFeedbackWhenCallEnds: false,
                                                                     chatAudioButtonConf: .disabled,
                                                                     chatVideoButtonConf: .disabled)
 
+    private lazy var subscriptions = Set<AnyCancellable>()
+
     // MARK: - Init
 
-    init(sdk: BandyerSDKProtocol,
+    init(sdk: KaleyraVideoSDKProtocol,
          viewControllerPresenter: ViewControllerPresenter,
-         callWindow: CallWindowProtocol,
-         formatter: Formatter) {
+         callWindow: CallWindowProtocol) {
         self.sdk = sdk
         self.viewControllerPresenter = viewControllerPresenter
         self.callWindow = callWindow
-        self.formatter = formatter
 
         super.init()
-
-        setupCallWindow()
     }
 
-    convenience init(rootViewController: UIViewController?, formatter: Formatter) {
-        self.init(sdk: BandyerSDK.instance,
+    convenience init(rootViewController: UIViewController?) {
+        self.init(sdk: KaleyraVideo.instance,
                   viewControllerPresenter: KaleyraVideoSDKUserInterfacePresenter.makeViewControllerPresenter(rootViewController),
-                  callWindow: KaleyraVideoSDKUserInterfacePresenter.makeCallWindow(),
-                  formatter: formatter)
+                  callWindow: KaleyraVideoSDKUserInterfacePresenter.makeCallWindow(rootViewController))
     }
 
-    private static func makeCallWindow() -> CallWindow {
-        guard let instance = CallWindow.instance else {
-            return CallWindow()
+    private static func makeCallWindow(_ rootViewController: UIViewController?) -> CallWindow {
+        guard let windowScene = rootViewController?.view.window?.windowScene else {
+            return .init()
         }
-        return instance
+
+        return .init(windowScene: windowScene)
     }
 
     private static func makeViewControllerPresenter(_ rootViewController: UIViewController?) -> ViewControllerPresenter {
@@ -86,19 +82,15 @@ class KaleyraVideoSDKUserInterfacePresenter: NSObject, UserInterfacePresenter {
 
     // MARK: - Setup
 
-    private func setupCallWindow() {
-        callWindow.callDelegate = self
-    }
-
     private func setupSDK() {
-        sdk.callClient.addIncomingCall(observer: self, queue: .main)
+        sdk.conference?.callPublisher.compactMap({ $0 }).receive(on: RunLoop.main).sink { [weak self] call in
+            self?.present(call: call)
+        }.store(in: &subscriptions)
     }
 
     private func setupNotificationCoordinator() {
-        sdk.notificationsCoordinator?.chatListener = self
-        sdk.notificationsCoordinator?.fileShareListener = self
-        sdk.notificationsCoordinator?.formatter = formatter
-        sdk.notificationsCoordinator?.start()
+        sdk.conversation?.notifications.delegate = self
+        sdk.conversation?.notifications.start()
     }
 
     // MARK: - Configuration
@@ -113,46 +105,59 @@ class KaleyraVideoSDKUserInterfacePresenter: NSObject, UserInterfacePresenter {
     // MARK: - Presenting Call UI
 
     func presentCall(_ options: CreateCallOptions) {
-        let intent = options.makeStartOutgoingCallIntent()
-        handleCallIntent(intent)
+        startCall(callees: options.callees, options: options.makeCallOptions())
     }
 
     func presentCall(_ url: URL) {
-        let intent = JoinURLIntent(url: url)
-        handleCallIntent(intent)
+        sdk.conference?.join(url: url) { result in
+            do {
+                try result.get()
+            } catch {
+                debugPrint("An error occurred while starting join call \(error)")
+            }
+        }
     }
 
-    private func makeCallViewControllerConfiguration() -> CallViewControllerConfiguration {
-        let builder = CallViewControllerConfigurationBuilder().withFormatter(formatter)
-
-        if configuration.showsFeedbackWhenCallEnds {
-            _ = builder.withFeedbackEnabled()
+    private func startCall(callees: [String], options: KaleyraVideoSDK.CallOptions) {
+        sdk.conference?.call(callees: callees,
+                             options: options) { result in
+            do {
+                try result.get()
+            } catch {
+                debugPrint("An error occurred while starting call \(error)")
+            }
         }
+    }
 
-        return builder.build()
+    private func present(call: Call) {
+        let controller = CallViewController(call: call, configuration: makeCallViewControllerConfiguration())
+        controller.delegate = self
+        callWindow.makeKeyAndVisible()
+        callWindow.set(rootViewController: controller, animated: true, completion: nil)
+    }
+
+    private func makeCallViewControllerConfiguration() -> CallViewController.Configuration {
+        .init(feedback: configuration.showsFeedbackWhenCallEnds ? .init() : nil)
     }
 
     // MARK: - Presenting Chat UI
 
     func presentChat(with userID: String) {
-        let intent = OpenChatIntent.openChat(with: userID)
+        let intent = ChatViewController.Intent.participant(id: userID)
         handleChatIntent(intent)
     }
 
-    private func makeChannelViewController(intent: OpenChatIntent) -> ChannelViewController {
-        let config = ChannelViewControllerConfiguration(audioButton: configuration.chatHasAudioButton,
-                                                        videoButton: configuration.chatHasVideoButton,
-                                                        formatter: formatter)
-        let controller = ChannelViewController()
+    private func makeChannelViewController(intent: ChatViewController.Intent) -> ChatViewController {
+        let controller = ChatViewController(intent: intent,
+                                            configuration: .init(audioButton: configuration.chatHasAudioButton,
+                                                                 videoButton: configuration.chatHasVideoButton))
         controller.delegate = self
-        controller.configuration = config
-        controller.intent = intent
         return controller
     }
 
     // MARK: - Intents
 
-    private func handleChatIntent(_ intent: OpenChatIntent) {
+    private func handleChatIntent(_ intent: ChatViewController.Intent) {
         let channelViewController = makeChannelViewController(intent: intent)
 
         let continueWith: (() -> Void) = { [weak self] in
@@ -165,85 +170,46 @@ class KaleyraVideoSDKUserInterfacePresenter: NSObject, UserInterfacePresenter {
             continueWith()
         }
     }
-
-    private func handleCallIntent(_ intent: Intent) {
-        callWindow.setConfiguration(makeCallViewControllerConfiguration())
-        callWindow.presentCallViewController(for: intent) { [weak self] error in
-            guard let self = self else { return }
-            guard error != nil else { return }
-
-            self.viewControllerPresenter.displayAlert(title: "Warning", message: "Another call ongoing", dismissButtonText: "OK")
-        }
-    }
 }
 
-// MARK: - CallWindowDelegate
+// MARK: - CallViewControllerDelegate
 
-@available(iOS 12.0, *)
-extension KaleyraVideoSDKUserInterfacePresenter: CallWindowDelegate {
+extension KaleyraVideoSDKUserInterfacePresenter: CallViewControllerDelegate {
 
-    func callWindowDidFinish(_ window: Bandyer.CallWindow) {
+    func callViewControllerDidFinish(_ controller: KaleyraVideoSDK.CallViewController) {
         callWindow.isHidden = true
-    }
-
-    func callWindow(_ window: CallWindow, openChatWith intent: OpenChatIntent) {
-        handleChatIntent(intent)
-    }
-}
-
-// MARK: - IncomingCallObserver
-
-@available(iOS 12.0, *)
-extension KaleyraVideoSDKUserInterfacePresenter: IncomingCallObserver {
-
-    func callClient(_ client: Bandyer.CallClient, didReceiveIncomingCall call: Bandyer.Call) {
-        handleCallIntent(HandleIncomingCallIntent(call: call))
     }
 }
 
 // MARK: - InAppChatNotificationTouchListener
 
-@available(iOS 12.0, *)
-extension KaleyraVideoSDKUserInterfacePresenter: InAppChatNotificationTouchListener {
+extension KaleyraVideoSDKUserInterfacePresenter: InAppNotificationsDelegate {
 
-    func onTouch(_ notification: Bandyer.ChatNotification) {
-        guard let intent = OpenChatIntent.openChat(from: notification) else { return }
+    func onTouch(_ notification: ChatNotification) {
+        let intent = ChatViewController.Intent.chat(id: notification.chatId)
         handleChatIntent(intent)
-    }
-}
-
-// MARK: - InAppFileShareNotificationTouchListener
-
-@available(iOS 12.0, *)
-extension KaleyraVideoSDKUserInterfacePresenter: InAppFileShareNotificationTouchListener {
-
-    func onTouch(_ notification: Bandyer.FileShareNotification) {
-        callWindow.presentCallViewController(for: OpenDownloadsIntent()) { _ in }
     }
 }
 
 // MARK: - ChannelViewControllerDelegate
 
-@available(iOS 12.0, *)
-extension KaleyraVideoSDKUserInterfacePresenter: ChannelViewControllerDelegate {
+extension KaleyraVideoSDKUserInterfacePresenter: ChatViewControllerDelegate {
 
-    func channelViewControllerDidFinish(_ controller: Bandyer.ChannelViewController) {
+    func chatViewControllerDidFinish(_ controller: KaleyraVideoSDK.ChatViewController) {
         viewControllerPresenter.dismiss(controller, animated: true, completion: nil)
     }
 
-    func channelViewController(_ controller: Bandyer.ChannelViewController, didTapAudioCallWith users: [String]) {
+    func chatViewControllerDidTapAudioCallButton(_ controller: KaleyraVideoSDK.ChatViewController) {
         guard case let .enabled(audioOptions) = configuration.chatAudioButtonConf else { return }
 
-        let options = audioOptions.callOptions
-        let intent = StartOutgoingCallIntent(callees: users, options: options)
-        handleCallIntent(intent)
+        startCall(callees: controller.participants, options: .init(type: audioOptions.type.callType,
+                                                                   recording: audioOptions.recordingType?.callRecordingType))
     }
 
-    func channelViewController(_ controller: Bandyer.ChannelViewController, didTapVideoCallWith users: [String]) {
+    func chatViewControllerDidTapVideoCallButton(_ controller: KaleyraVideoSDK.ChatViewController) {
         guard case let .enabled(videoOptions) = configuration.chatVideoButtonConf else { return }
 
-        let options = videoOptions.callOptions
-        let intent = StartOutgoingCallIntent(callees: users, options: options)
-        handleCallIntent(intent)
+        startCall(callees: controller.participants, options: .init(type: .audioVideo,
+                                                                   recording: videoOptions.recordingType?.callRecordingType))
     }
 }

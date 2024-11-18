@@ -2,29 +2,33 @@
 // See LICENSE for licensing information
 
 import Foundation
-import Bandyer
+import KaleyraVideoSDK
 
-@available(iOS 12.0, *)
 protocol SDKEventReporter {
+
+    var lastVoIPToken: String? { get }
 
     func start()
     func stop()
 }
 
-@available(iOS 12.0, *)
 class EventsReporter: SDKEventReporter {
 
     // MARK: - Properties
 
     private let emitter: EventEmitter
-    private let sdk: BandyerSDKProtocol
+    private let sdk: KaleyraVideoSDKProtocol
 
     private(set) var callClientEventReporter: CallClientEventsReporter?
     private(set) var chatClientEventReporter: ChatClientEventsReporter?
 
+    var lastVoIPToken: String? {
+        callClientEventReporter?.lastVoIPToken
+    }
+
     // MARK: - Init
 
-    init(emitter: EventEmitter, sdk: BandyerSDKProtocol) {
+    init(emitter: EventEmitter, sdk: KaleyraVideoSDKProtocol) {
         self.emitter = emitter
         self.sdk = sdk
     }
@@ -32,21 +36,21 @@ class EventsReporter: SDKEventReporter {
     // MARK: - Start Reporting Events
 
     func start() {
-        startReportingCallClientEvents(sdk.callClient)
-        startReportingChatClientEvents(sdk.chatClient)
+        startReportingCallClientEvents(sdk.conference)
+        startReportingChatClientEvents(sdk.conversation)
     }
 
-    private func startReportingCallClientEvents(_ callClient: CallClient) {
-        guard callClientEventReporter == nil else { return }
+    private func startReportingCallClientEvents(_ conference: Conference?) {
+        guard let conference, callClientEventReporter == nil else { return }
 
-        callClientEventReporter = .init(client: callClient, emitter: emitter)
+        callClientEventReporter = .init(conference: conference, emitter: emitter)
         callClientEventReporter?.start()
     }
 
-    private func startReportingChatClientEvents(_ chatClient: ChatClient) {
-        guard chatClientEventReporter == nil else { return }
+    private func startReportingChatClientEvents(_ conversation: Conversation?) {
+        guard let conversation, chatClientEventReporter == nil else { return }
 
-        chatClientEventReporter = .init(client: chatClient, emitter: emitter)
+        chatClientEventReporter = .init(conversation: conversation, emitter: emitter)
         chatClientEventReporter?.start()
     }
 

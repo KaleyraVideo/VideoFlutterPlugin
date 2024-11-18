@@ -5,7 +5,6 @@ import Foundation
 import Hamcrest
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 final class PresentingViewControllerViewControllerPresenterTests: UnitTestCase {
 
     private var presentingViewController: ViewControllerSpy!

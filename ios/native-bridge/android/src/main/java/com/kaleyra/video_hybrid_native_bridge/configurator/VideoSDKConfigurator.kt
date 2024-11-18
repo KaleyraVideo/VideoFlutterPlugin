@@ -3,9 +3,10 @@
 
 package com.kaleyra.video_hybrid_native_bridge.configurator
 
-import com.bandyer.android_sdk.client.BandyerSDKInstance
+import com.kaleyra.video_common_ui.CallUI
+import com.kaleyra.video_common_ui.ChatUI
+import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.KaleyraVideoConfiguration
-import com.kaleyra.video_hybrid_native_bridge.CreateCallOptionsProxy
 import com.kaleyra.video_hybrid_native_bridge.extensions.toSDK
 import com.kaleyra.video_hybrid_native_bridge.repository.ConfigurationEntity
 import com.kaleyra.video_hybrid_native_bridge.repository.VideoHybridBridgeRepository
@@ -13,8 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 internal class VideoSDKConfigurator(
-    private val sdk: BandyerSDKInstance,
-    private val createCallOptionsProxy: CreateCallOptionsProxy,
+    private val sdk: KaleyraVideo,
     private val repository: VideoHybridBridgeRepository,
     private val scope: CoroutineScope
 ) : CachedSDKConfigurator {
@@ -24,7 +24,12 @@ internal class VideoSDKConfigurator(
     override fun configureBridge(configuration: KaleyraVideoConfiguration) {
         scope.launch {
             repository.configurationDao().insert(ConfigurationEntity(configuration))
-            sdk.configure(configuration.toSDK(createCallOptionsProxy))
+            sdk.configure(
+                configuration.toSDK(
+                    callActions = { KaleyraVideo.conference.callActions = it },
+                    chatActions = { KaleyraVideo.conversation.chatActions = it }
+                )
+            )
             lastConfiguration = configuration
         }
     }
@@ -33,6 +38,8 @@ internal class VideoSDKConfigurator(
         scope.launch {
             repository.clearAllTables()
             sdk.reset()
+            KaleyraVideo.conference.callActions = CallUI.Action.default
+            KaleyraVideo.conversation.chatActions = ChatUI.Action.default
             lastConfiguration = null
         }
     }

@@ -2,17 +2,18 @@
 // See LICENSE for licensing information
 
 import Foundation
-import Bandyer
+import KaleyraVideoSDK
 
-@available(iOS 12.0, *)
-extension AudioCallType {
+extension CallType {
 
-    var callType: Bandyer.CallType {
+    var bandyerType: KaleyraVideoSDK.CallOptions.CallType {
         switch self {
             case .audio:
                 return .audioOnly
             case .audioUpgradable:
                 return .audioUpgradable
+            case .audioVideo:
+                return .audioVideo
         }
     }
 }

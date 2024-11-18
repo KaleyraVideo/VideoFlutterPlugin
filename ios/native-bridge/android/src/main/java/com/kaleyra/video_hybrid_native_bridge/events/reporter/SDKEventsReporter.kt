@@ -3,7 +3,7 @@
 
 package com.kaleyra.video_hybrid_native_bridge.events.reporter
 
-import com.bandyer.android_sdk.client.BandyerSDKInstance
+import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.events.EventsEmitter
 import com.kaleyra.video_hybrid_native_bridge.events.EventsReporter
 import kotlinx.coroutines.CoroutineScope
@@ -21,20 +21,20 @@ class SDKEventsReporter internal constructor(
         private var instance: SDKEventsReporter? = null
 
         fun create(
-            sdk: BandyerSDKInstance,
+            sdk: KaleyraVideo,
             eventsEmitter: EventsEmitter,
             scope: CoroutineScope
         ): SDKEventsReporter = instance.takeIf { it?.isRunning == true } ?: SDKEventsReporter(sdk, eventsEmitter, scope).apply { instance = this }
     }
 
     private constructor(
-        sdk: BandyerSDKInstance,
+        sdk: KaleyraVideo,
         eventsEmitter: EventsEmitter,
         scope: CoroutineScope
     ) : this(
-        ModuleEventsReporter(sdk, eventsEmitter),
-        CallEventsReporter(sdk, eventsEmitter),
-        ChatEventsReporter(sdk, eventsEmitter),
+        ModuleEventsReporter(sdk, eventsEmitter, scope),
+        CallEventsReporter(sdk, eventsEmitter, scope),
+        ChatEventsReporter(sdk, eventsEmitter, scope),
         scope
     )
 

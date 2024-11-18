@@ -4,10 +4,10 @@
 package com.kaleyra.video_hybrid_native_bridge.connector
 
 import androidx.annotation.VisibleForTesting
-import com.bandyer.android_sdk.client.BandyerSDKInstance
-import com.bandyer.android_sdk.client.Session
+import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.CrossPlatformAccessTokenProvider
 import com.kaleyra.video_hybrid_native_bridge.SDKAccessTokenProviderProxy
+import com.kaleyra.video_hybrid_native_bridge.Session
 import com.kaleyra.video_hybrid_native_bridge.events.EventsReporter
 import com.kaleyra.video_hybrid_native_bridge.repository.ConnectedUserEntity
 import com.kaleyra.video_hybrid_native_bridge.repository.VideoHybridBridgeRepository
@@ -15,7 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 internal class VideoSDKCachedUserConnector(
-    private val sdk: BandyerSDKInstance,
+    private val sdk: KaleyraVideo,
     private val repository: VideoHybridBridgeRepository,
     private val tokenProvider: CrossPlatformAccessTokenProvider,
     private val eventsReporter: EventsReporter,
@@ -31,8 +31,10 @@ internal class VideoSDKCachedUserConnector(
         scope.launch {
             repository.connectedUserDao().insert(ConnectedUserEntity(userID))
             eventsReporter.start()
-            sdk.connect(Session(userID, accessTokenProviderProxy))
-            lastConnectedUserId = userID
+            val connectedUser = kotlin.runCatching {
+                sdk.connect(userID) { accessTokenProviderProxy.provideAccessToken(userID) }.await()
+            }.getOrNull()
+            lastConnectedUserId = connectedUser?.userId
         }
     }
 

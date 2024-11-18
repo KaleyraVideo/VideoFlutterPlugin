@@ -3,15 +3,15 @@
 
 import XCTest
 import Hamcrest
-import Bandyer
+import Combine
+import KaleyraVideoSDK
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 class ChatClientEventsReporterTests: UnitTestCase {
 
     private let statusChangedEvent = "chatModuleStatusChanged"
 
-    private var client: ChatClientStub!
+    private var client: ConversationStub!
     private var emitter: EventEmitterSpy!
     private var sut: ChatClientEventsReporter!
 
@@ -20,7 +20,7 @@ class ChatClientEventsReporterTests: UnitTestCase {
 
         client = .init()
         emitter = .init()
-        sut = .init(client: client, emitter: emitter)
+        sut = .init(conversation: client, emitter: emitter)
     }
 
     override func tearDownWithError() throws {
@@ -33,69 +33,50 @@ class ChatClientEventsReporterTests: UnitTestCase {
 
     // MARK: - Tests
 
-    func testStartTwiceShouldSubscribeAsClientObserverOnlyOnce() {
-        sut.start()
+    func testOnClientConnectingShouldSendEvent() throws {
+        sut.startWithImmediateScheduler()
 
-        sut.start()
-
-        assertThat(client.clientObservers(), equalTo(1))
-    }
-
-    func testOnClientStartingShouldSendEvent() throws {
-        sut.start()
-
-        client.state = .starting
+        client.state = .connecting
 
         let event = try unwrap(emitter.sentEvents.first)
         assertThat(event.event, equalTo(statusChangedEvent))
-        assertThat(event.args, instanceOfAnd(equalTo("connecting")))
+        assertThat(event.args, presentAnd(instanceOfAnd(equalTo("connecting"))))
     }
 
-    func testOnClientRunningShouldSendEvent() throws {
-        sut.start()
+    func testOnClientConnectedShouldSendEvent() throws {
+        sut.startWithImmediateScheduler()
 
-        client.state = .running
+        client.state = .connected
 
         let event = try unwrap(emitter.sentEvents.first)
         assertThat(event.event, equalTo(statusChangedEvent))
-        assertThat(event.args, instanceOfAnd(equalTo("ready")))
+        assertThat(event.args, presentAnd(instanceOfAnd(equalTo("connected"))))
     }
 
-    func testOnClientStoppedShouldSendEvent() throws {
-        sut.start()
+    func testOnClientDisconnectedShouldSendEvent() throws {
+        sut.startWithImmediateScheduler()
 
-        client.state = .running
-        client.state = .stopped
+        client.state = .connected
+        client.state = .disconnected(error: nil)
 
         let event = try unwrap(emitter.sentEvents.last)
         assertThat(event.event, equalTo(statusChangedEvent))
-        assertThat(event.args, instanceOfAnd(equalTo("stopped")))
-    }
-
-    func testOnClientPausedShouldSendEvent() throws {
-        sut.start()
-
-        client.state = .running
-        client.state = .paused
-
-        let event = try unwrap(emitter.sentEvents.last)
-        assertThat(event.event, equalTo(statusChangedEvent))
-        assertThat(event.args, instanceOfAnd(equalTo("paused")))
+        assertThat(event.args, presentAnd(instanceOfAnd(equalTo("disconnected"))))
     }
 
     func testOnClientReconnectingShouldSendEvent() throws {
-        sut.start()
+        sut.startWithImmediateScheduler()
 
-        client.state = .running
+        client.state = .connected
         client.state = .reconnecting
 
         let event = try unwrap(emitter.sentEvents.last)
         assertThat(event.event, equalTo(statusChangedEvent))
-        assertThat(event.args, instanceOfAnd(equalTo("reconnecting")))
+        assertThat(event.args, presentAnd(instanceOfAnd(equalTo("reconnecting"))))
     }
 
     func testOnClientFailedShouldSendTwoEvents() throws {
-        sut.start()
+        sut.startWithImmediateScheduler()
 
         let error = anyNSError()
         client.simulateFailure(error: error)
@@ -103,19 +84,25 @@ class ChatClientEventsReporterTests: UnitTestCase {
         assertThat(emitter.sentEvents, hasCount(2))
         let firstEvent = emitter.sentEvents[0]
         assertThat(firstEvent.event, equalTo("chatError"))
-        assertThat(firstEvent.args, instanceOfAnd(equalTo(error.localizedDescription)))
+        assertThat(firstEvent.args, presentAnd(instanceOfAnd(equalTo(error.localizedDescription))))
         let secondEvent = emitter.sentEvents[1]
         assertThat(secondEvent.event, equalTo(statusChangedEvent))
-        assertThat(secondEvent.args, instanceOfAnd(equalTo("failed")))
+        assertThat(secondEvent.args, presentAnd(instanceOfAnd(equalTo("failed"))))
     }
 
     func testStopShouldStopListeningForClientEvents() {
-        sut.start()
+        sut.startWithImmediateScheduler()
 
         sut.stop()
-        client.state = .running
+        client.state = .connected
 
         assertThat(emitter.sentEvents, empty())
     }
+}
 
+private extension ChatClientEventsReporter {
+
+    func startWithImmediateScheduler() {
+        start(scheduler: ImmediateScheduler.shared)
+    }
 }

@@ -3,10 +3,9 @@
 
 import XCTest
 import Hamcrest
-import Bandyer
+import KaleyraVideoSDK
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 class UsersDetailsCacheTests: UnitTestCase, UserDetailsFixtureFactory {
 
     private var sut: UsersDetailsCache!
@@ -26,11 +25,11 @@ class UsersDetailsCacheTests: UnitTestCase, UserDetailsFixtureFactory {
     // MARK: - Tests
 
     func testSetsItem() {
-        let item = makeItem(userID: "bob", firstname: "Robert", lastname: "Appleseed")
+        let item = makeItem(userID: "bob", name: "Robert")
 
-        sut.setItem(item, forKey: item.userID)
+        sut.setItem(item, forKey: item.userId)
 
-        let storedItem = sut.item(forKey: item.userID)
+        let storedItem = sut.item(forKey: item.userId)
         assertThat(storedItem, equalTo(item))
     }
 

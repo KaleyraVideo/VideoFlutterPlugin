@@ -3,6 +3,7 @@
 
 package com.kaleyra.video_hybrid_native_bridge.extensions
 
+import com.kaleyra.video_common_ui.CallUI
 import com.kaleyra.video_hybrid_native_bridge.CallDisplayMode.Background
 import com.kaleyra.video_hybrid_native_bridge.CallDisplayMode.Foreground
 import com.kaleyra.video_hybrid_native_bridge.CallDisplayMode.ForegroundPictureInPicture
@@ -17,18 +18,18 @@ class CallDisplayModeTest {
     @Test
     fun background() {
         val mode = Background
-        assertEquals(com.bandyer.android_sdk.intent.call.CallDisplayMode.BACKGROUND, mode.toSDK())
+        assertEquals(CallUI.DisplayMode.Background, mode.toSDK())
     }
 
     @Test
     fun foreground() {
         val mode = Foreground
-        assertEquals(com.bandyer.android_sdk.intent.call.CallDisplayMode.FOREGROUND, mode.toSDK())
+        assertEquals(CallUI.DisplayMode.Foreground, mode.toSDK())
     }
 
     @Test
     fun pip() {
         val mode = ForegroundPictureInPicture
-        assertEquals(com.bandyer.android_sdk.intent.call.CallDisplayMode.FOREGROUND_PICTURE_IN_PICTURE, mode.toSDK())
+        assertEquals(CallUI.DisplayMode.PictureInPicture, mode.toSDK())
     }
 }

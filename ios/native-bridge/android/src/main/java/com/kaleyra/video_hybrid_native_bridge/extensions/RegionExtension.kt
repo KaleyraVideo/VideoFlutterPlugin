@@ -6,8 +6,8 @@ package com.kaleyra.video_hybrid_native_bridge.extensions
 import com.kaleyra.video_hybrid_native_bridge.Region
 
 internal fun Region.toSDK() = when (name.lowercase()) {
-    "europe" -> com.kaleyra.collaboration_suite_networking.Region.Eu
-    "india"  -> com.kaleyra.collaboration_suite_networking.Region.In
-    "us"     -> com.kaleyra.collaboration_suite_networking.Region.Us
-    else     -> com.kaleyra.collaboration_suite_networking.Region.create(name)
+    "europe" -> com.kaleyra.video.configuration.Region.Europe
+    "india"  -> com.kaleyra.video.configuration.Region.India
+    "us"     -> com.kaleyra.video.configuration.Region.US
+    else     -> com.kaleyra.video.configuration.Region.create(name)
 }

@@ -1,12 +1,12 @@
 # Copyright © 2018-2023 Kaleyra S.p.a. All Rights Reserved.
 # See LICENSE for licensing information
 
-platform :ios, '12.0'
+platform :ios, '15.0'
 
 target 'KaleyraVideoHybridNativeBridge' do
   use_frameworks!
 
-  pod 'Bandyer', '~> 3.12.1'
+  pod 'KaleyraVideoSDK', '~> 4.0.0'
 
   target 'KaleyraVideoHybridNativeBridgeTests' do
     use_frameworks!

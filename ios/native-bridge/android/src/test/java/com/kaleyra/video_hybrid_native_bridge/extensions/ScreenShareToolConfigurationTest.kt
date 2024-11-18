@@ -3,7 +3,7 @@
 
 package com.kaleyra.video_hybrid_native_bridge.extensions
 
-import com.bandyer.android_sdk.tool_configuration.screen_share.ScreenShareOptionSet
+import com.kaleyra.video_common_ui.CallUI
 import com.kaleyra.video_hybrid_native_bridge.ScreenShareToolConfiguration
 import com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner
 import org.junit.Assert.assertEquals
@@ -22,18 +22,18 @@ class ScreenShareToolConfigurationTest {
     @Test
     fun inApp() {
         val screenShareToolConfiguration = ScreenShareToolConfiguration(inApp = true)
-        assertEquals(ScreenShareOptionSet.APP_ONLY, screenShareToolConfiguration.toSDK()!!.mode)
+        assertEquals(CallUI.Action.ScreenShare, screenShareToolConfiguration.toSDK()!!)
     }
 
     @Test
     fun wholeDevice() {
         val screenShareToolConfiguration = ScreenShareToolConfiguration(wholeDevice = true)
-        assertEquals(ScreenShareOptionSet.WHOLE_DEVICE, screenShareToolConfiguration.toSDK()!!.mode)
+        assertEquals(CallUI.Action.ScreenShare, screenShareToolConfiguration.toSDK()!!)
     }
 
     @Test
     fun both() {
         val screenShareToolConfiguration = ScreenShareToolConfiguration(inApp = true, wholeDevice = true)
-        assertEquals(ScreenShareOptionSet.USER_SELECTION, screenShareToolConfiguration.toSDK()!!.mode)
+        assertEquals(CallUI.Action.ScreenShare, screenShareToolConfiguration.toSDK()!!)
     }
 }

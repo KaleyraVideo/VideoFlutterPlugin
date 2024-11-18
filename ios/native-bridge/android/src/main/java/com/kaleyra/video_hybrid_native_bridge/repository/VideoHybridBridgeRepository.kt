@@ -14,7 +14,7 @@ import androidx.room.TypeConverters
  *
  * @author kristiyan
  */
-@Database(entities = [UserDetailsEntity::class, ConfigurationEntity::class, ConnectedUserEntity::class], version = 2, exportSchema = false)
+@Database(entities = [UserDetailsEntity::class, ConfigurationEntity::class, ConnectedUserEntity::class], version = 3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class VideoHybridBridgeRepository : RoomDatabase() {
 

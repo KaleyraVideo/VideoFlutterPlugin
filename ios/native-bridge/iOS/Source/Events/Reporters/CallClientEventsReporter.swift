@@ -2,45 +2,70 @@
 // See LICENSE for licensing information
 
 import Foundation
-import Bandyer
+import Combine
+import KaleyraVideoSDK
 
-@available(iOS 12.0, *)
-class CallClientEventsReporter: NSObject, CallClientObserver {
+class CallClientEventsReporter: NSObject {
 
-    private let client: CallClient
+    private(set) var lastVoIPToken: String?
+    private let conference: Conference
     private let emitter: EventEmitter
-    private(set) var isRunning = false
+    private var cancellables = Set<AnyCancellable>()
 
-    init(client: CallClient, emitter: EventEmitter) {
-        self.client = client
+    var isRunning: Bool {
+        !cancellables.isEmpty
+    }
+
+    init(conference: Conference, emitter: EventEmitter) {
+        self.conference = conference
         self.emitter = emitter
         super.init()
     }
 
-    func start() {
+    func start<S: Scheduler>(scheduler: S = DispatchQueue.main) {
         guard !isRunning else { return }
 
-        isRunning = true
-        client.add(observer: self, queue: .main)
+        conference.statePublisher.dropFirst().receive(on: scheduler).sink { [weak self] _ in
+            self?.notifyNewClientState()
+        }.store(in: &cancellables)
+
+        conference.voipCredentialsPublisher.receive(on: scheduler).sink { [weak self] credentials in
+            self?.notifyNewCredentials(credentials)
+        }.store(in: &cancellables)
     }
 
     func stop() {
         guard isRunning else { return }
 
-        client.remove(observer: self)
-        isRunning = false
+        cancellables.removeAll()
     }
 
     // MARK: - Call client observer
 
-    func callClientDidChangeState(_ client: CallClient, oldState: CallClientState, newState: CallClientState) {
-        guard let clientState = ClientState(clientState: newState) else { return }
+    private func notifyNewClientState() {
+        notifyErrorIfNeeded()
 
+        guard let clientState = ClientState(state: conference.state) else { return }
         emitter.sendEvent(Events.callModuleStatusChanged, args: clientState.rawValue)
     }
 
-    func callClient(_ client: CallClient, didFailWithError error: Error) {
+    private func notifyErrorIfNeeded() {
+        guard case KaleyraVideoSDK.ClientState.disconnected(error: let error) = conference.state, let error else { return }
         emitter.sendEvent(Events.callError, args: error.localizedDescription)
-        emitter.sendEvent(Events.callModuleStatusChanged, args: ClientState.failed.rawValue)
+    }
+
+    // MARK: - VoIP Credentials
+
+    private func notifyNewCredentials(_ credentials: VoIPCredentials?) {
+        guard let credentials else {
+            guard lastVoIPToken != nil else { return }
+
+            emitter.sendEvent(.iOSVoipPushTokenInvalidated, args: nil)
+            lastVoIPToken = nil
+            return
+        }
+
+        emitter.sendEvent(.iOSVoipPushTokenUpdated, args: credentials.tokenAsString)
+        lastVoIPToken = credentials.tokenAsString
     }
 }

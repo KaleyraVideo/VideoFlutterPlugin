@@ -5,7 +5,6 @@ import XCTest
 import Hamcrest
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 class BroadcastConfigurationPlistReaderTests: UnitTestCase {
 
     private var sut: BroadcastConfigurationPlistReader!

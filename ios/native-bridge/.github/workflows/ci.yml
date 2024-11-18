@@ -18,20 +18,21 @@ jobs:
         working-directory: ./iOS
         run: pod install --repo-update
 
-      - name: Run unit tests iOS 16
-        working-directory: ./iOS
-        run: |
-          set -o pipefail
-          xcodebuild clean -workspace KaleyraVideoHybridNativeBridge.xcworkspace -scheme KaleyraVideoHybridNativeBridge | xcpretty
-          xcodebuild test -workspace KaleyraVideoHybridNativeBridge.xcworkspace -scheme KaleyraVideoHybridNativeBridge -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 14,OS=16.2"  | xcpretty -t
+      # - name: Run unit tests iOS 18
+      #   working-directory: ./iOS
+      #   run: |
+      #     set -o pipefail
+      #     sudo xcode-select -s '/Applications/Xcode_16.1.app/Contents/Developer'
+      #     xcodebuild clean -workspace KaleyraVideoHybridNativeBridge.xcworkspace -scheme KaleyraVideoHybridNativeBridge | xcpretty
+      #     xcodebuild test -workspace KaleyraVideoHybridNativeBridge.xcworkspace -scheme KaleyraVideoHybridNativeBridge -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 14,OS=18.1"  | xcpretty -t
 
-      - name: Run unit tests iOS 15
+      - name: Run unit tests iOS 17
         working-directory: ./iOS
         run: |
           set -o pipefail
-          sudo xcode-select -s /Applications/Xcode_13.4.app
+          sudo xcode-select -s '/Applications/Xcode_15.4.app/Contents/Developer'
           xcodebuild clean -workspace KaleyraVideoHybridNativeBridge.xcworkspace -scheme KaleyraVideoHybridNativeBridge | xcpretty
-          xcodebuild test -workspace KaleyraVideoHybridNativeBridge.xcworkspace -scheme KaleyraVideoHybridNativeBridge -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 13,OS=15.5"  | xcpretty -t
+          xcodebuild test -workspace KaleyraVideoHybridNativeBridge.xcworkspace -scheme KaleyraVideoHybridNativeBridge -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 15,OS=17.5"  | xcpretty -t
 
   test-android:
     runs-on: ubuntu-latest

@@ -4,7 +4,6 @@
 import Foundation
 @testable import KaleyraVideoHybridNativeBridge
 
-@available(iOS 12.0, *)
 extension KaleyraVideoConfiguration: Encodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -33,7 +32,6 @@ extension KaleyraVideoConfiguration: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension KaleyraVideoHybridNativeBridge.Environment: Encodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -46,7 +44,6 @@ extension KaleyraVideoHybridNativeBridge.Environment: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension KaleyraVideoHybridNativeBridge.Region: Encodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -59,7 +56,6 @@ extension KaleyraVideoHybridNativeBridge.Region: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension IosConfiguration: Encodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -74,7 +70,6 @@ extension IosConfiguration: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension KaleyraVideoHybridNativeBridge.CallKitConfiguration: Encodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -91,7 +86,6 @@ extension KaleyraVideoHybridNativeBridge.CallKitConfiguration: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension VoipHandlingStrategy: Encodable {
 
     public func encode(to encoder: Encoder) throws {
@@ -106,7 +100,6 @@ extension VoipHandlingStrategy: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension Tools: Encodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -127,7 +120,6 @@ extension Tools: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension KaleyraVideoHybridNativeBridge.ChatToolConfiguration: Encodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -142,7 +134,6 @@ extension KaleyraVideoHybridNativeBridge.ChatToolConfiguration: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension ScreenShareToolConfiguration: Encodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -157,7 +148,6 @@ extension ScreenShareToolConfiguration: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension AudioCallOptions: Encodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -172,7 +162,6 @@ extension AudioCallOptions: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension RecordingType: Encodable {
 
     public func encode(to encoder: Encoder) throws {
@@ -189,7 +178,6 @@ extension RecordingType: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension AudioCallType: Encodable {
 
     public func encode(to encoder: Encoder) throws {
@@ -204,7 +192,6 @@ extension AudioCallType: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension KaleyraVideoHybridNativeBridge.CallOptions: Encodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -217,26 +204,6 @@ extension KaleyraVideoHybridNativeBridge.CallOptions: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
-extension UserDetailsFormat: Encodable {
-
-    private enum CodingKeys: String, CodingKey {
-        case `default`
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(userDetailsFormatDefault, forKey: .default)
-    }
-
-    func JSONEncoded() throws -> String {
-        let encoder = JSONEncoder()
-        let data = try encoder.encode(self)
-        return String(data: data, encoding: .utf8)!
-    }
-}
-
-@available(iOS 12.0, *)
 extension CreateCallOptions: Encodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -259,7 +226,6 @@ extension CreateCallOptions: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension KaleyraVideoHybridNativeBridge.CallType: Encodable {
 
     public func encode(to encoder: Encoder) throws {
@@ -276,26 +242,19 @@ extension KaleyraVideoHybridNativeBridge.CallType: Encodable {
     }
 }
 
-@available(iOS 12.0, *)
 extension UserDetails: Encodable {
 
     private enum CodingKeys: String, CodingKey {
         case userID
-        case firstName
-        case lastName
-        case email
-        case nickName
-        case profileImageURL
+        case name
+        case imageUrl
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(userID, forKey: .userID)
-        try container.encode(firstName, forKey: .firstName)
-        try container.encode(lastName, forKey: .lastName)
-        try container.encode(email, forKey: .email)
-        try container.encode(nickName, forKey: .nickName)
-        try container.encode(profileImageURL, forKey: .profileImageURL)
+        try container.encode(name, forKey: .name)
+        try container.encode(imageURL, forKey: .imageUrl)
     }
 
     func JSONEncoded() throws -> String {

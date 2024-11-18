@@ -16,6 +16,4 @@ interface VideoHybridBridge : CachedUserConnector, UserInterfacePresenter, Cache
     val tokenProvider: CrossPlatformAccessTokenProvider
 
     val eventsEmitter: EventsEmitter
-    fun verifyCurrentCall(verify: Boolean)
-    fun handlePushNotificationPayload(payload: String)
 }

@@ -10,7 +10,7 @@ interface UserDetailsDao {
     @get:Query("SELECT * FROM userdetailsentity")
     val all: List<UserDetailsEntity>
 
-    @Query("SELECT * FROM userdetailsentity WHERE userAlias = :userAlias LIMIT 1")
+    @Query("SELECT * FROM userdetailsentity WHERE userID = :userAlias LIMIT 1")
     fun getUserDetailsEntity(userAlias: String): UserDetailsEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

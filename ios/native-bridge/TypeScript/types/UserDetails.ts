@@ -11,27 +11,12 @@ export interface UserDetails {
   userID: string;
 
   /**
-   * Nickname for the user
+   * The user's display name.
    */
-  nickName?: string;
-
-  /**
-   * First name of the user
-   */
-  firstName?: string;
-
-  /**
-   * Last name of the user
-   */
-  lastName?: string;
-
-  /**
-   * Email of the user
-   */
-  email?: string;
+  name?: string;
 
   /**
    * Image url to use as placeholder for the user.
    */
-  profileImageUrl?: string;
+  imageUrl?: string;
 }
