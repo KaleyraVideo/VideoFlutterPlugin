@@ -85,10 +85,6 @@ class FlutterNativeChannel extends FlutterNativePlatformInterface {
   void clearUserCache() => nativeChannel.invokeMethod("clearUserCache");
 
   @override
-  void handlePushNotificationPayload(String payload) => nativeChannel
-      .invokeMethod("handlePushNotificationPayload", jsonEncode(payload));
-
-  @override
   void removeUsersDetails() => nativeChannel.invokeMethod("removeUsersDetails");
 
   @override

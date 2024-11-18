@@ -90,14 +90,6 @@ abstract class KaleyraVideo {
   ///
   clearUserCache() => FlutterNativePlatformInterface.instance.clearUserCache();
 
-  ///
-  /// Call this method to handle a notification
-  ///
-  /// Pass the notification payload as a JSON String
-  ///
-  handlePushNotificationPayload(String payload) =>
-      FlutterNativePlatformInterface.instance
-          .handlePushNotificationPayload(payload);
 
   ///
   /// Call this method to remove all the user details previously provided.

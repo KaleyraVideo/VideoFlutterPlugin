@@ -109,18 +109,6 @@ void main() {
     });
 
     test(
-        'KaleyraVideo handlePushNotificationPayload should forward invocation to FlutterNativePlatformInterface.instance',
-        () {
-      final instance = _makeFlutterNativePlatformInterfaceMock();
-      final sut = _makeSUT();
-
-      _mockFlutterNativePlatformInterface(instance);
-      sut.handlePushNotificationPayload("payload");
-
-      expect(instance.handlePushNotificationPayloadInvocations, ["payload"]);
-    });
-
-    test(
         'KaleyraVideo removeUsersDetails should forward invocation to FlutterNativePlatformInterface.instance',
         () {
       final instance = _makeFlutterNativePlatformInterfaceMock();
@@ -226,7 +214,6 @@ class _FlutterNativePlatformInterfaceMock extends Mock
   List<CreateCallOptions> startCallInvocations = [];
   int disconnectInvocationsCount = 0;
   int clearUserCacheInvocationsCount = 0;
-  List<String> handlePushNotificationPayloadInvocations = [];
   int removeUsersDetailsInvocationsCount = 0;
   List<List<UserDetails>> addUsersDetailsInvocations = [];
   List<CallDisplayMode> setDisplayModeForCurrentCallInvocations = [];
@@ -274,11 +261,6 @@ class _FlutterNativePlatformInterfaceMock extends Mock
   @override
   clearUserCache() {
     clearUserCacheInvocationsCount++;
-  }
-
-  @override
-  handlePushNotificationPayload(String payload) {
-    handlePushNotificationPayloadInvocations.add(payload);
   }
 
   @override

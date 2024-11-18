@@ -66,8 +66,6 @@ public class SwiftVideoNativePlugin: NSObject, FlutterPlugin {
                     try plugin.disconnect()
                 case ("clearUserCache", _):
                     plugin.clearUserCache()
-                case ("handlePushNotificationPayload", let json as String):
-                    plugin.handlePushNotificationPayload(json)
                 case ("addUsersDetails", let jsonList as [String]):
                     plugin.addUsersDetails(try jsonList.map({ try UserDetails.decodeJSON($0) }))
                 case ("removeUsersDetails", _):
