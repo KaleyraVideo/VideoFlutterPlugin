@@ -7,28 +7,19 @@ void main() {
       final sut = UserDetails(userID: "user_id");
 
       expect(sut.userID, "user_id");
-      expect(sut.nickName, null);
-      expect(sut.firstName, null);
-      expect(sut.lastName, null);
-      expect(sut.email, null);
-      expect(sut.profileImageUrl, null);
+      expect(sut.name, null);
+      expect(sut.imageUrl, null);
     });
 
     test('UserDetails initializer with optional params', () {
       final sut = UserDetails(
           userID: "user_id",
-          nickName: "nick_name",
-          firstName: "first name",
-          lastName: "last name",
-          email: "email",
-          profileImageUrl: "profile_url");
+          name: "nick_name",
+          imageUrl: "profile_url");
 
       expect(sut.userID, "user_id");
-      expect(sut.nickName, "nick_name");
-      expect(sut.firstName, "first name");
-      expect(sut.lastName, "last name");
-      expect(sut.email, "email");
-      expect(sut.profileImageUrl, "profile_url");
+      expect(sut.name, "nick_name");
+      expect(sut.imageUrl, "profile_url");
     });
   });
 
@@ -38,21 +29,15 @@ void main() {
         () {
       final sut = UserDetails(
           userID: "user_id",
-          nickName: "nick_name",
-          firstName: "first name",
-          lastName: "last name",
-          email: "email",
-          profileImageUrl: "profile_url");
+          name: "nick_name",
+          imageUrl: "profile_url");
 
       var json = sut.toMapJson();
 
       expect(json, {
         "userID": "user_id",
-        "firstName": "first name",
-        "lastName": "last name",
-        "email": "email",
-        "nickName": "nick_name",
-        "profileImageURL": "profile_url",
+        "name": "nick_name",
+        "imageUrl": "profile_url",
       });
     });
 
@@ -63,27 +48,21 @@ void main() {
 
       expect(json, {
         "userID": "user_id",
-        "firstName": null,
-        "lastName": null,
-        "email": null,
-        "nickName": null,
-        "profileImageURL": null,
+        "name": null,
+        "imageUrl": null
       });
     });
 
     test('UserDetails toJson() function should return a valid JSON string', () {
       final sut = UserDetails(
           userID: "user_id",
-          nickName: "nick_name",
-          firstName: "first name",
-          lastName: "last name",
-          email: "email",
-          profileImageUrl: "profile_url");
+          name: "nick_name",
+          imageUrl: "profile_url");
 
       var jsonString = sut.toJson();
 
       expect(jsonString,
-          "{\"userID\":\"user_id\",\"firstName\":\"first name\",\"lastName\":\"last name\",\"email\":\"email\",\"nickName\":\"nick_name\",\"profileImageURL\":\"profile_url\"}");
+          "{\"userID\":\"user_id\",\"name\":\"nick_name\",\"imageUrl\":\"profile_url\"}");
     });
   });
 }
