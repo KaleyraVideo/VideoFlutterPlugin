@@ -46,9 +46,9 @@ Future<void> initKaleyraVideo() async {
   plugin = await KaleyraVideo.configure(configuration);
 
   plugin?.addUsersDetails([
-    UserDetails(userID: "usr1", nickName: "User1"),
-    UserDetails(userID: "usr2", nickName: "User2"),
-    UserDetails(userID: "usr3", nickName: "User3"),
+    UserDetails(userID: "usr1", name: "User1"),
+    UserDetails(userID: "usr2", name: "User2"),
+    UserDetails(userID: "usr3", name: "User3"),
   ]);
 
   if (!signedUser.isSignedIn) return;

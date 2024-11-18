@@ -7,30 +7,18 @@ part of 'kaleyra_video_flutter_plugin.dart';
 class UserDetails {
   UserDetails({
     required this.userID,
-    this.nickName,
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.profileImageUrl,
+    this.name,
+    this.imageUrl,
   });
 
   /// Kaleyra Video user identifier
   String userID;
 
-  /// Nickname for the user
-  String? nickName;
-
-  /// First name of the user
-  String? firstName;
-
-  /// Last name of the user
-  String? lastName;
-
-  /// Email of the user
-  String? email;
+  /// The user's display name.
+  String? name;
 
   /// Image url to use as placeholder for the user.
-  String? profileImageUrl;
+  String? imageUrl;
 
   /// @nodoc
   String toJson() => json.encode(toMapJson());
@@ -38,10 +26,7 @@ class UserDetails {
   /// @nodoc
   Map<String, dynamic> toMapJson() => {
         "userID": userID,
-        "firstName": firstName,
-        "lastName": lastName,
-        "email": email,
-        "nickName": nickName,
-        "profileImageURL": profileImageUrl,
+        "name": name,
+        "imageUrl": imageUrl,
       };
 }
