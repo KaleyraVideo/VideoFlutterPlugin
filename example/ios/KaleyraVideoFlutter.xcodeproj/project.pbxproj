@@ -205,6 +205,7 @@
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				ED61666B3C4EA78922791276 /* [CP] Embed Pods Frameworks */,
 				F9DC8CC12A4C856D007DEBC3 /* Embed Foundation Extensions */,
+				B405C397E2FBEA926B829C84 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -366,6 +367,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+		};
+		B405C397E2FBEA926B829C84 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KaleyraVideoFlutter/Pods-KaleyraVideoFlutter-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KaleyraVideoFlutter/Pods-KaleyraVideoFlutter-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KaleyraVideoFlutter/Pods-KaleyraVideoFlutter-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		ED61666B3C4EA78922791276 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
