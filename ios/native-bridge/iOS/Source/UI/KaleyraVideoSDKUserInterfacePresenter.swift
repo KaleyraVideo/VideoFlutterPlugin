@@ -177,7 +177,9 @@ class KaleyraVideoSDKUserInterfacePresenter: NSObject, UserInterfacePresenter {
 extension KaleyraVideoSDKUserInterfacePresenter: CallViewControllerDelegate {
 
     func callViewControllerDidFinish(_ controller: KaleyraVideoSDK.CallViewController) {
-        callWindow.isHidden = true
+        callWindow.set(rootViewController: nil, animated: true) { _ in
+            self.callWindow.isHidden = true
+        }
     }
 }
 
