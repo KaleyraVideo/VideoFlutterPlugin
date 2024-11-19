@@ -61,11 +61,11 @@ class KaleyraVideoSDKUserInterfacePresenter: NSObject, UserInterfacePresenter {
     convenience init(rootViewController: UIViewController?) {
         self.init(sdk: KaleyraVideo.instance,
                   viewControllerPresenter: KaleyraVideoSDKUserInterfacePresenter.makeViewControllerPresenter(rootViewController),
-                  callWindow: KaleyraVideoSDKUserInterfacePresenter.makeCallWindow(rootViewController))
+                  callWindow: KaleyraVideoSDKUserInterfacePresenter.makeCallWindow())
     }
 
-    private static func makeCallWindow(_ rootViewController: UIViewController?) -> CallWindow {
-        guard let windowScene = rootViewController?.view.window?.windowScene else {
+    private static func makeCallWindow() -> CallWindow {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
             return .init()
         }
 
