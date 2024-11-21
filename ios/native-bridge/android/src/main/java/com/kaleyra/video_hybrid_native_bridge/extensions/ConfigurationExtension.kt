@@ -4,9 +4,6 @@
 package com.kaleyra.video_hybrid_native_bridge.extensions
 
 import com.kaleyra.video.configuration.Configuration
-import com.kaleyra.video_common_ui.CallUI
-import com.kaleyra.video_common_ui.ChatUI
-import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.KaleyraVideoConfiguration
 import com.kaleyra.video_hybrid_native_bridge.utils.TLSSocketFactoryCompat
 import com.kaleyra.video_utils.logging.BaseLogger
@@ -19,18 +16,14 @@ import javax.net.ssl.X509TrustManager
  *
  * @author kristiyan
  */
-internal fun KaleyraVideoConfiguration.toSDK(chatActions: (Set<ChatUI.Action>) -> Unit, callActions: (Set<CallUI.Action>) -> Unit) =
+internal fun KaleyraVideoConfiguration.toSDK() =
     Configuration(
         appId = appID,
         environment = environment.toSDK(),
         region = region.toSDK(),
         httpStack = trustedHttpClient(),
         logger = if (logEnabled == true) androidPrioryLogger(BaseLogger.VERBOSE, -1) else null
-    ).apply {
-        tools ?: return@apply
-        chatActions(tools.toChatActions())
-        callActions(tools.toCallActions())
-    }
+    )
 
 private fun trustedHttpClient() =
     OkHttpClient.Builder().sslSocketFactory(TLSSocketFactoryCompat(), object : X509TrustManager {

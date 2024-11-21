@@ -7,6 +7,8 @@ import com.kaleyra.video_common_ui.CallUI
 import com.kaleyra.video_common_ui.ChatUI
 import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.KaleyraVideoConfiguration
+import com.kaleyra.video_hybrid_native_bridge.extensions.toCallActions
+import com.kaleyra.video_hybrid_native_bridge.extensions.toChatActions
 import com.kaleyra.video_hybrid_native_bridge.extensions.toSDK
 import com.kaleyra.video_hybrid_native_bridge.repository.ConfigurationEntity
 import com.kaleyra.video_hybrid_native_bridge.repository.VideoHybridBridgeRepository
@@ -24,12 +26,9 @@ internal class VideoSDKConfigurator(
     override fun configureBridge(configuration: KaleyraVideoConfiguration) {
         scope.launch {
             repository.configurationDao().insert(ConfigurationEntity(configuration))
-            sdk.configure(
-                configuration.toSDK(
-                    callActions = { KaleyraVideo.conference.callActions = it },
-                    chatActions = { KaleyraVideo.conversation.chatActions = it }
-                )
-            )
+            sdk.configure(configuration.toSDK())
+            sdk.conference.callActions = configuration.tools?.toCallActions() ?: CallUI.Action.default
+            sdk.conversation.chatActions = configuration.tools?.toChatActions() ?: ChatUI.Action.default
             lastConfiguration = configuration
         }
     }

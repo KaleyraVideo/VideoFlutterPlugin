@@ -22,18 +22,18 @@ class ScreenShareToolConfigurationTest {
     @Test
     fun inApp() {
         val screenShareToolConfiguration = ScreenShareToolConfiguration(inApp = true)
-        assertEquals(CallUI.Action.ScreenShare, screenShareToolConfiguration.toSDK()!!)
+        assertEquals(CallUI.Action.ScreenShare.App, screenShareToolConfiguration.toSDK()!!)
     }
 
     @Test
     fun wholeDevice() {
         val screenShareToolConfiguration = ScreenShareToolConfiguration(wholeDevice = true)
-        assertEquals(CallUI.Action.ScreenShare, screenShareToolConfiguration.toSDK()!!)
+        assertEquals(CallUI.Action.ScreenShare.WholeDevice, screenShareToolConfiguration.toSDK()!!)
     }
 
     @Test
     fun both() {
         val screenShareToolConfiguration = ScreenShareToolConfiguration(inApp = true, wholeDevice = true)
-        assertEquals(CallUI.Action.ScreenShare, screenShareToolConfiguration.toSDK()!!)
+        assertEquals(CallUI.Action.ScreenShare.UserChoice, screenShareToolConfiguration.toSDK()!!)
     }
 }

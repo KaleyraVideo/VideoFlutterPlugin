@@ -74,8 +74,8 @@ class SDKConfiguratorTests {
         mockkObject(KaleyraVideo)
         val conference = ConferenceUI(mockk(relaxed = true), this::class.java)
         val conversation = ConversationUI(mockk(relaxed = true), this::class.java)
-        every { KaleyraVideo.conversation } returns conversation
-        every { KaleyraVideo.conference } returns conference
+        every { sdk.conversation } returns conversation
+        every { sdk.conference } returns conference
         val configurator = VideoSDKConfigurator(sdk, repository, this)
         configurator.configureBridge(conf)
         advanceUntilIdle()
@@ -84,8 +84,8 @@ class SDKConfiguratorTests {
             verify { insert(any()) }
         }
         assertEquals(conf, configurator.lastConfiguration)
-        assertEquals(conf.tools!!.toCallActions(), KaleyraVideo.conference.callActions)
-        assertEquals(conf.tools!!.toChatActions(), KaleyraVideo.conversation.chatActions)
+        assertEquals(conf.tools!!.toCallActions(), sdk.conference.callActions)
+        assertEquals(conf.tools!!.toChatActions(), sdk.conversation.chatActions)
         unmockkObject(KaleyraVideo)
     }
 

@@ -1,55 +1,7 @@
 plugins {
     id 'com.android.library' version catalog.versions.gradleVersion
-    id "org.jetbrains.kotlin.android" version catalog.versions.jetbrainsKotlinVersion
+    id 'org.jetbrains.kotlin.android' version catalog.versions.jetbrainsKotlinVersion
     id 'com.google.devtools.ksp' version catalog.versions.googleDevToolsKspVersion
 }
 
-def kaleyraVideoSdkVersion = "4.1.1"
-
-android {
-    namespace 'com.kaleyra.video_hybrid_native_bridge'
-    compileSdkVersion project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : catalog.versions.sdkVersion.get().toInteger()
-
-    defaultConfig {
-        minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 22
-        testInstrumentationRunner "com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner"
-    }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
-    compileOptions {
-        coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
-    testOptions {
-        unitTests.returnDefaultValues = true
-    }
-}
-
-dependencies {
-    implementation(platform("com.kaleyra:video-sdk-bom:$kaleyraVideoSdkVersion"))
-    implementation "com.kaleyra:video-sdk"
-    implementation "com.kaleyra:video-extension-external-camera"
-
-    implementation catalog.googleGson
-    implementation kaleyraCatalog.kaleyraVideoUtils
-    implementation catalog.kotlinReflect
-    implementation catalog.kotlinSerializationJson
-    implementation catalog.androidxRoomRuntime
-    ksp catalog.androidxRoomCompiler
-
-    /*** Testing ***/
-    testImplementation catalog.junit
-    testImplementation catalog.mockk
-    testImplementation catalog.json
-    testImplementation catalog.coroutinesTest
-    testImplementation catalog.flowTestObserver
-}
+apply from: "bridge.gradle"

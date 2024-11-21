@@ -3,7 +3,6 @@
 
 package com.kaleyra.video_hybrid_native_bridge.ui
 
-import com.kaleyra.video.conference.Conference
 import com.kaleyra.video_common_ui.KaleyraVideo
 import com.kaleyra.video_hybrid_native_bridge.CallDisplayMode
 import com.kaleyra.video_hybrid_native_bridge.ContextContainer
