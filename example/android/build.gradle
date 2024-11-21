@@ -2,7 +2,7 @@
 // See LICENSE for licensing information
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.9.0'
     repositories {
         google()
         mavenLocal()
@@ -12,12 +12,12 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath 'com.android.tools.build:gradle:8.1.1'
         // START: FlutterFire Configuration
-        classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'com.google.gms:google-services:4.4.2'
         // END: FlutterFire Configuration
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.huawei.agconnect:agcp:1.8.0.300'
+//        classpath 'com.huawei.agconnect:agcp:1.9.1.300'
     }
 }
 
@@ -39,6 +39,6 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
-task clean(type: Delete) {
+tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }

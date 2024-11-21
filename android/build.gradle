@@ -1,10 +1,16 @@
 // Copyright © 2018-2023 Kaleyra S.p.a. All Rights Reserved.
 // See LICENSE for licensing information
 
-apply plugin: 'com.android.library'
-apply from: "../ios/native-bridge/android/build.gradle"
+plugins {
+    id 'com.android.library'
+    id 'com.google.devtools.ksp' version "1.9.0-1.0.13"
+}
+
+apply from: "../ios/native-bridge/android/bridge.gradle"
 
 android {
+    namespace "com.kaleyra.video_flutter_plugin"
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
         main.java.srcDirs += '../ios/native-bridge/android/src/main/java'

@@ -5,7 +5,7 @@ package com.kaleyra.video_flutter_plugin
 
 import android.content.Context
 import com.kaleyra.video_hybrid_native_bridge.ContextContainer
-import com.kaleyra.collaboration_suite_utils.ContextRetainer
+import com.kaleyra.video_utils.ContextRetainer
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 
