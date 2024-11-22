@@ -32,12 +32,12 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-       <receiver
-           android:name="com.huawei.hms.flutter.push.receiver.BackgroundMessageBroadcastReceiver"
-           android:exported="false">
-           <intent-filter>
-               <action android:name="com.huawei.hms.flutter.push.receiver.BACKGROUND_REMOTE_MESSAGE"/>
-           </intent-filter>
-       </receiver>
+<!--       <receiver-->
+<!--           android:name="com.huawei.hms.flutter.push.receiver.BackgroundMessageBroadcastReceiver"-->
+<!--           android:exported="false">-->
+<!--           <intent-filter>-->
+<!--               <action android:name="com.huawei.hms.flutter.push.receiver.BACKGROUND_REMOTE_MESSAGE"/>-->
+<!--           </intent-filter>-->
+<!--       </receiver>-->
     </application>
 </manifest>
