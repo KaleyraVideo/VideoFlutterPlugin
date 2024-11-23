@@ -27,6 +27,10 @@ dependencyResolutionManagement {
         create("catalog") {
             from("com.kaleyra:video-sdk-version-catalog:$catalogVersion")
         }
+
+        create("sampleAppCatalog") {
+            from("com.kaleyra:video-app-version-catalog:$catalogVersion")
+        }
     }
 }
 

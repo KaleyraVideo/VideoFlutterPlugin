@@ -3,7 +3,7 @@
 
 plugins {
     id 'com.android.library'
-    id 'com.google.devtools.ksp' version "1.9.0-1.0.13"
+    id 'com.google.devtools.ksp' version catalog.versions.googleDevToolsKspVersion
 }
 
 apply from: "../ios/native-bridge/android/bridge.gradle"
