@@ -1,4 +1,4 @@
-def kaleyraVideoSdkVersion = "4.2.0"
+def kaleyraVideoSdkVersion = "4.2.1"
 
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.devtools.ksp'
