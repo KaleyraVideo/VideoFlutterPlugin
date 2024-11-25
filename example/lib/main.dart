@@ -12,7 +12,7 @@ import 'package:kaleyra_video_flutter_plugin_example/signed_user.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:huawei_push/huawei_push.dart' as huawei;
+import 'package:huawei_push/huawei_push.dart' as huawei;
 
 import 'action_button.dart';
 import 'header.dart';
@@ -77,9 +77,9 @@ Future<void> backgroundMessageCallback(String payload) async {
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) =>
     backgroundMessageCallback(message.data["message"]!);
 
-// @pragma('vm:entry-point')
-// Future<void> huaweiBackgroundMessageCallback(huawei.RemoteMessage message) =>
-//     backgroundMessageCallback(message.dataOfMap!["message"]!);
+@pragma('vm:entry-point')
+Future<void> huaweiBackgroundMessageCallback(huawei.RemoteMessage message) =>
+    backgroundMessageCallback(message.dataOfMap!["message"]!);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

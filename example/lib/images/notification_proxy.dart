@@ -3,8 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_api_availability/google_api_availability.dart';
-// import 'package:huawei_hmsavailability/huawei_hmsavailability.dart';
-// import 'package:huawei_push/huawei_push.dart' as huawei;
+import 'package:huawei_hmsavailability/huawei_hmsavailability.dart';
+import 'package:huawei_push/huawei_push.dart' as huawei;
 
 import '../firebase_options.dart';
 import '../main.dart';
@@ -20,8 +20,7 @@ class NotificationProxy {
       GooglePlayServicesAvailability.success;
 
   static Future<bool> isHmsSupported() async =>
-    false;
-      // await HmsApiAvailability().isHMSAvailable() == 0;
+      await HmsApiAvailability().isHMSAvailable() == 0;
 
   static init() async {
     if (defaultTargetPlatform != TargetPlatform.android) return;
@@ -30,8 +29,8 @@ class NotificationProxy {
           options: DefaultFirebaseOptions.currentPlatform);
       FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     } else if (await isHmsSupported()) {
-      // await huawei.Push.registerBackgroundMessageHandler(
-      //     huaweiBackgroundMessageCallback);
+      await huawei.Push.registerBackgroundMessageHandler(
+          huaweiBackgroundMessageCallback);
     }
   }
 
@@ -68,11 +67,11 @@ class NotificationProxy {
       FirebaseMessaging.onMessage.listen((RemoteMessage message) =>
           backgroundMessageCallback(message.data['message']!));
     } else if (await isHmsSupported()) {
-      // huawei.Push.getTokenStream
-      //     .listen((token) => register(token, PushProvider.hms));
-      // huawei.Push.getToken('');
-      // huawei.Push.onMessageReceivedStream.listen((message) =>
-      //     backgroundMessageCallback(message.dataOfMap!['message']!));
+      huawei.Push.getTokenStream
+          .listen((token) => register(token, PushProvider.hms));
+      huawei.Push.getToken('');
+      huawei.Push.onMessageReceivedStream.listen((message) =>
+          backgroundMessageCallback(message.dataOfMap!['message']!));
     }
   }
 
@@ -80,7 +79,7 @@ class NotificationProxy {
     if (await isFirebaseSupported()) {
       return FirebaseMessaging.instance.getToken();
     } else if (await isHmsSupported()) {
-      // return await huawei.Push.getTokenStream.last;
+      return await huawei.Push.getTokenStream.last;
     }
     return "";
   }
