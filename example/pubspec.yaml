@@ -34,8 +34,8 @@ dependencies:
   flutter_dotenv: ^5.0.2
   firebase_messaging: ^15.1.5
   firebase_core: ^3.8.0
-#  huawei_push: ^6.12.0+302
-#  huawei_hmsavailability: ^6.12.0+300
+  huawei_push: ^6.12.0+302
+  huawei_hmsavailability: ^6.12.0+300
   google_api_availability: ^5.0.0
 
 dev_dependencies:
