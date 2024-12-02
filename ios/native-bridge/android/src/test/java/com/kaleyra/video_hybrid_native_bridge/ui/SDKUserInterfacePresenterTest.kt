@@ -18,6 +18,7 @@ import com.kaleyra.video_hybrid_native_bridge.RecordingType
 import com.kaleyra.video_hybrid_native_bridge.configurator.CachedSDKConfigurator
 import com.kaleyra.video_hybrid_native_bridge.mock.MockContextContainer
 import com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner
+import com.kaleyra.video.State
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -104,6 +105,13 @@ class SDKUserInterfacePresenterTest {
         every { sdk.conference } returns conference
         sdkUserInterfacePresenter.startCallUrl("https://url")
         verify { conference.joinUrl("https://url") }
+    }
+
+    @Test
+    fun sdkDisconnected_presentCallWithUrl() {
+        every { sdk.state } returns MutableStateFlow(State.Disconnected)
+        sdkUserInterfacePresenter.startCallUrl("https://url")
+        verify { sdk.connect("https://url") }
     }
 
     @Test

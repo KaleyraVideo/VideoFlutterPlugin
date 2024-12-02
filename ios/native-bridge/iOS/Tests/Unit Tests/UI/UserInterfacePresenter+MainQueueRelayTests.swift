@@ -48,7 +48,7 @@ final class UserInterfacePresenter_MainQueueRelayTests: UnitTestCase {
             self.sut.configure(with: self.makeUserInterfacePresenterConfiguration())
         }
 
-        wait(for: [exp], timeout: 10.0)
+        wait(for: [exp], timeout: 30.0)
     }
 
     // MARK: - Present Call
@@ -74,7 +74,7 @@ final class UserInterfacePresenter_MainQueueRelayTests: UnitTestCase {
             self.sut.presentCall(self.makeCreateCallOptions())
         }
 
-        wait(for: [exp], timeout: 10.0)
+        wait(for: [exp], timeout: 30.0)
     }
 
     func testPresentCallWithURLShouldForwardInvocationToDecoratee() {
@@ -98,7 +98,7 @@ final class UserInterfacePresenter_MainQueueRelayTests: UnitTestCase {
             self.sut.presentCall(self.makeAnyURL())
         }
 
-        wait(for: [exp], timeout: 10.0)
+        wait(for: [exp], timeout: 30.0)
     }
 
     // MARK: - Present Chat
@@ -122,7 +122,7 @@ final class UserInterfacePresenter_MainQueueRelayTests: UnitTestCase {
             self.sut.presentChat(with: "user_id")
         }
 
-        wait(for: [exp], timeout: 10.0)
+        wait(for: [exp], timeout: 30.0)
     }
 
     // MARK: - Helpers

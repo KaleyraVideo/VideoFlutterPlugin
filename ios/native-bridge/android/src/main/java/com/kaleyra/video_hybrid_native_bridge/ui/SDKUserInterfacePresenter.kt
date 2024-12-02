@@ -9,6 +9,7 @@ import com.kaleyra.video_hybrid_native_bridge.ContextContainer
 import com.kaleyra.video_hybrid_native_bridge.CreateCallOptions
 import com.kaleyra.video_hybrid_native_bridge.configurator.CachedSDKConfigurator
 import com.kaleyra.video_hybrid_native_bridge.extensions.toSDK
+import com.kaleyra.video.State
 
 internal class SDKUserInterfacePresenter(
     private val sdk: KaleyraVideo,
@@ -33,6 +34,9 @@ internal class SDKUserInterfacePresenter(
     }
 
     override fun startCallUrl(url: String) {
+        if (sdk.state.value == State.Disconnected) {
+            sdk.connect(url)
+        }
         sdk.conference.joinUrl(url)
     }
 
