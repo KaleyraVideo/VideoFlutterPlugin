@@ -1,7 +1,7 @@
 plugins {
-    id 'com.android.library' version catalog.versions.gradleVersion
-    id 'org.jetbrains.kotlin.android' version catalog.versions.jetbrainsKotlinVersion
-    id 'com.google.devtools.ksp' version catalog.versions.googleDevToolsKspVersion
+  id 'com.android.library' version catalog.versions.gradleVersion
+  id 'org.jetbrains.kotlin.android' version catalog.versions.jetbrainsKotlinVersion
+  id 'com.google.devtools.ksp' version catalog.versions.googleDevToolsKspVersion
 }
 
 apply from: "bridge.gradle"

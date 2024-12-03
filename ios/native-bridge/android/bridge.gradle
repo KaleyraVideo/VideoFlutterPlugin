@@ -4,50 +4,48 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.devtools.ksp'
 
 android {
-    namespace 'com.kaleyra.video_hybrid_native_bridge'
+  namespace 'com.kaleyra.video_hybrid_native_bridge'
 
-    defaultConfig {
-        compileSdk project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : catalog.versions.sdkVersion.get().toInteger()
-        minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 22
-        testInstrumentationRunner "com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner"
-    }
+  defaultConfig {
+    compileSdk project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : catalog.versions.sdkVersion.get().toInteger()
+    minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 22
+    testInstrumentationRunner "com.kaleyra.video_hybrid_native_bridge.utils.RandomRunner"
+  }
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+  }
 
-    compileOptions {
-        coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
 
-    testOptions {
-        unitTests.returnDefaultValues = true
-    }
+  testOptions {
+    unitTests.returnDefaultValues = true
+  }
 }
 
 dependencies {
-    implementation(platform("com.kaleyra:video-sdk-bom:$kaleyraVideoSdkVersion"))
-    implementation "com.kaleyra:video-sdk"
-    implementation "com.kaleyra:video-extension-external-camera"
+  implementation(platform("com.kaleyra:video-sdk-bom:$kaleyraVideoSdkVersion"))
+  implementation "com.kaleyra:video-sdk"
+  implementation "com.kaleyra:video-extension-external-camera"
 
-    implementation catalog.googleGson
-    implementation kaleyraCatalog.kaleyraVideoUtils
-    implementation catalog.kotlinReflect
-    implementation catalog.kotlinSerializationJson
-    implementation catalog.androidxRoomRuntime
-    coreLibraryDesugaring catalog.desugar
-    ksp catalog.androidxRoomCompiler
+  implementation catalog.googleGson
+  implementation kaleyraCatalog.kaleyraVideoUtils
+  implementation catalog.kotlinReflect
+  implementation catalog.kotlinSerializationJson
+  implementation catalog.androidxRoomRuntime
+  ksp catalog.androidxRoomCompiler
 
-    /*** Testing ***/
-    testImplementation catalog.junit
-    testImplementation catalog.mockk
-    testImplementation catalog.json
-    testImplementation catalog.coroutinesTest
-    testImplementation catalog.flowTestObserver
+  /*** Testing ***/
+  testImplementation catalog.junit
+  testImplementation catalog.mockk
+  testImplementation catalog.json
+  testImplementation catalog.coroutinesTest
+  testImplementation catalog.flowTestObserver
 }
