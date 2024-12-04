@@ -6,6 +6,4 @@ pluginManagement {
   }
 }
 
-apply from: "catalog.gradle"
-
 rootProject.name = 'video_hybrid_native_bridge'
