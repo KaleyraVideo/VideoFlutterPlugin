@@ -1,3 +1,10 @@
+## 2.0.1
+
+- git subrepo pull ios/native-bridge
+- Update release.yml
+- Update release.yml
+- fix: push notification handling for demo app
+
 ## 2.0.0
 
 - Update release.yml
