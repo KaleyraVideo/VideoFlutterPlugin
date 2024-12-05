@@ -1,3 +1,39 @@
+## 2.0.0
+
+- Update release.yml
+- Update README.md
+- chore: remove catalog
+- git subrepo pull ios/native-bridge
+- git subrepo pull ios/native-bridge
+- git subrepo pull ios/native-bridge
+- chore: update gradle to use new plugins API
+- chore: add ag connect json for huawei push kit
+- chore: enable huawei push registration
+- chore: enable huawei push receiver on demo app's manifest
+- feat: fix huawei plugins for the example app
+- chore: use catalog for sample app and flutter android plugin
+- git subrepo pull (merge) ios/native-bridge
+- chore: remove huawei hms provider registration due to hms plugin compatibility
+- chore: remove title bar from activities launched by android example
+- refactor: update gradle 8
+- git subrepo pull ios/native-bridge
+- git subrepo pull ios/native-bridge
+- Remove rootViewController parameter from VideoHybridNativeBridge initialization
+- git subrepo pull ios/native-bridge
+- Fix pip not working due to initialization of CallWindow without parameters
+- Remove no more needed verifyCurrentCall(_) function from plugin and implementation from iOS platform
+- Remove no more needed handlePushNotificationPayload(_) function from plugin and implementation from iOS platform
+- Remove UserDetailsFormat class and related functions and tests
+- Fix failing tests for UserDetails
+- Update framework import with new naming
+- Review UserDetails dart class removing no more used properties and rename others
+- Update sample app dependency
+- Update pods for sample app
+- Update iOS plugin podspec file using latest KaleyraVideoSDK pod
+- Update sample app dependency
+- Update minimum deployment target for sample app
+- git subrepo pull ios/native-bridge
+
 ## 1.3.0
 
 - git subrepo pull ios/native-bridge
