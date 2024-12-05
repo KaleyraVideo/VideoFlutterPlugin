@@ -25,6 +25,9 @@ jobs:
     runs-on: macos-latest
     environment:
       name: create_release
+    defaults:
+      run:
+        working-directory: ./videoFlutterPlugin
     steps:
       - uses: actions/create-github-app-token@v1
         id: app-token
@@ -35,8 +38,12 @@ jobs:
           repositories: VideoFlutterPlugin
       - uses: actions/checkout@v2
         with:
-          token: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          repository: KaleyraVideo/VideoFlutterPlugin
+          path: videoFlutterPlugin
+          ref: 'main'
           fetch-depth: 0
+          fetch-tags: true
+          token: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
       - name: Setting up environment
         run: |
           pip install pyyaml
@@ -76,5 +83,6 @@ jobs:
           pod update KaleyraVideoSDK
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
+          repository: ./videoFlutterPlugin
           commit_message: "chore: updated to version ${{ steps.output_tag.outputs.TAG }}"
           tagging_message: "${{ steps.output_tag.outputs.TAG }}"
