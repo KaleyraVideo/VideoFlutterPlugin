@@ -1,34 +1,44 @@
 name: Release hybrid
 
 on:
+  workflow_dispatch:
+    inputs:
+      release_kind:
+        type: choice
+        description: What kind of release do you want to do?
+        required: true
+        options:
+          -
+          - patch
+          - minor
   pull_request:
     branches:
       - main
     types: [ closed ]
 jobs:
   release_flutter:
-    if: github.head_ref == 'prepare_release_native' && github.event.pull_request.merged == true
+    if:  ${{ github.event.inputs.release_kind != '' }} || github.head_ref == 'prepare_release_native' && github.event.pull_request.merged == true
     uses: KaleyraVideo/VideoFlutterPlugin/.github/workflows/release.yml@main
+    secrets: inherit
     with:
-      release_kind: ${{ contains(github.event.pull_request.labels.*.name, 'minor') && 'minor' || 'patch' }}
-      secrets: inherit
+      release_kind: ${{ github.event.inputs.release_kind || contains(github.event.pull_request.labels.*.name, 'minor') && 'minor' || 'patch' }}
 
   release_cordova:
-      if: github.head_ref == 'prepare_release_native' && github.event.pull_request.merged == true
+      if: ${{ github.event.inputs.release_kind != '' }} || github.head_ref == 'prepare_release_native' && github.event.pull_request.merged == true
       uses: KaleyraVideo/VideoCordovaPlugin/.github/workflows/release.yml@main
+      secrets: inherit
       with:
-        release_kind: ${{ contains(github.event.pull_request.labels.*.name, 'minor') && 'minor' || 'patch' }}
-        secrets: inherit
+        release_kind: ${{ github.event.inputs.release_kind || contains(github.event.pull_request.labels.*.name, 'minor') && 'minor' || 'patch' }}
   
-  release_react_native:
-      if: github.head_ref == 'prepare_release_native' && github.event.pull_request.merged == true
-      uses: KaleyraVideo/VideoReactNativeModule/.github/workflows/release.yml@main
-      with:
-        release_kind: ${{ contains(github.event.pull_request.labels.*.name, 'minor') && 'minor' || 'patch' }}
-        secrets: inherit
+  # release_react_native:
+      # if: ${{ github.event.inputs.release_kind != '' }} || github.head_ref == 'prepare_release_native' && github.event.pull_request.merged == true
+      # uses: KaleyraVideo/VideoReactNativeModule/.github/workflows/release.yml@main
+      # secrets: inherit
+      # with:
+        # release_kind: ${{ github.event.inputs.release_kind || contains(github.event.pull_request.labels.*.name, 'minor') && 'minor' || 'patch' }}
 
   clean:
-    needs: [ release_flutter, release_cordova, release_react_native ]
+    needs: [ release_flutter, release_cordova ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/create-github-app-token@v1
