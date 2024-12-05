@@ -24,6 +24,10 @@ Open the **terminal** in your Flutter-App folder and run the following commands
 flutter pub add kaleyra_video_flutter_plugin
 ```
 
+## Minimum requirements
+- Android 21+, gradle 8+, kotlin 1.9+
+- iOS 15+, swift 5.x
+
 ## How to remove the plugin
 
 ```shell
@@ -174,8 +178,8 @@ This method will allow you to set your user details DB from which the sdk will r
 
 ```dart
 kaleyraVideo.addUsersDetails([
-    UserDetails(userID: "usr_yyy", firstName: "User1Name", lastName: "User1Surname"),
-    UserDetails(userID: "usr_zzz", firstName: "User2Name", lastName: "User2Surname"),
+    UserDetails(userID: "usr_yyy", name: "User1Name", imageUrl: "https://www.example.com/user1image.png"),
+    UserDetails(userID: "usr_zzz", name: "User2Name", imageUrl: "https://www.example.com/user2image.png"),
 ]);
 ```
 
@@ -185,19 +189,6 @@ This method will allow you to remove all the user info from the local app DB.
 
 ```dart
 kaleyraVideo.removeUsersDetails();
-```
-
-## Set user details format
-
-This method will allow you to specify how you want your user details to be displayed.
-> Be aware that you can specify only keywords which exist in the UserDetails type.
-
-For example: if you wish to show only the firstName while your dataset contains also the lastName you may change it here.
-
-```dart
-kaleyraVideo.setUserDetailsFormat(UserDetailsFormat(
-      userDetailsFormatDefault: "\${firstName} \${lastName}",
-      androidNotification: "\${firstName} \${lastName}")); // optional if you wish to personalize the details in the notification.
 ```
 
 ## Remove all the cached info in preferences and DBs
@@ -213,22 +204,6 @@ For example: if you wish to show fingerprint dialog you should first put the cur
 
 ```dart
 kaleyraVideo.setDisplayModeForCurrentCall(CallDisplayMode.background); // .foreground, .foregroundPictureInPicture or .background
-```
-
-## Verify user
-
-To verify a user for the current call.
-
-```dart
-kaleyraVideo.verifyCurrentCall(true);
-```
-
-## iOS Podfile Setup
-
-Please pay attention to the Podfile setup for your iOS application. Is required to add this to your Podfile:
-
-```ruby
-use_frameworks!
 ```
 
 ## iOS Broadcast Screen sharing
