@@ -70,7 +70,7 @@ void connect(String userID) =>
 void disconnect() => plugin?.disconnect();
 
 Future<void> backgroundMessageCallback(String payload) async {
-  log("Handling push message is no more needed");
+  await initKaleyraVideo();
 }
 
 @pragma('vm:entry-point')

@@ -62,13 +62,13 @@ class NotificationProxy {
     if (await isFirebaseSupported()) {
       FirebaseMessaging.instance
           .getToken()
-          .then((token) => register(token, PushProvider.fcm));
+          .then((token) => register(token, PushProvider.FCM));
       FirebaseMessaging.instance.requestPermission();
       FirebaseMessaging.onMessage.listen((RemoteMessage message) =>
           backgroundMessageCallback(message.data['message']!));
     } else if (await isHmsSupported()) {
       huawei.Push.getTokenStream
-          .listen((token) => register(token, PushProvider.hms));
+          .listen((token) => register(token, PushProvider.HMS));
       huawei.Push.getToken('');
       huawei.Push.onMessageReceivedStream.listen((message) =>
           backgroundMessageCallback(message.dataOfMap!['message']!));
@@ -85,4 +85,4 @@ class NotificationProxy {
   }
 }
 
-enum PushProvider { hms, fcm }
+enum PushProvider { HMS, FCM }
