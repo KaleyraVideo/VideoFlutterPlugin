@@ -244,29 +244,7 @@ The module supports **on_call_incoming** notification.
 You will need to set the **voipHandlingStrategy** and subscribe to **iOSVoipPushTokenUpdated** event to receive the voip token to use on your backend to notify the plugin.
 
 ## Android Notifications
-
-Supports only **on_call_incoming** and **on_message_sent** notification types.
-
-```javascript
-kaleyraVideo.handlePushNotificationPayload(payload);
-```
-
-Example of acceptable payload
-
-```json
-{
-  "google.delivered_priority":"high",
-  "content-available":"1",
-  "google.sent_time":1663347601917,
-  "google.ttl":60,
-  "google.original_priority":"high",
-  "from":"320",
-  "title":"",
-  "google.message_id":"0:1123%ac212d7bf9fd7ecd",
-  "message":"{\"kaleyra\":{\"payload\":{\"event\":\"on_call_incoming\",\"room_id\":\"room_b36f162\",\"data\":{\"initiator\":\"user1\",\"users\":[{\"user\":{\"userAlias\":\"user2\"},\"status\":\"invited\"},{\"user\":{\"userAlias\":\"user1\"},\"status\":\"invited\"}],\"roomAlias\":\"room_b37a64c6f162\",\"options\":{\"duration\":0,\"record\":true,\"recordingType\":\"manual\",\"recording\":\"manual\",\"creationDate\":\"2022-09-16T17:00:01.457Z\",\"callType\":\"audio_upgradable\",\"live\":true}}},\"user_token\":\"eyJhtokenksadfjoiasdjfoaidjfsoasidjfoi\"}}",
-  "google.c.sender.id":"320"
-}
-```
+When recevied a **on_call_incoming** or **on_message_sent** notification you just need to configure and connect the plugin and it will automatically show the notification.
 
 ## Proguard 
 ```groovy
