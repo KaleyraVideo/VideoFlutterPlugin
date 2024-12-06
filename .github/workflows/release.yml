@@ -66,7 +66,7 @@ jobs:
         id: output_tag
         run: |
           set -o pipefail
-          new_version=$(python update_plugin_version.py ${{ github.event.inputs.release_kind }})
+          new_version=$(python update_plugin_version.py ${{ inputs.release_kind }})
           echo "TAG=v$new_version" >> $GITHUB_OUTPUT
           last_commit_hash=$(git log -1 --format="%H")
           last_tag_commit_hash=$(git log -1 --format=format:"%H" $(git describe --tags --abbrev=0))
