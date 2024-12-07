@@ -84,5 +84,6 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           repository: ./videoFlutterPlugin
+          branch: main
           commit_message: "chore: updated to version ${{ steps.output_tag.outputs.TAG }}"
           tagging_message: "${{ steps.output_tag.outputs.TAG }}"
