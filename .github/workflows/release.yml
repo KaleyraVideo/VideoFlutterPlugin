@@ -81,6 +81,7 @@ jobs:
           flutter pub get
           cd ios
           pod update KaleyraVideoSDK
+          cd ../..
       - name: Commit changes
         run: |
           git add .
