@@ -81,9 +81,9 @@ jobs:
           flutter pub get
           cd ios
           pod update KaleyraVideoSDK
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          repository: ./videoFlutterPlugin
-          branch: main
-          commit_message: "chore: updated to version ${{ steps.output_tag.outputs.TAG }}"
-          tagging_message: "${{ steps.output_tag.outputs.TAG }}"
+      - name: Commit changes
+        run: |
+          git add .
+          git commit -m "chore: updated to version ${{ steps.output_tag.outputs.TAG }}"
+          git tag "${{ steps.output_tag.outputs.TAG }}"
+          git push && git push --tags
