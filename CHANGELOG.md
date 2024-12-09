@@ -1,3 +1,12 @@
+## 2.0.2
+
+- git subrepo pull ios/native-bridge
+- chore: updare release.yml
+- chore: update releate workflow
+- Update release.yml
+- Update release.yml
+- Update README.md
+
 ## 2.0.1
 
 - git subrepo pull ios/native-bridge
