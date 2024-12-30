@@ -23,31 +23,31 @@ jobs:
     with:
       release_kind: ${{ github.event.inputs.release_kind || contains(github.event.pull_request.labels.*.name, 'minor') && 'minor' || 'patch' }}
 
-  # release_cordova:
-  #     if: ${{ github.event.inputs.release_kind != '' }} || github.head_ref == 'prepare_release_native' && github.event.pull_request.merged == true
-  #     uses: KaleyraVideo/VideoCordovaPlugin/.github/workflows/release.yml@main
-  #     secrets: inherit
-  #     with:
-  #       release_kind: ${{ github.event.inputs.release_kind || contains(github.event.pull_request.labels.*.name, 'minor') && 'minor' || 'patch' }}
+  release_cordova:
+      if: ${{ github.event.inputs.release_kind != '' }} || github.head_ref == 'prepare_release_native' && github.event.pull_request.merged == true
+      uses: KaleyraVideo/VideoCordovaPlugin/.github/workflows/release.yml@main
+      secrets: inherit
+      with:
+        release_kind: ${{ github.event.inputs.release_kind || contains(github.event.pull_request.labels.*.name, 'minor') && 'minor' || 'patch' }}
   
-  # release_react_native:
-  #     if: ${{ github.event.inputs.release_kind != '' }} || github.head_ref == 'prepare_release_native' && github.event.pull_request.merged == true
-  #     uses: KaleyraVideo/VideoReactNativeModule/.github/workflows/release.yml@main
-  #     secrets: inherit
-  #     with:
-  #       release_kind: ${{ github.event.inputs.release_kind || contains(github.event.pull_request.labels.*.name, 'minor') && 'minor' || 'patch' }}
+  release_react_native:
+      if: ${{ github.event.inputs.release_kind != '' }} || github.head_ref == 'prepare_release_native' && github.event.pull_request.merged == true
+      uses: KaleyraVideo/VideoReactNativeModule/.github/workflows/release.yml@main
+      secrets: inherit
+      with:
+        release_kind: ${{ github.event.inputs.release_kind || contains(github.event.pull_request.labels.*.name, 'minor') && 'minor' || 'patch' }}
 
-  # clean:
-  #   needs: [ release_cordova, release_react_native, release_flutter ]
-  #   if: github.event.pull_request.merged == true
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/create-github-app-token@v1
-  #       id: generate_token
-  #       with:
-  #         app-id: ${{ vars.APP_ID }}
-  #         private-key: ${{ secrets.PRIVATE_KEY }}
-  #     - uses: dawidd6/action-delete-branch@v3
-  #       with:
-  #         github_token: ${{steps.generate_token.outputs.token}}
-  #         branches: update_native
+  clean:
+    needs: [ release_cordova, release_react_native, release_flutter ]
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v1
+        id: generate_token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+      - uses: dawidd6/action-delete-branch@v3
+        with:
+          github_token: ${{steps.generate_token.outputs.token}}
+          branches: update_native
