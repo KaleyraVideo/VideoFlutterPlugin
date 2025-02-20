@@ -1,3 +1,9 @@
+## 2.0.4
+
+- git subrepo pull ios/native-bridge
+- Update ci.yml
+- Update release.yml
+
 ## 2.0.3
 
 - git subrepo pull ios/native-bridge
