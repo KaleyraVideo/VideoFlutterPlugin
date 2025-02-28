@@ -60,7 +60,7 @@ PODS:
   - GoogleUtilities/UserDefaults (8.0.2):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - kaleyra_video_flutter_plugin (2.0.4):
+  - kaleyra_video_flutter_plugin (2.0.5):
     - Flutter
     - KaleyraVideoSDK (~> 4.2.0)
   - KaleyraVideoSDK (4.2.0):
@@ -129,7 +129,7 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
-  kaleyra_video_flutter_plugin: 24d1a78bb8c675a08a6d3d7afbae823a4b62c952
+  kaleyra_video_flutter_plugin: c892c92dc8c19b69970719be9ebb34e79977e941
   KaleyraVideoSDK: ef6a49d53a5a28ac9130f876bbe9c50740f6d572
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
