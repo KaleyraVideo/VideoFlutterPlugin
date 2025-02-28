@@ -44,13 +44,22 @@ class SDKUserInterfacePresenterTest {
         val conference = mockk<ConferenceUI>(relaxed = true)
         val slot = slot<Conference.CreationOptions.() -> Unit>()
         every { sdk.conference } returns conference
-        every { conference.call(any(), capture(slot)) } returns Result.success(mockk(relaxed = true))
-        val options = CreateCallOptions(listOf("callee"), Audio, recordingType = RecordingType.Automatic)
+        every {
+            conference.call(
+                any(),
+                capture(slot)
+            )
+        } returns Result.success(mockk(relaxed = true))
+        val options =
+            CreateCallOptions(listOf("callee"), Audio, recordingType = RecordingType.Automatic)
         sdkUserInterfacePresenter.startCall(options)
 
-        val defaultOptions = Conference.CreationOptions()
+        val defaultOptions = Conference.CreationOptions(
+            recordingType = Call.Recording.Type.Automatic,
+            callType = Call.Type.audioOnly()
+        )
         slot.captured.invoke(defaultOptions)
-        assertEquals(Call.PreferredType.audioOnly(), defaultOptions.preferredType)
+        assertEquals(Call.Type.audioOnly(), defaultOptions.callType)
         assertEquals(Call.Recording.automatic(), defaultOptions.recordingType)
         verify { conference.call(userIDs = listOf("callee"), any()) }
     }
@@ -60,13 +69,22 @@ class SDKUserInterfacePresenterTest {
         val conference = mockk<ConferenceUI>(relaxed = true)
         val slot = slot<Conference.CreationOptions.() -> Unit>()
         every { sdk.conference } returns conference
-        every { conference.call(any(), capture(slot)) } returns Result.success(mockk(relaxed = true))
-        val options = CreateCallOptions(listOf("callee"), AudioUpgradable, recordingType = RecordingType.None)
+        every {
+            conference.call(
+                any(),
+                capture(slot)
+            )
+        } returns Result.success(mockk(relaxed = true))
+        val options =
+            CreateCallOptions(listOf("callee"), AudioUpgradable, recordingType = RecordingType.None)
         sdkUserInterfacePresenter.startCall(options)
 
-        val defaultOptions = Conference.CreationOptions()
+        val defaultOptions = Conference.CreationOptions(
+            recordingType = Call.Recording.Type.Never,
+            callType = Call.Type.audioUpgradable()
+        )
         slot.captured.invoke(defaultOptions)
-        assertEquals(Call.PreferredType.audioUpgradable(), defaultOptions.preferredType)
+        assertEquals(Call.Type.audioUpgradable(), defaultOptions.callType)
         assertEquals(Call.Recording.disabled(), defaultOptions.recordingType)
         verify { conference.call(userIDs = listOf("callee"), any()) }
     }
@@ -76,13 +94,22 @@ class SDKUserInterfacePresenterTest {
         val conference = mockk<ConferenceUI>(relaxed = true)
         val slot = slot<Conference.CreationOptions.() -> Unit>()
         every { sdk.conference } returns conference
-        every { conference.call(any(), capture(slot)) } returns Result.success(mockk(relaxed = true))
-        val options = CreateCallOptions(listOf("callee"), AudioVideo, recordingType = RecordingType.Manual)
+        every {
+            conference.call(
+                any(),
+                capture(slot)
+            )
+        } returns Result.success(mockk(relaxed = true))
+        val options =
+            CreateCallOptions(listOf("callee"), AudioVideo, recordingType = RecordingType.Manual)
         sdkUserInterfacePresenter.startCall(options)
 
-        val defaultOptions = Conference.CreationOptions()
+        val defaultOptions = Conference.CreationOptions(
+            recordingType = Call.Recording.Type.Manual,
+            callType = Call.Type.audioVideo()
+        )
         slot.captured.invoke(defaultOptions)
-        assertEquals(Call.PreferredType.audioVideo(), defaultOptions.preferredType)
+        assertEquals(Call.Type.audioVideo(), defaultOptions.callType)
         assertEquals(Call.Recording.manual(), defaultOptions.recordingType)
         verify { conference.call(userIDs = listOf("callee"), any()) }
     }
@@ -90,7 +117,7 @@ class SDKUserInterfacePresenterTest {
     @Test
     fun startCallWithFeedback() {
         val conference = mockk<ConferenceUI>(relaxed = true)
-        val call = CallUI(mockk(), this::class.java)
+        val call = CallUI(mockk(relaxed = true), this::class.java)
         every { sdk.conference } returns conference
         every { conference.call(any(), any()) } returns Result.success(call)
         val options = CreateCallOptions(listOf("callee"), AudioVideo)
@@ -101,10 +128,11 @@ class SDKUserInterfacePresenterTest {
 
     @Test
     fun presentCallWithUrl() {
+        every { sdk.state } returns MutableStateFlow(State.Connecting)
         val conference = mockk<ConferenceUI>(relaxed = true)
         every { sdk.conference } returns conference
         sdkUserInterfacePresenter.startCallUrl("https://url")
-        verify { conference.joinUrl("https://url") }
+        verify { conference.join("https://url") }
     }
 
     @Test

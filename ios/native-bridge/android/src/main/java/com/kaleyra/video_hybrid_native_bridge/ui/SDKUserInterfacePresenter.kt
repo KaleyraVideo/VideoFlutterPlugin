@@ -36,8 +36,9 @@ internal class SDKUserInterfacePresenter(
     override fun startCallUrl(url: String) {
         if (sdk.state.value == State.Disconnected) {
             sdk.connect(url)
+        } else {
+            sdk.conference.join(url)
         }
-        sdk.conference.joinUrl(url)
     }
 
     override fun startChat(userId: String) {

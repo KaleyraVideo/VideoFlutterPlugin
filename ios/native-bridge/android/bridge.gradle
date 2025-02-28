@@ -1,4 +1,4 @@
-def kaleyraVideoSdkVersion = "4.5.1"
+def kaleyraVideoSdkVersion = "4.6.1"
 
 def gsonVersion = "2.9.1"
 def kotlinVersionVersion = "1.9.0"

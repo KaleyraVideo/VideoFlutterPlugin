@@ -37,6 +37,9 @@ on:
 jobs:
   create_branch:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # To push a branch 
+      pull-requests: write 
     steps:
       - name: Generate a token
         id: generate_token
@@ -53,13 +56,10 @@ jobs:
           ref: main
           token: ${{steps.generate_token.outputs.token}}
       - name: Push branch
-        uses: ad-m/github-push-action@master
-        continue-on-error: true
-        with:
-          github_token:  ${{steps.generate_token.outputs.token}}
-          repository: KaleyraVideo/VideoHybridNativeBridge
-          branch: update_native
-          directory: ./videoHybridNativeBridge
+        working-directory: ./videoHybridNativeBridge
+        run: |
+          git checkout -b update_native
+          git push --set-upstream origin update_native
 
   update_android_native_version:
     needs: create_branch
