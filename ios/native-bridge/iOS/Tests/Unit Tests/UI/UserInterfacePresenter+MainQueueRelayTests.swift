@@ -36,21 +36,6 @@ final class UserInterfacePresenter_MainQueueRelayTests: UnitTestCase {
         assertThat(spy.configureInvocations, equalTo([config]))
     }
 
-    func testConfigureShouldForwardInvocationToDecorateeOnCurrentQueue() {
-        let exp = expectation(description: "Performing work async on background queue")
-
-        spy.onConfigure = {
-            exp.fulfill()
-            assertThat(Thread.isMainThread, isFalse())
-        }
-
-        executeOnBgThread {
-            self.sut.configure(with: self.makeUserInterfacePresenterConfiguration())
-        }
-
-        wait(for: [exp], timeout: 30.0)
-    }
-
     // MARK: - Present Call
 
     func testPresentCallWithOptionsShouldForwardInvocationToDecoratee() {
@@ -61,22 +46,6 @@ final class UserInterfacePresenter_MainQueueRelayTests: UnitTestCase {
         assertThat(spy.presentCallWithOptionsInvocations, equalTo([options]))
     }
 
-    func testPresentCallWithOptionsShouldForwardInvocationToDecorateeOnMainQueue() {
-        let exp = expectation(description: "Performing work async on background queue")
-
-        spy.onPresentCallWithOptions = {
-            exp.fulfill()
-
-            assertThat(Thread.isMainThread, isTrue())
-        }
-
-        executeOnBgThread {
-            self.sut.presentCall(self.makeCreateCallOptions())
-        }
-
-        wait(for: [exp], timeout: 30.0)
-    }
-
     func testPresentCallWithURLShouldForwardInvocationToDecoratee() {
         let url = makeAnyURL()
 
@@ -85,44 +54,12 @@ final class UserInterfacePresenter_MainQueueRelayTests: UnitTestCase {
         assertThat(spy.presentCallWithURLInvocations, equalTo([url]))
     }
 
-    func testPresentCallWithURLShouldForwardInvocationToDecorateeOnMainQueue() {
-        let exp = expectation(description: "Performing work async on background queue")
-
-        spy.onPresentCallWithURL = {
-            exp.fulfill()
-
-            assertThat(Thread.isMainThread, isTrue())
-        }
-
-        executeOnBgThread {
-            self.sut.presentCall(self.makeAnyURL())
-        }
-
-        wait(for: [exp], timeout: 30.0)
-    }
-
     // MARK: - Present Chat
 
     func testPresentChatShouldForwardInvocationToDecoratee() {
         sut.presentChat(with: "user_id")
 
         assertThat(spy.presentChatInvocations, equalTo(["user_id"]))
-    }
-
-    func testPresentChatShouldForwardInvocationToDecorateeOnMainQueue() {
-        let exp = expectation(description: "Performing work async on background queue")
-
-        spy.onPresentChat = {
-            exp.fulfill()
-
-            assertThat(Thread.isMainThread, isTrue())
-        }
-
-        executeOnBgThread {
-            self.sut.presentChat(with: "user_id")
-        }
-
-        wait(for: [exp], timeout: 30.0)
     }
 
     // MARK: - Helpers

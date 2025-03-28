@@ -55,11 +55,11 @@ jobs:
           fetch-tags: true
           ref: main
           token: ${{steps.generate_token.outputs.token}}
-      - name: Push branch
-        working-directory: ./videoHybridNativeBridge
-        run: |
-          git checkout -b update_native
-          git push --set-upstream origin update_native
+      - uses: peterjgrainger/action-create-branch@v2.2.0
+        env:
+            GITHUB_TOKEN: ${{steps.generate_token.outputs.token}}
+        with:
+          branch: 'update_native'
 
   update_android_native_version:
     needs: create_branch
