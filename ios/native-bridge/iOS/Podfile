@@ -6,7 +6,7 @@ platform :ios, '15.0'
 target 'KaleyraVideoHybridNativeBridge' do
   use_frameworks!
 
-       pod 'KaleyraVideoSDK', '~> 4.3.1'
+        pod 'KaleyraVideoSDK', '~> 4.4.0'
 
   target 'KaleyraVideoHybridNativeBridgeTests' do
     use_frameworks!

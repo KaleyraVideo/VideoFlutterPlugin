@@ -1,13 +1,13 @@
 PODS:
-  - KaleyraVideoSDK (4.3.1):
-    - KaleyraVideoSDK/Core (= 4.3.1)
-    - KaleyraVideoSDK/WebRTC (= 4.3.1)
-  - KaleyraVideoSDK/Core (4.3.1)
-  - KaleyraVideoSDK/WebRTC (4.3.1)
+  - KaleyraVideoSDK (4.4.0):
+    - KaleyraVideoSDK/Core (= 4.4.0)
+    - KaleyraVideoSDK/WebRTC (= 4.4.0)
+  - KaleyraVideoSDK/Core (4.4.0)
+  - KaleyraVideoSDK/WebRTC (4.4.0)
   - SwiftHamcrest (2.2.4)
 
 DEPENDENCIES:
-  - KaleyraVideoSDK (~> 4.3.1)
+  - KaleyraVideoSDK (~> 4.4.0)
   - SwiftHamcrest (~> 2.2)
 
 SPEC REPOS:
@@ -16,9 +16,9 @@ SPEC REPOS:
     - SwiftHamcrest
 
 SPEC CHECKSUMS:
-  KaleyraVideoSDK: e9e76e3938e42b9ae80e2fcb7e87a66af2f921dd
+  KaleyraVideoSDK: 1a1f85792deb357c29a998898b58495262c224de
   SwiftHamcrest: a45dd878978049c0953259aa01c34fd7258d0340
 
-PODFILE CHECKSUM: 023cf7e54d04f3d89fc1e5f1561230a03e504513
+PODFILE CHECKSUM: 2dfd76a1104285f666084e5b7e62461c8ebf6f54
 
 COCOAPODS: 1.16.2
