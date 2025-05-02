@@ -1,3 +1,7 @@
+## 2.1.0
+
+- git subrepo pull (merge) ios/native-bridge
+
 ## 2.0.6
 
 - git subrepo pull ios/native-bridge
