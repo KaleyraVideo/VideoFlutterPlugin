@@ -5,7 +5,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:kaleyra_video_flutter_plugin/kaleyra_video_flutter_plugin.dart';
-import 'package:kaleyra_video_flutter_plugin_example/images/notification_proxy.dart';
+import 'package:kaleyra_video_flutter_plugin_example/notification_proxy.dart';
 import 'package:kaleyra_video_flutter_plugin_example/network_example_api.dart';
 import 'package:kaleyra_video_flutter_plugin_example/scrollable_column.dart';
 import 'package:kaleyra_video_flutter_plugin_example/signed_user.dart';

@@ -6,8 +6,8 @@ import 'package:google_api_availability/google_api_availability.dart';
 import 'package:huawei_hmsavailability/huawei_hmsavailability.dart';
 import 'package:huawei_push/huawei_push.dart' as huawei;
 
-import '../firebase_options.dart';
-import '../main.dart';
+import 'firebase_options.dart';
+import 'main.dart';
 
 class NotificationProxy {
   static String? cachedPushToken;
@@ -35,10 +35,12 @@ class NotificationProxy {
   }
 
   static unregisterNotifications({required String userId}) {
-    if (cachedPushToken != null)
+    if (cachedPushToken != null) {
       _networkExampleApi.unregisterForNotifications(userId, cachedPushToken!);
-    if (cachedVoipToken != null)
+    }
+    if (cachedVoipToken != null) {
       _networkExampleApi.unregisterForNotifications(userId, cachedVoipToken!);
+    }
   }
 
   static registerForVoipNotifications(

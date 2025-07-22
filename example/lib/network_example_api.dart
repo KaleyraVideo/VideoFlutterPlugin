@@ -8,7 +8,7 @@ import 'dart:io' show Platform;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
-import 'images/notification_proxy.dart';
+import 'notification_proxy.dart';
 
 // Mock request to our private server
 // DO NOT USE !!!
