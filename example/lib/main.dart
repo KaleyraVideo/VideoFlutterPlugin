@@ -2,7 +2,6 @@
 // See LICENSE for licensing information
 
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:kaleyra_video_flutter_plugin/kaleyra_video_flutter_plugin.dart';
 import 'package:kaleyra_video_flutter_plugin_example/notification_proxy.dart';
@@ -128,8 +127,9 @@ class _MyAppState extends State<MyApp> {
   void _handlePressSignOut() async {
     _usersToContactController.text = "";
     var userID = signedUser.userID;
-    if (userID != null)
+    if (userID != null) {
       NotificationProxy.unregisterNotifications(userId: userID);
+    }
     signedUser.signOut();
     disconnect();
     setState(() => {});
