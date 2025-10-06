@@ -1,8 +1,8 @@
 def kaleyraVideoSdkVersion = "4.10.1"
 
 def gsonVersion = "2.9.1"
-def kotlinVersionVersion = "1.9.0"
-def jsonSerializationVersionVersion = "1.6.0"
+def kotlinVersion = "1.9.0"
+def jsonSerializationVersion = "1.6.0"
 def roomVersion = "2.5.2"
 
 def junitVersion = "4.13.2"
@@ -57,8 +57,8 @@ dependencies {
     implementation "com.kaleyra:video-extension-external-camera"
 
     implementation "com.google.code.gson:gson:$gsonVersion"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersionVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$jsonSerializationVersionVersion"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$jsonSerializationVersion"
     implementation "androidx.room:room-runtime:$roomVersion"
     ksp "androidx.room:room-compiler:$roomVersion"
 
