@@ -1,3 +1,11 @@
+## 2.3.2
+
+- git subrepo pull ios/native-bridge
+- chore: setup java desugaring in order to execute demo app on older api 21 devices
+- chore: update gradle versions
+- chore: avoid dart compilation warnings
+- chore: fix wrong package for notification_proxy.dart
+
 ## 2.3.1
 
 - git subrepo pull (merge) ios/native-bridge
